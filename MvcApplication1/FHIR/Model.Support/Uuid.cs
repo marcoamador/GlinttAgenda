@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Hl7.Fhir.Support;
-using System.Xml.Linq;
-
-/*
-  Copyright (c) 2011-2012, HL7, Inc.
+﻿/*
+  Copyright (c) 2011-2012, HL7, Inc
   All rights reserved.
   
   Redistribution and use in source and binary forms, with or without modification, 
@@ -33,39 +28,59 @@ using System.Xml.Linq;
 
 */
 
-//
-// Generated on Tue, Apr 9, 2013 08:39+1000 for FHIR v0.08
-//
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+
 namespace Hl7.Fhir.Model
 {
-    /// <summary>
-    /// Typed element containing the primitive xhtml
-    /// </summary>
-    [FhirComposite("xhtml")]
-    public partial class XHtml : Element
+    public partial class Uuid
     {
-        public XHtml(string value)
+        public static bool TryParse(string value, out Uuid result)
         {
-            Contents = value; 
+            Regex uuidRegEx = new Regex("^" + PATTERN + "$", RegexOptions.Singleline);
+
+            if(value==null ||uuidRegEx.IsMatch(value))
+            {
+                result = new Uuid(value);
+                return true;
+            }
+            else
+            {
+                result = null;
+                return false;
+            }
         }
-        
-        public XHtml(): this(null) {}
-        
-        public static implicit operator XHtml(string value)
+
+        public static Uuid Parse(string value)
         {
-            return new XHtml(value);
+            Uuid result = null;
+
+            if (TryParse(value, out result))
+                return result;
+            else
+                throw new FhirFormatException("Not an correctly formatted uuid value");
         }
-        
-        public static explicit operator string(XHtml value)
+
+        public override string ValidateData()
         {
-            return value.Contents;
+            if (Contents == null)
+                return "Uuid values cannot be empty";
+
+            Uuid dummy;
+
+            if (!TryParse( this.Contents, out dummy ))
+                return "Not an correctly formatted uuid value";
+            
+            return null; 
         }
-        
-        /// <summary>
-        /// Primitive value of element
-        /// </summary>
-        public string Contents { get; set; }
-        
+
+        public override string ToString()
+        {
+            return Contents;
+        }
     }
-    
 }
