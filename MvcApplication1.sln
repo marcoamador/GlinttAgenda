@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication1", "MvcAppli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcApplication1.Tests", "MvcApplication1.Tests\MvcApplication1.Tests.csproj", "{069DB725-E8E4-4A03-A72B-9C4BE9772DBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hl7.Fhir", "FHIR\Hl7.Fhir.csproj", "{3CA811D7-19A7-43AC-A403-1F35E4EC2BFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{069DB725-E8E4-4A03-A72B-9C4BE9772DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{069DB725-E8E4-4A03-A72B-9C4BE9772DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{069DB725-E8E4-4A03-A72B-9C4BE9772DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CA811D7-19A7-43AC-A403-1F35E4EC2BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CA811D7-19A7-43AC-A403-1F35E4EC2BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CA811D7-19A7-43AC-A403-1F35E4EC2BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CA811D7-19A7-43AC-A403-1F35E4EC2BFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

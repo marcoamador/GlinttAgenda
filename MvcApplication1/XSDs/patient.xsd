@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="Patient" type="Patient">
+    <xs:annotation>
+      <xs:documentation>Demographics and other administrative information about a person or animal receiving care or other health-related services</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Patient">
+    <xs:annotation>
+      <xs:documentation>Demographics and other administrative information about a person or animal receiving care or other health-related services</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="link" minOccurs="0" maxOccurs="unbounded" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>A linked patient record is a record that concerns the same patient. Records are linked after it is realized that at least one was created in error.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="active" minOccurs="0" maxOccurs="1" type="boolean">
+            <xs:annotation>
+              <xs:documentation>Whether the patient record is in use, or has been removed from active use</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="identifier" minOccurs="0" maxOccurs="unbounded" type="Identifier">
+            <xs:annotation>
+              <xs:documentation>An identifier that applies to this person as a patient</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="details" minOccurs="0" maxOccurs="1" type="Demographics">
+            <xs:annotation>
+              <xs:documentation>Patient Demographic details</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="contact" type="Patient.Contact" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>A contact party for the patient</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="animal" type="Patient.Animal" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>This element has a value if the patient is an animal</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="provider" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>The provider for whom this is a patient record</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:choice minOccurs="0" maxOccurs="1" >
+            <xs:annotation>
+              <xs:documentation>Indicates whether the patient is part of a multiple or indicates the actual birth order.</xs:documentation>
+            </xs:annotation>
+            <xs:element name="multipleBirthBoolean" type="boolean"/>
+            <xs:element name="multipleBirthInteger" type="integer"/>
+          </xs:choice>
+          <xs:element name="deceasedDate" minOccurs="0" maxOccurs="1" type="dateTime">
+            <xs:annotation>
+              <xs:documentation>Date of death of patient. May include time.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="diet" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Dietary restrictions for the patient</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Patient.Contact">
+    <xs:annotation>
+      <xs:documentation>Demographics and other administrative information about a person or animal receiving care or other health-related services</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="relationship" minOccurs="0" maxOccurs="unbounded" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>The nature of the relationship between the patient and the contactperson</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="details" minOccurs="0" maxOccurs="1" type="Demographics">
+            <xs:annotation>
+              <xs:documentation>Details about the contact person</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="organization" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Organization on behalf of which the contact is acting or for which the contact is working.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Patient.Animal">
+    <xs:annotation>
+      <xs:documentation>Demographics and other administrative information about a person or animal receiving care or other health-related services</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="species" minOccurs="1" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Identifies the high level categorization of the kind of animal</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="breed" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Identifies the detailed categorization of the kind of animal.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="genderStatus" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Indicates the current state of the animal's reproductive organs</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
