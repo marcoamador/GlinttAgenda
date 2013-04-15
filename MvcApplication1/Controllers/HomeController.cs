@@ -25,7 +25,7 @@ namespace MvcApplication1.Controllers
         {
             
             
-            return Json(new { foo = resource , baz = res_action,baz2 = Int32.Parse(id),count=gE.g_doente.Count() }, JsonRequestBehavior.AllowGet);
+            return Json(new { resource = resource , resource_action = res_action,id = Int32.Parse(id),count=gE.g_doente.Count() }, JsonRequestBehavior.AllowGet);
         }
     }
 }
