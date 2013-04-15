@@ -124,7 +124,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\Patient.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\Pratitioner.cs" />
     <Compile Include="Controllers\Visit.cs" />
     <Compile Include="Controllers\HomeController.cs" />
