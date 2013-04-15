@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="glinttModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="glinttModelStoreContainer">
+          <EntitySet Name="g_cons_marc" EntityType="glinttModel.Store.g_cons_marc" store:Type="Tables" store:Schema="glintt" store:Name="g_cons_marc">
+            <DefiningQuery>SELECT
+      `g_cons_marc`.`n_cons`, 
+      `g_cons_marc`.`t_doente`, 
+      `g_cons_marc`.`doente`, 
+      `g_cons_marc`.`n_cred`, 
+      `g_cons_marc`.`cod_serv`, 
+      `g_cons_marc`.`cod_act_med`, 
+      `g_cons_marc`.`medico`, 
+      `g_cons_marc`.`cod_gab`, 
+      `g_cons_marc`.`cod_serv_req`, 
+      `g_cons_marc`.`dt_cons`, 
+      `g_cons_marc`.`duracao_cons`, 
+      `g_cons_marc`.`flag_estado`, 
+      `g_cons_marc`.`observ_cons`
+      FROM `g_cons_marc` AS `g_cons_marc`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="g_doente" EntityType="glinttModel.Store.g_doente" store:Type="Tables" store:Schema="glintt" store:Name="g_doente">
+            <DefiningQuery>SELECT
+      `g_doente`.`t_doente`, 
+      `g_doente`.`doente`, 
+      `g_doente`.`nome`, 
+      `g_doente`.`dt_nasc`, 
+      `g_doente`.`morada`, 
+      `g_doente`.`cod_pais`, 
+      `g_doente`.`localidade`, 
+      `g_doente`.`cod_postal`, 
+      `g_doente`.`telef1`, 
+      `g_doente`.`telef2`, 
+      `g_doente`.`sexo`, 
+      `g_doente`.`grupo_sang`, 
+      `g_doente`.`escolaridade`, 
+      `g_doente`.`raca`, 
+      `g_doente`.`religiao`, 
+      `g_doente`.`n_bi`, 
+      `g_doente`.`n_contrib`, 
+      `g_doente`.`nome_mae`, 
+      `g_doente`.`nome_pai`, 
+      `g_doente`.`estado_civil`, 
+      `g_doente`.`nome_conjuge`, 
+      `g_doente`.`flag_falec`, 
+      `g_doente`.`dt_falec`, 
+      `g_doente`.`e_mail`, 
+      `g_doente`.`cartao_europeu_saude`
+      FROM `g_doente` AS `g_doente`</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'glintt.g_cons_marc' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="g_cons_marc">
+          <Key>
+            <PropertyRef Name="flag_estado" />
+          </Key>
+          <Property Name="n_cons" Type="char" MaxLength="15" />
+          <Property Name="t_doente" Type="char" MaxLength="5" />
+          <Property Name="doente" Type="char" MaxLength="12" />
+          <Property Name="n_cred" Type="char" MaxLength="15" />
+          <Property Name="cod_serv" Type="char" MaxLength="10" />
+          <Property Name="cod_act_med" Type="char" MaxLength="10" />
+          <Property Name="medico" Type="char" MaxLength="10" />
+          <Property Name="cod_gab" Type="char" MaxLength="10" />
+          <Property Name="cod_serv_req" Type="char" MaxLength="10" />
+          <Property Name="dt_cons" Type="date" />
+          <Property Name="duracao_cons" Type="date" />
+          <Property Name="flag_estado" Type="char" Nullable="false" MaxLength="2" />
+          <Property Name="observ_cons" Type="text" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'glintt.g_doente' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="g_doente">
+          <Key>
+            <PropertyRef Name="t_doente" />
+            <PropertyRef Name="doente" />
+          </Key>
+          <Property Name="t_doente" Type="char" Nullable="false" MaxLength="5" />
+          <Property Name="doente" Type="char" Nullable="false" MaxLength="12" />
+          <Property Name="nome" Type="char" MaxLength="80" />
+          <Property Name="dt_nasc" Type="date" />
+          <Property Name="morada" Type="char" MaxLength="80" />
+          <Property Name="cod_pais" Type="char" MaxLength="4" />
+          <Property Name="localidade" Type="char" MaxLength="80" />
+          <Property Name="cod_postal" Type="char" MaxLength="10" />
+          <Property Name="telef1" Type="char" MaxLength="15" />
+          <Property Name="telef2" Type="char" MaxLength="15" />
+          <Property Name="sexo" Type="char" MaxLength="1" />
+          <Property Name="grupo_sang" Type="char" MaxLength="2" />
+          <Property Name="escolaridade" Type="char" MaxLength="3" />
+          <Property Name="raca" Type="char" MaxLength="2" />
+          <Property Name="religiao" Type="char" MaxLength="2" />
+          <Property Name="n_bi" Type="char" MaxLength="20" />
+          <Property Name="n_contrib" Type="char" MaxLength="20" />
+          <Property Name="nome_mae" Type="char" MaxLength="80" />
+          <Property Name="nome_pai" Type="char" MaxLength="80" />
+          <Property Name="estado_civil" Type="char" MaxLength="2" />
+          <Property Name="nome_conjuge" Type="char" MaxLength="60" />
+          <Property Name="flag_falec" Type="char" MaxLength="1" />
+          <Property Name="dt_falec" Type="date" />
+          <Property Name="e_mail" Type="char" MaxLength="60" />
+          <Property Name="cartao_europeu_saude" Type="char" MaxLength="30" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'glintt.g_pess_hosp_def' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="g_pess_hosp_def">
+        <Property Name="n_mecan" Type="char" MaxLength="10" />
+        <Property Name="nome" Type="char" MaxLength="80" />
+        <Property Name="abr" Type="char" MaxLength="20" />
+        <Property Name="titulo" Type="char" MaxLength="12" />
+        <Property Name="email" Type="text" />
+        <Property Name="telef" Type="char" MaxLength="20" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'glintt.g_serv' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="g_serv">
+        <Property Name="cod_serv" Type="char" MaxLength="10" />
+        <Property Name="descr_serv" Type="char" MaxLength="40" />
+        <Property Name="local_serv" Type="char" MaxLength="30" />
+        <Property Name="obs" Type="char" MaxLength="100" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'glintt.g_t_act_med' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="g_t_act_med">
+        <Property Name="cod_serv" Type="char" MaxLength="10" />
+        <Property Name="cod_act_med" Type="char" MaxLength="4" />
+        <Property Name="descr" Type="char" MaxLength="40" />
+        <Property Name="dur" Type="date" />
+      </EntityType>-->
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="glinttModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="glinttEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="g_cons_marc" EntityType="glinttModel.g_cons_marc" />
+          <EntitySet Name="g_doente" EntityType="glinttModel.g_doente" />
+        </EntityContainer>
+        <EntityType Name="g_cons_marc">
+          <Key>
+            <PropertyRef Name="flag_estado" />
+          </Key>
+          <Property Name="n_cons" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
+          <Property Name="t_doente" Type="String" MaxLength="5" Unicode="false" FixedLength="true" />
+          <Property Name="doente" Type="String" MaxLength="12" Unicode="false" FixedLength="true" />
+          <Property Name="n_cred" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
+          <Property Name="cod_serv" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="cod_act_med" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="medico" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="cod_gab" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="cod_serv_req" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="dt_cons" Type="DateTime" Precision="0" />
+          <Property Name="duracao_cons" Type="DateTime" Precision="0" />
+          <Property Name="flag_estado" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="observ_cons" Type="String" MaxLength="65535" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="g_doente">
+          <Key>
+            <PropertyRef Name="t_doente" />
+            <PropertyRef Name="doente" />
+          </Key>
+          <Property Name="t_doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="true" />
+          <Property Name="doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="true" />
+          <Property Name="nome" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
+          <Property Name="dt_nasc" Type="DateTime" Precision="0" />
+          <Property Name="morada" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
+          <Property Name="cod_pais" Type="String" MaxLength="4" Unicode="false" FixedLength="true" />
+          <Property Name="localidade" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
+          <Property Name="cod_postal" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="telef1" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
+          <Property Name="telef2" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
+          <Property Name="sexo" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="grupo_sang" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="escolaridade" Type="String" MaxLength="3" Unicode="false" FixedLength="true" />
+          <Property Name="raca" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="religiao" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="n_bi" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
+          <Property Name="n_contrib" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
+          <Property Name="nome_mae" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
+          <Property Name="nome_pai" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
+          <Property Name="estado_civil" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="nome_conjuge" Type="String" MaxLength="60" Unicode="false" FixedLength="true" />
+          <Property Name="flag_falec" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="dt_falec" Type="DateTime" Precision="0" />
+          <Property Name="e_mail" Type="String" MaxLength="60" Unicode="false" FixedLength="true" />
+          <Property Name="cartao_europeu_saude" Type="String" MaxLength="30" Unicode="false" FixedLength="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="glinttModelStoreContainer" CdmEntityContainer="glinttEntities">
+          <EntitySetMapping Name="g_cons_marc">
+            <EntityTypeMapping TypeName="glinttModel.g_cons_marc">
+              <MappingFragment StoreEntitySet="g_cons_marc">
+                <ScalarProperty Name="n_cons" ColumnName="n_cons" />
+                <ScalarProperty Name="t_doente" ColumnName="t_doente" />
+                <ScalarProperty Name="doente" ColumnName="doente" />
+                <ScalarProperty Name="n_cred" ColumnName="n_cred" />
+                <ScalarProperty Name="cod_serv" ColumnName="cod_serv" />
+                <ScalarProperty Name="cod_act_med" ColumnName="cod_act_med" />
+                <ScalarProperty Name="medico" ColumnName="medico" />
+                <ScalarProperty Name="cod_gab" ColumnName="cod_gab" />
+                <ScalarProperty Name="cod_serv_req" ColumnName="cod_serv_req" />
+                <ScalarProperty Name="dt_cons" ColumnName="dt_cons" />
+                <ScalarProperty Name="duracao_cons" ColumnName="duracao_cons" />
+                <ScalarProperty Name="flag_estado" ColumnName="flag_estado" />
+                <ScalarProperty Name="observ_cons" ColumnName="observ_cons" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="g_doente">
+            <EntityTypeMapping TypeName="glinttModel.g_doente">
+              <MappingFragment StoreEntitySet="g_doente">
+                <ScalarProperty Name="t_doente" ColumnName="t_doente" />
+                <ScalarProperty Name="doente" ColumnName="doente" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="dt_nasc" ColumnName="dt_nasc" />
+                <ScalarProperty Name="morada" ColumnName="morada" />
+                <ScalarProperty Name="cod_pais" ColumnName="cod_pais" />
+                <ScalarProperty Name="localidade" ColumnName="localidade" />
+                <ScalarProperty Name="cod_postal" ColumnName="cod_postal" />
+                <ScalarProperty Name="telef1" ColumnName="telef1" />
+                <ScalarProperty Name="telef2" ColumnName="telef2" />
+                <ScalarProperty Name="sexo" ColumnName="sexo" />
+                <ScalarProperty Name="grupo_sang" ColumnName="grupo_sang" />
+                <ScalarProperty Name="escolaridade" ColumnName="escolaridade" />
+                <ScalarProperty Name="raca" ColumnName="raca" />
+                <ScalarProperty Name="religiao" ColumnName="religiao" />
+                <ScalarProperty Name="n_bi" ColumnName="n_bi" />
+                <ScalarProperty Name="n_contrib" ColumnName="n_contrib" />
+                <ScalarProperty Name="nome_mae" ColumnName="nome_mae" />
+                <ScalarProperty Name="nome_pai" ColumnName="nome_pai" />
+                <ScalarProperty Name="estado_civil" ColumnName="estado_civil" />
+                <ScalarProperty Name="nome_conjuge" ColumnName="nome_conjuge" />
+                <ScalarProperty Name="flag_falec" ColumnName="flag_falec" />
+                <ScalarProperty Name="dt_falec" ColumnName="dt_falec" />
+                <ScalarProperty Name="e_mail" ColumnName="e_mail" />
+                <ScalarProperty Name="cartao_europeu_saude" ColumnName="cartao_europeu_saude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

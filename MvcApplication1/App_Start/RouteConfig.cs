@@ -22,7 +22,7 @@ namespace MvcApplication1
             routes.MapRoute(
                name: "Default1",
                url: "{resource}/{res_action}/{id}",
-               defaults: new { controller = "Home", action = "Hello", id = UrlParameter.Optional, resource="",res_action=""}
+               defaults: new { controller = "Home", action = "Hello", id = "0", resource="",res_action=""}
            );
         }
     }
