@@ -6,61 +6,17 @@
     <edmx:StorageModels>
       <Schema Namespace="glinttModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="glinttModelStoreContainer">
-          <EntitySet Name="g_cons_marc" EntityType="glinttModel.Store.g_cons_marc" store:Type="Tables" store:Schema="glintt" store:Name="g_cons_marc">
-            <DefiningQuery>SELECT
-      `g_cons_marc`.`n_cons`, 
-      `g_cons_marc`.`t_doente`, 
-      `g_cons_marc`.`doente`, 
-      `g_cons_marc`.`n_cred`, 
-      `g_cons_marc`.`cod_serv`, 
-      `g_cons_marc`.`cod_act_med`, 
-      `g_cons_marc`.`medico`, 
-      `g_cons_marc`.`cod_gab`, 
-      `g_cons_marc`.`cod_serv_req`, 
-      `g_cons_marc`.`dt_cons`, 
-      `g_cons_marc`.`duracao_cons`, 
-      `g_cons_marc`.`flag_estado`, 
-      `g_cons_marc`.`observ_cons`
-      FROM `g_cons_marc` AS `g_cons_marc`</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="g_doente" EntityType="glinttModel.Store.g_doente" store:Type="Tables" store:Schema="glintt" store:Name="g_doente">
-            <DefiningQuery>SELECT
-      `g_doente`.`t_doente`, 
-      `g_doente`.`doente`, 
-      `g_doente`.`nome`, 
-      `g_doente`.`dt_nasc`, 
-      `g_doente`.`morada`, 
-      `g_doente`.`cod_pais`, 
-      `g_doente`.`localidade`, 
-      `g_doente`.`cod_postal`, 
-      `g_doente`.`telef1`, 
-      `g_doente`.`telef2`, 
-      `g_doente`.`sexo`, 
-      `g_doente`.`grupo_sang`, 
-      `g_doente`.`escolaridade`, 
-      `g_doente`.`raca`, 
-      `g_doente`.`religiao`, 
-      `g_doente`.`n_bi`, 
-      `g_doente`.`n_contrib`, 
-      `g_doente`.`nome_mae`, 
-      `g_doente`.`nome_pai`, 
-      `g_doente`.`estado_civil`, 
-      `g_doente`.`nome_conjuge`, 
-      `g_doente`.`flag_falec`, 
-      `g_doente`.`dt_falec`, 
-      `g_doente`.`e_mail`, 
-      `g_doente`.`cartao_europeu_saude`
-      FROM `g_doente` AS `g_doente`</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="g_cons_marc" EntityType="glinttModel.Store.g_cons_marc" store:Type="Tables" Schema="glintt" />
+          <EntitySet Name="g_doente" EntityType="glinttModel.Store.g_doente" store:Type="Tables" Schema="glintt" />
+          <EntitySet Name="g_pess_hosp_def" EntityType="glinttModel.Store.g_pess_hosp_def" store:Type="Tables" Schema="glintt" />
+          <EntitySet Name="g_serv" EntityType="glinttModel.Store.g_serv" store:Type="Tables" Schema="glintt" />
+          <EntitySet Name="g_t_act_med" EntityType="glinttModel.Store.g_t_act_med" store:Type="Tables" Schema="glintt" />
         </EntityContainer>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'glintt.g_cons_marc' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="g_cons_marc">
           <Key>
-            <PropertyRef Name="flag_estado" />
+            <PropertyRef Name="n_cons" />
           </Key>
-          <Property Name="n_cons" Type="char" MaxLength="15" />
+          <Property Name="n_cons" Type="char" Nullable="false" MaxLength="15" />
           <Property Name="t_doente" Type="char" MaxLength="5" />
           <Property Name="doente" Type="char" MaxLength="12" />
           <Property Name="n_cred" Type="char" MaxLength="15" />
@@ -74,9 +30,6 @@
           <Property Name="flag_estado" Type="char" Nullable="false" MaxLength="2" />
           <Property Name="observ_cons" Type="text" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'glintt.g_doente' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="g_doente">
           <Key>
             <PropertyRef Name="t_doente" />
@@ -108,35 +61,36 @@
           <Property Name="e_mail" Type="char" MaxLength="60" />
           <Property Name="cartao_europeu_saude" Type="char" MaxLength="30" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6013: The table/view 'glintt.g_pess_hosp_def' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-      
-      <EntityType Name="g_pess_hosp_def">
-        <Property Name="n_mecan" Type="char" MaxLength="10" />
-        <Property Name="nome" Type="char" MaxLength="80" />
-        <Property Name="abr" Type="char" MaxLength="20" />
-        <Property Name="titulo" Type="char" MaxLength="12" />
-        <Property Name="email" Type="text" />
-        <Property Name="telef" Type="char" MaxLength="20" />
-      </EntityType>
-      Errors Found During Generation:
-      warning 6013: The table/view 'glintt.g_serv' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-      
-      <EntityType Name="g_serv">
-        <Property Name="cod_serv" Type="char" MaxLength="10" />
-        <Property Name="descr_serv" Type="char" MaxLength="40" />
-        <Property Name="local_serv" Type="char" MaxLength="30" />
-        <Property Name="obs" Type="char" MaxLength="100" />
-      </EntityType>
-      Errors Found During Generation:
-      warning 6013: The table/view 'glintt.g_t_act_med' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-      
-      <EntityType Name="g_t_act_med">
-        <Property Name="cod_serv" Type="char" MaxLength="10" />
-        <Property Name="cod_act_med" Type="char" MaxLength="4" />
-        <Property Name="descr" Type="char" MaxLength="40" />
-        <Property Name="dur" Type="date" />
-      </EntityType>-->
+        <EntityType Name="g_pess_hosp_def">
+          <Key>
+            <PropertyRef Name="n_mecan" />
+          </Key>
+          <Property Name="n_mecan" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="nome" Type="char" MaxLength="80" />
+          <Property Name="abr" Type="char" MaxLength="20" />
+          <Property Name="titulo" Type="char" MaxLength="12" />
+          <Property Name="email" Type="text" />
+          <Property Name="telef" Type="char" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="g_serv">
+          <Key>
+            <PropertyRef Name="cod_serv" />
+          </Key>
+          <Property Name="cod_serv" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="descr_serv" Type="char" MaxLength="40" />
+          <Property Name="local_serv" Type="char" MaxLength="30" />
+          <Property Name="obs" Type="char" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="g_t_act_med">
+          <Key>
+            <PropertyRef Name="cod_serv" />
+            <PropertyRef Name="cod_act_med" />
+          </Key>
+          <Property Name="cod_serv" Type="char" Nullable="false" MaxLength="10" />
+          <Property Name="cod_act_med" Type="char" Nullable="false" MaxLength="4" />
+          <Property Name="descr" Type="char" MaxLength="40" />
+          <Property Name="dur" Type="date" />
+        </EntityType>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
@@ -145,12 +99,15 @@
         <EntityContainer Name="glinttEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="g_cons_marc" EntityType="glinttModel.g_cons_marc" />
           <EntitySet Name="g_doente" EntityType="glinttModel.g_doente" />
+          <EntitySet Name="g_pess_hosp_def" EntityType="glinttModel.g_pess_hosp_def" />
+          <EntitySet Name="g_serv" EntityType="glinttModel.g_serv" />
+          <EntitySet Name="g_t_act_med" EntityType="glinttModel.g_t_act_med" />
         </EntityContainer>
         <EntityType Name="g_cons_marc">
           <Key>
-            <PropertyRef Name="flag_estado" />
+            <PropertyRef Name="n_cons" />
           </Key>
-          <Property Name="n_cons" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
+          <Property Name="n_cons" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="true" />
           <Property Name="t_doente" Type="String" MaxLength="5" Unicode="false" FixedLength="true" />
           <Property Name="doente" Type="String" MaxLength="12" Unicode="false" FixedLength="true" />
           <Property Name="n_cred" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
@@ -194,6 +151,36 @@
           <Property Name="dt_falec" Type="DateTime" Precision="0" />
           <Property Name="e_mail" Type="String" MaxLength="60" Unicode="false" FixedLength="true" />
           <Property Name="cartao_europeu_saude" Type="String" MaxLength="30" Unicode="false" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="g_pess_hosp_def">
+          <Key>
+            <PropertyRef Name="n_mecan" />
+          </Key>
+          <Property Name="n_mecan" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="nome" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
+          <Property Name="abr" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
+          <Property Name="titulo" Type="String" MaxLength="12" Unicode="false" FixedLength="true" />
+          <Property Name="email" Type="String" MaxLength="65535" Unicode="false" FixedLength="false" />
+          <Property Name="telef" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="g_serv">
+          <Key>
+            <PropertyRef Name="cod_serv" />
+          </Key>
+          <Property Name="cod_serv" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="descr_serv" Type="String" MaxLength="40" Unicode="false" FixedLength="true" />
+          <Property Name="local_serv" Type="String" MaxLength="30" Unicode="false" FixedLength="true" />
+          <Property Name="obs" Type="String" MaxLength="100" Unicode="false" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="g_t_act_med">
+          <Key>
+            <PropertyRef Name="cod_serv" />
+            <PropertyRef Name="cod_act_med" />
+          </Key>
+          <Property Name="cod_serv" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
+          <Property Name="cod_act_med" Type="String" Nullable="false" MaxLength="4" Unicode="false" FixedLength="true" />
+          <Property Name="descr" Type="String" MaxLength="40" Unicode="false" FixedLength="true" />
+          <Property Name="dur" Type="DateTime" Precision="0" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -248,6 +235,38 @@
                 <ScalarProperty Name="dt_falec" ColumnName="dt_falec" />
                 <ScalarProperty Name="e_mail" ColumnName="e_mail" />
                 <ScalarProperty Name="cartao_europeu_saude" ColumnName="cartao_europeu_saude" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="g_pess_hosp_def">
+            <EntityTypeMapping TypeName="glinttModel.g_pess_hosp_def">
+              <MappingFragment StoreEntitySet="g_pess_hosp_def">
+                <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="abr" ColumnName="abr" />
+                <ScalarProperty Name="titulo" ColumnName="titulo" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="telef" ColumnName="telef" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="g_serv">
+            <EntityTypeMapping TypeName="glinttModel.g_serv">
+              <MappingFragment StoreEntitySet="g_serv">
+                <ScalarProperty Name="cod_serv" ColumnName="cod_serv" />
+                <ScalarProperty Name="descr_serv" ColumnName="descr_serv" />
+                <ScalarProperty Name="local_serv" ColumnName="local_serv" />
+                <ScalarProperty Name="obs" ColumnName="obs" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="g_t_act_med">
+            <EntityTypeMapping TypeName="glinttModel.g_t_act_med">
+              <MappingFragment StoreEntitySet="g_t_act_med">
+                <ScalarProperty Name="cod_serv" ColumnName="cod_serv" />
+                <ScalarProperty Name="cod_act_med" ColumnName="cod_act_med" />
+                <ScalarProperty Name="descr" ColumnName="descr" />
+                <ScalarProperty Name="dur" ColumnName="dur" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

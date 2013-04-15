@@ -27,5 +27,8 @@ namespace MvcApplication1
     
         public DbSet<g_cons_marc> g_cons_marc { get; set; }
         public DbSet<g_doente> g_doente { get; set; }
+        public DbSet<g_pess_hosp_def> g_pess_hosp_def { get; set; }
+        public DbSet<g_serv> g_serv { get; set; }
+        public DbSet<g_t_act_med> g_t_act_med { get; set; }
     }
 }
