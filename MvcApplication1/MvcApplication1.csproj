@@ -130,6 +130,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\GlinttDabase.mdf" />
+    <Content Include="App_Data\GlinttDabase_log.ldf">
+      <DependentUpon>GlinttDabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -229,13 +233,27 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Patient.cshtml" />
+    <None Include="Xsd\patient.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\practitioner.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Xsd\visit.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FHIR\Hl7.Fhir.csproj">
+      <Project>{3ca811d7-19a7-43ac-a403-1f35e4ec2bfc}</Project>
+      <Name>Hl7.Fhir</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
