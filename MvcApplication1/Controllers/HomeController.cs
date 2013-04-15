@@ -12,5 +12,11 @@ namespace MvcApplication1.Controllers
         {
             return View();
         }
+
+        public ActionResult Hello(string resource,string res_action, string id)
+        {
+            
+            return Json(new { foo = resource , baz = res_action,baz2 = Int32.Parse(id) }, JsonRequestBehavior.AllowGet);
+        }
     }
 }
