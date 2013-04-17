@@ -18,12 +18,13 @@ namespace MvcApplication1.Models
         }
     
         public string byId(string id){
-            g_doente patient= gE.g_doente.Find(id);
-           
+            Object[] key = { id };
+            g_doente patient= gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?",key).First();
+         
             Hl7.Fhir.Model.Identifier i=new Hl7.Fhir.Model.Identifier();
             i.Id=patient.doente;
             i.InternalId=patient.t_doente;
-            
+            p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
 
             Hl7.Fhir.Model.Demographics dem = new Hl7.Fhir.Model.Demographics();
@@ -31,6 +32,7 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Identifier i1 = new Hl7.Fhir.Model.Identifier();
             i1.Id = patient.n_bi;
             i1.InternalId = patient.t_doente;
+            dem.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             dem.Identifier.Add(i1); //errado
 
             Hl7.Fhir.Model.Identifier i2 = new Hl7.Fhir.Model.Identifier();
@@ -40,6 +42,7 @@ namespace MvcApplication1.Models
             dem.InternalId = patient.t_doente;
             Hl7.Fhir.Model.HumanName human=new Hl7.Fhir.Model.HumanName();
             human.Text=patient.nome;
+            dem.Name = new List<Hl7.Fhir.Model.HumanName>();
             dem.Name.Add(human); //falta completar
             Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
             gender.Code = patient.sexo;
@@ -48,6 +51,7 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Contact c2=new Hl7.Fhir.Model.Contact();
             c1.Value=patient.telef1;
             c2.Value=patient.telef2;
+            dem.Telecom = new List<Hl7.Fhir.Model.Contact>();
             dem.Telecom.Add(c1);
             dem.Telecom.Add(c2);
             Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime();
@@ -61,9 +65,9 @@ namespace MvcApplication1.Models
             address.Country = patient.cod_pais; //confirmar
             address.Zip = patient.cod_postal;
             address.Text = patient.morada;
-
+            dem.Address = new List<Hl7.Fhir.Model.Address>();
             dem.Address.Add(address);
-
+            dem.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
             dem.MaritalStatus.Text = patient.estado_civil;
 
             p.Details = dem;
