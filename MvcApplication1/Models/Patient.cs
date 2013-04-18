@@ -9,7 +9,7 @@ namespace MvcApplication1.Models
    
     public class Patient
     {
-        private static Dictionary<String, String> ParamToDic = new Dictionary<string, List<string>>() { { "_id", new List<string>(){"doente"} }, { "active",new List<string>() {"flag_falec"} }, 
+        private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() { { "_id", new List<string>(){"doente"} }, { "active",new List<string>() {"flag_falec"} }, 
                                             { "address",new List<string>() {"morada"} }, { "birthdate",new List<string>() {"dt_nasc"} },{"birthdate-before",new List<string>(){"dt_nasc"}},
                                             {"birthdate-after",new List<string>(){"dt_nasc"}}, {"family",new List<string>(){"last_name"}}, {"gender",new List<string>(){"sexo"}},
                                             {"given",new List<string>(){"nome"}},{"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
