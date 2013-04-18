@@ -16,10 +16,30 @@ namespace MvcApplication1.Controllers
             base.Initialize(rc);
             gE = new glinttEntities();
         }
- 
-        public ActionResult Index()
+
+        public ActionResult Index(String id)
         {
-            return View();
+            if (Request.HttpMethod.Equals("GET"))
+            {
+                if (id == null || id.Equals(""))
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                Patient p = new Patient();
+                String result = p.byId(id);
+                if (result == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(result);
+            }
+            else {
+                Response.StatusCode = 400;
+                return null;
+            
+            }
         }
 
         public ActionResult SearchById(String id)
@@ -28,9 +48,9 @@ namespace MvcApplication1.Controllers
             return Content(new Patient().byId(id)) ;
         }
 
-        public ActionResult SearchField()
+        public ActionResult SearchField(String param)
         {
-            return Content(new Patient().search(Request.Params));
+            return null;//Content(new Patient().search(param));
         }
     }
 }

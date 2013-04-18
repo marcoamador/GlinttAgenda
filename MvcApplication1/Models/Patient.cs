@@ -77,7 +77,11 @@ namespace MvcApplication1.Models
     
         public String byId(string id){
             Object[] key = { id };
-            g_doente patient= gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?",key).First();
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult= gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?", key);
+            if (sqlresult.Count() == 0) {
+                return null;
+            }
+            g_doente patient= sqlresult.First();
             return patientParser(patient);
         }
 

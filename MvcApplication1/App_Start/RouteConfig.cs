@@ -13,7 +13,11 @@ namespace MvcApplication1
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-
+            routes.MapRoute(
+              name: "Patient",
+              url: "Patient/{id}",
+              defaults: new { controller = "Patient", action = "Index", id = "" }
+          );
 
            routes.MapRoute(
                 name: "Default",
@@ -22,11 +26,7 @@ namespace MvcApplication1
             );
 
 
-           routes.MapRoute(
-               name: "Patient",
-               url: "Patient/{action}/{id}",
-               defaults: new { controller = "Patient", action = "Index", id = UrlParameter.Optional }
-           );
+          
 
             /*routes.MapRoute(
               name: "Default1",
