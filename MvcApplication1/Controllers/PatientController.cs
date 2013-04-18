@@ -22,11 +22,15 @@ namespace MvcApplication1.Controllers
             return View();
         }
 
-        public ActionResult Search( string id)
+        public ActionResult SearchById(String id)
         {
 
-       
-            return Content(new PatientModel().byId(id)) ;
+            return Content(new Patient().byId(id)) ;
+        }
+
+        public ActionResult SearchField()
+        {
+            return Content(new Patient().search(Request.Params));
         }
     }
 }

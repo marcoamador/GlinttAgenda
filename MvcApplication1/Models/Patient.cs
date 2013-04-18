@@ -7,19 +7,17 @@ namespace MvcApplication1.Models
 {
 
    
-    public class PatientModel
+    public class Patient
     {
         Hl7.Fhir.Model.Patient p;
         glinttEntities gE;
-        public PatientModel() {
+        public Patient() {
             gE = new glinttEntities();
             p = new Hl7.Fhir.Model.Patient();
 
         }
-    
-        public string byId(string id){
-            Object[] key = { id };
-            g_doente patient= gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?",key).First();
+
+        public String patientParser(g_doente patient){
          
             Hl7.Fhir.Model.Identifier i=new Hl7.Fhir.Model.Identifier();
             i.Id=patient.doente;
@@ -75,6 +73,18 @@ namespace MvcApplication1.Models
             //falta familiares
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
+        }
+    
+        public String byId(string id){
+            Object[] key = { id };
+            g_doente patient= gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?",key).First();
+            return patientParser(patient);
+        }
+
+        public String search(HttpRequestBase req)
+        {
+            String s = "temp";
+            return s;
         }
     
     }

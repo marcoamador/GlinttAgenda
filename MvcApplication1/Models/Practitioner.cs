@@ -14,13 +14,11 @@ namespace MvcApplication1.Models
 
 
         glinttEntities ge;
-        Hl7.Fhir.Model.Practitioner p;
 
-        public string byID (int id)
+        public String practitionerParser(g_pess_hosp_def d)
         {
-            p = new Hl7.Fhir.Model.Practitioner();
-            g_pess_hosp_def d =  ge.g_pess_hosp_def.Find(id);
-
+            Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
+            
             //setup id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id= d.n_mecan;
@@ -50,11 +48,11 @@ namespace MvcApplication1.Models
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
-        
-
-        public string toXml()
+        public String byID(int id)
         {
-            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
+            g_pess_hosp_def d = ge.g_pess_hosp_def.Find(id);
+            return practitionerParser(d);
+
         }
 
     }
