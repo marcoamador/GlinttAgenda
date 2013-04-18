@@ -29,7 +29,7 @@ namespace MvcApplication1.Models
          
             Hl7.Fhir.Model.Identifier i=new Hl7.Fhir.Model.Identifier();
             i.Id=patient.doente;
-            i.InternalId=patient.t_doente;
+            i.InternalId=patient.doente;
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
 
