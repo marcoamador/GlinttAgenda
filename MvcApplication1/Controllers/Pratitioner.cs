@@ -9,6 +9,20 @@ namespace MvcApplication1.Controllers
 {
     public class PratitionerController : Controller
     {
+
+        private static Dictionary<string, string> ParamToDic = new Dictionary<string, string>() {
+                                                                                    { "_id", "n_mecan" }, 
+                                                                                    { "address", "morada" }, 
+                                                                                    { "family", null },
+                                                                                    { "gender", null },
+                                                                                    { "given", "nome" },
+                                                                                    { "identifier", "n-mecan" },
+                                                                                    { "language", null },
+                                                                                    { "name", "nome" },
+                                                                                    { "organization", null },
+                                                                                    { "phonetic", null },
+                                                                                    { "telecom", "telef" }
+                                                                                };
         glinttEntities gE;
         protected override void Initialize(RequestContext rc)
         {

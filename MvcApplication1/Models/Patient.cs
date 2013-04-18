@@ -9,6 +9,14 @@ namespace MvcApplication1.Models
    
     public class Patient
     {
+        private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() { { "_id", new List<string>(){"doente"} }, { "active",new List<string>() {"flag_falec"} }, 
+                                            { "address",new List<string>() {"morada"} }, { "birthdate",new List<string>() {"dt_nasc"} },{"birthdate-before",new List<string>(){"dt_nasc"}},
+                                            {"birthdate-after",new List<string>(){"dt_nasc"}}, {"family",new List<string>(){"last_name"}}, {"gender",new List<string>(){"sexo"}},
+                                            {"given",new List<string>(){"nome"}},{"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
+                                            {"language",null},{"language",new List<string>(){"nome"}},{"name",new List<string>(){"nome"}},{"phonetic",null},
+                                            {"telecom",new List<string>(){"telef1","telef2"}}};
+                                            
+
         Hl7.Fhir.Model.Patient p;
         glinttEntities gE;
         public Patient() {
@@ -21,7 +29,7 @@ namespace MvcApplication1.Models
          
             Hl7.Fhir.Model.Identifier i=new Hl7.Fhir.Model.Identifier();
             i.Id=patient.doente;
-            i.InternalId=patient.t_doente;
+            i.InternalId=patient.doente;
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
 
