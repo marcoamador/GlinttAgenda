@@ -8,20 +8,20 @@ namespace MvcApplication1.Models
     public class VisitModel
     {
 
-        private static Dictionary<String, String> ParamToDic = new Dictionary<string, string>() {
-            { "_id", "n_cons" }, 
+        private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
+            { "_id", new List<string>(){"n_cons"} }, 
             { "contact", null }, 
             { "fulfills", null },
-            { "identifier", "n_cons" },
-            { "indication", "observ_cons" },
-            { "length", "n-mecan" },
-            { "period", "duracao_cons" },
-            { "period-before", "dt_cons" },
-            { "period-after", "dt_cons" },
-            { "responsible", "medico" },
+            { "identifier", new List<string>() {"n_cons"} },
+            { "indication", new List<string>() {"observ_cons"} },
+            { "length", new List<string>() {"n-mecan"} },
+            { "period", new List<string>() {"duracao_cons"} },
+            { "period-before", new List<string>() {"dt_cons"} },
+            { "period-after", new List<string>() {"dt_cons"} },
+            { "responsible", new List<string>() {"medico"} },
             { "setting", null },
-            { "state", "flag_estado" },
-            { "subject", "doente" }
+            { "state", new List<string>() {"flag_estado"} },
+            { "subject", new List<string>() {"doente"} }
         };
 
         public VisitModel()
@@ -86,6 +86,48 @@ namespace MvcApplication1.Models
             return visitParser(visit);
         }
 
+        public string search(HttpRequestBase v)
+        {
+            List<Object> l = new List<Object>();
+            int i = 0;
+            string query1 = "Select * from g_cons_marc where ";
+            foreach (string querykeys in v.QueryString.Keys)
+            {
+                if (i != 0)
+                {
+                    query1 += " and ";
+                }
+                int j = 0;
+                foreach (string conver in VisitModel.ParamToDic[querykeys])
+                {
+
+                    if (conver != null)
+                    {
+                        if (j != 0)
+                        {
+                            query1 += " or ";
+                        }
+                        query1 += conver + "=" + "?";
+
+                        l.Add(v.QueryString[querykeys]);
+                        j++;
+                    }
+                }
+                i++;
+
+            }
+
+            query1 += ";";
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
+            if (res.Count() > 0)
+            {
+                return visitParser(res.First());
+            }
+            else
+            {
+                return null;
+            }
+        }
         /*
      public List<VisitModel> byPatient (string id) 
      {

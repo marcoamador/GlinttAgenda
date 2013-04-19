@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcApplication1.Models;
 
 namespace MvcApplication1.Controllers
 {
@@ -26,6 +27,18 @@ namespace MvcApplication1.Controllers
             
             
             return Json(new { resource = resource , resource_action = res_action,id = Int32.Parse(id),count=gE.g_doente.Count() }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Search()
+        {
+            VisitModel v = new VisitModel();
+            String s = v.search(Request);
+            if (s == null)
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
+            return Content(s);
         }
     }
 }
