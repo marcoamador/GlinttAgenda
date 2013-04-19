@@ -51,9 +51,16 @@ namespace MvcApplication1.Controllers
             return Content(new Patient().byId(id)) ;
         }
 
-        public ActionResult SearchField(String param)
+        public ActionResult Search()
         {
-            return null;//Content(new Patient().search(param));
+            Patient p = new Patient();
+            String s = p.search(Request);
+            if (s == null)
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
+            return Content(s);
         }
     }
 }

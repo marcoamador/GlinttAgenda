@@ -13,7 +13,7 @@ namespace MvcApplication1.Models
                                             { "address",new List<string>() {"morada"} }, { "birthdate",new List<string>() {"dt_nasc"} },{"birthdate-before",new List<string>(){"dt_nasc"}},
                                             {"birthdate-after",new List<string>(){"dt_nasc"}}, {"family",new List<string>(){"last_name"}}, {"gender",new List<string>(){"sexo"}},
                                             {"given",new List<string>(){"nome"}},{"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
-                                            {"language",null},{"language",new List<string>(){"nome"}},{"name",new List<string>(){"nome"}},{"phonetic",null},
+                                            {"language",null},{"name",new List<string>(){"nome"}},{"phonetic",null},
                                             {"telecom",new List<string>(){"telef1","telef2"}}};
                                             
 
@@ -93,10 +93,43 @@ namespace MvcApplication1.Models
             return patientParser(patient);
         }
 
-        public String search(HttpRequestBase req)
+        public string search(HttpRequestBase p)
         {
-            String s = "temp";
-            return s;
+            List<Object> l = new List<Object>();
+            int i = 0;
+            string query1 = "Select * from g_doente where ";
+            foreach(string querykeys in p.QueryString.Keys){
+                if (i != 0)
+                {
+                    query1 += " and ";
+                }
+                int j = 0;
+                foreach (string conver in Patient.ParamToDic[querykeys]) {
+                
+                    if (conver != null) {
+                        if (j != 0)
+                        {
+                            query1 += " or ";
+                        }
+                            query1 += conver + "=" + "?";
+                        
+                        l.Add(p.QueryString[querykeys]);
+                        j++;
+                    }  
+                }
+                i++;
+            
+            }
+
+            query1 += ";";
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res=gE.g_doente.SqlQuery(query1,l.ToArray());
+            if (res.Count() > 0)
+            {
+                return patientParser(res.First());
+            }
+            else {
+                return null;
+            }
         }
     
     }
