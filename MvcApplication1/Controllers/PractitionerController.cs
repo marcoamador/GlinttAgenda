@@ -9,7 +9,7 @@ using MvcApplication1.Models;
 
 namespace MvcApplication1.Controllers
 {
-    public class PratitionerController : Controller
+    public class PractitionerController : Controller
     {
 
 
@@ -29,7 +29,7 @@ namespace MvcApplication1.Controllers
         {
             
             
-            return Json(new { resource = resource , resource_action = res_action,id = Int32.Parse(id),count=gE.g_doente.Count() }, JsonRequestBehavior.AllowGet);
+            return Json(new { resource = resource , resource_action = res_action,id = Int32.Parse(id),count=gE.g_pess_hosp_def.Count() }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Search()
