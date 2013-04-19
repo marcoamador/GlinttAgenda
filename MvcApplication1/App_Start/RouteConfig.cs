@@ -15,28 +15,40 @@ namespace MvcApplication1
 
 
             routes.MapRoute(
-              name: "Patient_Search",
-              url: "Patient/Search",
-              defaults: new { controller = "Patient", action = "Search" }
-          );
+                name: "Patient_Search",
+                url: "Patient/Search",
+                defaults: new { controller = "Patient", action = "Search" }
+            );
 
             routes.MapRoute(
-              name: "Patient",
-              url: "Patient/{id}",
-              defaults: new { controller = "Patient", action = "Index", id = "" }
-          );
+                name: "Patient",
+                url: "Patient/{id}",
+                defaults: new { controller = "Patient", action = "Index", id = "" }
+            );
 
             routes.MapRoute(
-             name: "Visit_Search",
-             url: "Visit/Search",
-             defaults: new { controller = "Visit", action = "Search" }
-         );
+                name: "Visit_Search",
+                url: "Visit/Search",
+                defaults: new { controller = "Visit", action = "Search" }
+            );
 
             routes.MapRoute(
-              name: "Visit",
-              url: "Visit/{id}",
-              defaults: new { controller = "Visit", action = "Index", id = "" }
-          );
+                name: "Visit",
+                url: "Visit/{id}",
+                defaults: new { controller = "Visit", action = "Index", id = "" }
+            );
+
+            routes.MapRoute(
+                name: "Practitioner_Search",
+                url: "Practitioner/Search",
+                defaults: new { controller = "Practitioner", action = "Search" }
+            );
+
+            routes.MapRoute(
+                name: "Practitioner",
+                url: "Practitioner/{id}",
+                defaults: new { controller = "Practitioner", action = "Index", id = "" }
+            );
 
            routes.MapRoute(
                 name: "Default",

@@ -19,6 +19,7 @@ namespace MvcApplication1.Models
 
         Hl7.Fhir.Model.Patient p;
         glinttEntities gE;
+
         public Patient() {
             gE = new glinttEntities();
             p = new Hl7.Fhir.Model.Patient();
