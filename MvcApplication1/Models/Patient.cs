@@ -95,7 +95,6 @@ namespace MvcApplication1.Models
 
         public string search(HttpRequestBase p)
         {
-            //System.Data.SqlClient.SqlCommand query = new System.Data.SqlClient.SqlCommand("Select * from aadasd where");
             List<Object> l = new List<Object>();
             int i = 0;
             string query1 = "Select * from g_doente where ";
@@ -108,8 +107,6 @@ namespace MvcApplication1.Models
                 foreach (string conver in Patient.ParamToDic[querykeys]) {
                 
                     if (conver != null) {
-                       // query.Parameters.Add(conver,System.Data.SqlDbType.VarChar);
-                        //query.Parameters[conver].Value = p.QueryString[querykeys];
                         if (j != 0)
                         {
                             query1 += " or ";
@@ -118,7 +115,6 @@ namespace MvcApplication1.Models
                         
                         l.Add(p.QueryString[querykeys]);
                         j++;
-                        //query += conver + "=" + System.Security.SecurityElement.Escape() + " and ";
                     }  
                 }
                 i++;
