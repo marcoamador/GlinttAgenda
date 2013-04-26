@@ -67,7 +67,7 @@ namespace MvcApplication1.Models
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
-        public String byID(string id)
+        public String byId(string id)
         {
             Object[] key = { id };
             System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=?", key);

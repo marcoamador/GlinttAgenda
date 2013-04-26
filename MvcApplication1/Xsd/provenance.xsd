@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="Provenance" type="Provenance">
+    <xs:annotation>
+      <xs:documentation>Provenance information associated with another resource that can be used to help determine its reliability or trace where the information in it came from. The focus of the provenance resource is record keeping, audit and traceability, not clinical meaning</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Provenance">
+    <xs:annotation>
+      <xs:documentation>Provenance information associated with another resource that can be used to help determine its reliability or trace where the information in it came from. The focus of the provenance resource is record keeping, audit and traceability, not clinical meaning</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="target" minOccurs="1" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>The resource that this provenance information pertains to</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="activity" type="Provenance.Activity" minOccurs="1" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>The activity that was being undertaken that led to the creation of the resource being referenced</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="party" type="Provenance.Party" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>An entity that is involved in the provenance of the target resource</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="signature" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>A digital signature on the target resource. The signature should reference a participant by xml:id</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Provenance.Activity">
+    <xs:annotation>
+      <xs:documentation>Provenance information associated with another resource that can be used to help determine its reliability or trace where the information in it came from. The focus of the provenance resource is record keeping, audit and traceability, not clinical meaning</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="period" minOccurs="0" maxOccurs="1" type="Period">
+            <xs:annotation>
+              <xs:documentation>The period during which the activity occurred</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="recorded" minOccurs="1" maxOccurs="1" type="instant">
+            <xs:annotation>
+              <xs:documentation>The instant of time at which the activity was recorded</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="reason" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>The reason that the activity was taking place</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="location" type="Provenance.Location" minOccurs="0" maxOccurs="1">
+            <xs:annotation>
+              <xs:documentation>Where the activity occurred, if relevant</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="policy" minOccurs="0" maxOccurs="1" type="uri">
+            <xs:annotation>
+              <xs:documentation>Policy or plan the activity was defined by</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Provenance.Location">
+    <xs:annotation>
+      <xs:documentation>Provenance information associated with another resource that can be used to help determine its reliability or trace where the information in it came from. The focus of the provenance resource is record keeping, audit and traceability, not clinical meaning</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="type" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>The type of location - a classification of the kind of location at which the activity took place</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="id" minOccurs="0" maxOccurs="1" type="Identifier">
+            <xs:annotation>
+              <xs:documentation>An identifier for the location</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>Human readable description of location at which the activity occurred</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="coords" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>Geospatial coordinates of the location</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Provenance.Party">
+    <xs:annotation>
+      <xs:documentation>Provenance information associated with another resource that can be used to help determine its reliability or trace where the information in it came from. The focus of the provenance resource is record keeping, audit and traceability, not clinical meaning</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="role" minOccurs="1" maxOccurs="1" type="Coding">
+            <xs:annotation>
+              <xs:documentation>The role that the participant played</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="type" minOccurs="1" maxOccurs="1" type="Coding">
+            <xs:annotation>
+              <xs:documentation>The type of the participant</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="id" minOccurs="1" maxOccurs="1" type="uri">
+            <xs:annotation>
+              <xs:documentation>Identity of participant. May be a logical or physical uri and maybe absolute or relative</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>Human readable description of the participant</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

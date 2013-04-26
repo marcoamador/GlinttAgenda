@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="FamilyHistory" type="FamilyHistory">
+    <xs:annotation>
+      <xs:documentation>Significant health events and conditions for people related to the subject</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="FamilyHistory">
+    <xs:annotation>
+      <xs:documentation>Significant health events and conditions for people related to the subject</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="subject" minOccurs="1" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>The person who this history concerns</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="relation" type="FamilyHistory.Relation" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The related person. Each FamilyHistory resource contains the entire family history for a single person.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FamilyHistory.Relation">
+    <xs:annotation>
+      <xs:documentation>Significant health events and conditions for people related to the subject</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="relatedPerson" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Depending on the capabilities of the system creating the resource, the related person may be an identifiable (on a FHIR system) person, a specific person who is not formally identified or an unidentified person (eg aunt, brother etc). Hence this property is optional. If a real person, then it could either be a reference to the resource that identifies that person, or a contained reference. Examples of both are given</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="relationship" minOccurs="0" maxOccurs="1" type="FamilialRelationship">
+            <xs:annotation>
+              <xs:documentation>The type of relationship this person has to the patient (father, mother, brother etc.) At the moment this is a code linking to a fixed set of values. I'm not sure if there is an international standard for this. A fixed (possibly extensible) set of codes feels better than a codeable concept for somehting like this...</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:choice minOccurs="0" maxOccurs="1" >
+            <xs:annotation>
+              <xs:documentation>If this resource is indicating that the related person is deceased, then the the date of death - or age at death - can be indicated here. If present, a receiving system must understand what the resource is indicating. If the reason for death is known, then it can be indicated in the 'fatal' flag of the condition - in this case the deceased property should still be set.</xs:documentation>
+            </xs:annotation>
+            <xs:element name="deceasedDate" type="date"/>
+            <xs:element name="deceasedAge" type="Age"/>
+          </xs:choice>
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>This property allows a non condition-specific note to the made about the related person. Ideally, the note would be in the condition property, but this is not always possible.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="condition" type="FamilyHistory.Condition" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>The significant problemss (or condition) that the family member had. This is a repeating section to allow a system to represent more than one condition per resource, though there is nothing stopping multiple resources - one per condition.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FamilyHistory.Condition">
+    <xs:annotation>
+      <xs:documentation>Significant health events and conditions for people related to the subject</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="type" minOccurs="1" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>The actual condition specified. Could be a coded condition (like MI or Diabetes) or a less specific string like 'cancer' depending on how much is known about the condition and the capabilities of the creating system</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="fatal" minOccurs="0" maxOccurs="1" type="boolean">
+            <xs:annotation>
+              <xs:documentation>Indicates that the person died of this condition. The date of death is indicated by the deceased property. If present, a receiving system must understand it.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:choice minOccurs="0" maxOccurs="1" >
+            <xs:annotation>
+              <xs:documentation>Either the age of onset or the date of onset can be recorded.</xs:documentation>
+            </xs:annotation>
+            <xs:element name="onsetDate" type="date"/>
+            <xs:element name="onsetAge" type="Age"/>
+          </xs:choice>
+          <xs:element name="note" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>An area where general notes can be placed about this specific condition.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="FamilialRelationship-list">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="mother">
+        <xs:annotation>
+          <xs:documentation>Mother</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="father">
+        <xs:annotation>
+          <xs:documentation>Father</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="sister">
+        <xs:annotation>
+          <xs:documentation>Sister</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="brother">
+        <xs:annotation>
+          <xs:documentation>Brother</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="matUncle">
+        <xs:annotation>
+          <xs:documentation>Maternal Uncle</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="matAunt">
+        <xs:annotation>
+          <xs:documentation>Maternal Aunt</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="matGFather">
+        <xs:annotation>
+          <xs:documentation>Maternal GrandFather</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="matGMother">
+        <xs:annotation>
+          <xs:documentation>Maternal GrandMother</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="patUncle">
+        <xs:annotation>
+          <xs:documentation>Paternal Uncle</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="patAunt">
+        <xs:annotation>
+          <xs:documentation>Paternal Aunt</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="patGFather">
+        <xs:annotation>
+          <xs:documentation>Paternal GrandFather</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="patGMother">
+        <xs:annotation>
+          <xs:documentation>Paternal GrandMother</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="FamilialRelationship">
+    <xs:annotation>
+      <xs:documentation>The nature of the relationship between the patient and the person with the condition</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:attribute name="value" type="FamilialRelationship-list" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

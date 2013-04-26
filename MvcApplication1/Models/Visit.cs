@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MvcApplication1.Models
 {
-    public class VisitModel
+    public class Visit
     {
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
@@ -24,7 +24,7 @@ namespace MvcApplication1.Models
             { "subject", new List<string>() {"doente"} }
         };
 
-        public VisitModel()
+        public Visit()
         {
             ge = new glinttEntities();
         }
@@ -98,7 +98,7 @@ namespace MvcApplication1.Models
                     query1 += " and ";
                 }
                 int j = 0;
-                foreach (string conver in VisitModel.ParamToDic[querykeys])
+                foreach (string conver in Visit.ParamToDic[querykeys])
                 {
 
                     if (conver != null)

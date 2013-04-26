@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="ImagingStudy" type="ImagingStudy">
+    <xs:annotation>
+      <xs:documentation>Manifest of a set of images produced in study. The set of images may include every image in the study, or it may be an incomplete sample, such as a list of key images</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ImagingStudy">
+    <xs:annotation>
+      <xs:documentation>Manifest of a set of images produced in study. The set of images may include every image in the study, or it may be an incomplete sample, such as a list of key images</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="dateTime" minOccurs="1" maxOccurs="1" type="dateTime">
+            <xs:annotation>
+              <xs:documentation>Date and Time the study took place</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="subject" minOccurs="1" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Who the images are of</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="uid" minOccurs="0" maxOccurs="1" type="oid">
+            <xs:annotation>
+              <xs:documentation>Formal identifier for the study</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="identifier" minOccurs="0" maxOccurs="unbounded" type="Identifier">
+            <xs:annotation>
+              <xs:documentation>Other identifiers for the study</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="requester" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>The requesting/referring physician</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="accessionNo" minOccurs="0" maxOccurs="1" type="Identifier">
+            <xs:annotation>
+              <xs:documentation>Accession Number</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="clinicalInformation" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>Diagnoses etc provided with request</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="procedure" minOccurs="0" maxOccurs="unbounded" type="Coding">
+            <xs:annotation>
+              <xs:documentation>Type of procedure performed</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="interpreter" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Who read study and interpreted the images</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>Institution-generated description or classification of the Study (component) performed</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="series" type="ImagingStudy.Series" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Each study has one or more series of image instances</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ImagingStudy.Series">
+    <xs:annotation>
+      <xs:documentation>Manifest of a set of images produced in study. The set of images may include every image in the study, or it may be an incomplete sample, such as a list of key images</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="number" minOccurs="0" maxOccurs="1" type="integer">
+            <xs:annotation>
+              <xs:documentation>The number of this series in the overall sequence</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="modality" minOccurs="1" maxOccurs="1" type="ImageModality">
+            <xs:annotation>
+              <xs:documentation>The modality of this sequence</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="datetime" minOccurs="0" maxOccurs="1" type="dateTime">
+            <xs:annotation>
+              <xs:documentation>When the series started</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="uid" minOccurs="0" maxOccurs="1" type="oid">
+            <xs:annotation>
+              <xs:documentation>Formal identifier for this series</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="description" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>A description of the series</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="bodySite" minOccurs="0" maxOccurs="1" type="Coding">
+            <xs:annotation>
+              <xs:documentation>Body part examined</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="image" type="ImagingStudy.Image" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>A single image taken from a patient</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ImagingStudy.Image">
+    <xs:annotation>
+      <xs:documentation>Manifest of a set of images produced in study. The set of images may include every image in the study, or it may be an incomplete sample, such as a list of key images</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="number" minOccurs="0" maxOccurs="1" type="integer">
+            <xs:annotation>
+              <xs:documentation>The number of this image in the series</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="dateTime" minOccurs="0" maxOccurs="1" type="dateTime">
+            <xs:annotation>
+              <xs:documentation>When this image was taken</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="uid" minOccurs="0" maxOccurs="1" type="oid">
+            <xs:annotation>
+              <xs:documentation>Formal identifier for this image</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="dicomClass" minOccurs="0" maxOccurs="1" type="oid">
+            <xs:annotation>
+              <xs:documentation>DICOM Image type</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="url" minOccurs="0" maxOccurs="1" type="uri">
+            <xs:annotation>
+              <xs:documentation>WADO url where image is available</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="ImageModality-list">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="XC">
+        <xs:annotation>
+          <xs:documentation>External Camera (Photography)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DIA">
+        <xs:annotation>
+          <xs:documentation>Diagram / Hand drawn image</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="BI">
+        <xs:annotation>
+          <xs:documentation>Biomagnetic Imaging</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CR">
+        <xs:annotation>
+          <xs:documentation>Computed Radiography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="CT">
+        <xs:annotation>
+          <xs:documentation>Computed Tomography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DG">
+        <xs:annotation>
+          <xs:documentation>Diaphanography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DX">
+        <xs:annotation>
+          <xs:documentation>Digital Radiography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ECG">
+        <xs:annotation>
+          <xs:documentation>Electrocardiograms</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="EM">
+        <xs:annotation>
+          <xs:documentation>Electron Microscope</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ES">
+        <xs:annotation>
+          <xs:documentation>Endoscopy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="GM">
+        <xs:annotation>
+          <xs:documentation>General Microscopy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="LS">
+        <xs:annotation>
+          <xs:documentation>Laser Surface Scan</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MG">
+        <xs:annotation>
+          <xs:documentation>Mammography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MR">
+        <xs:annotation>
+          <xs:documentation>Magnetic Resonance</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="NM">
+        <xs:annotation>
+          <xs:documentation>Nuclear Medicine</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OP">
+        <xs:annotation>
+          <xs:documentation>Ophthalmic Photography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OPM">
+        <xs:annotation>
+          <xs:documentation>Ophthalmic Mapping</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OPR">
+        <xs:annotation>
+          <xs:documentation>Ophthalmic Refraction</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OPV">
+        <xs:annotation>
+          <xs:documentation>Ophthalmic Visual Field</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PT">
+        <xs:annotation>
+          <xs:documentation>Positron Emission Tomography (PET)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RD">
+        <xs:annotation>
+          <xs:documentation>Radiotherapy Dose (a.k.a. RTDOSE)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RF">
+        <xs:annotation>
+          <xs:documentation>Radio Fluoroscopy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RG">
+        <xs:annotation>
+          <xs:documentation>Radiographic Imaging (conventional film screen)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RTIMAG">
+        <xs:annotation>
+          <xs:documentation>Radiotherapy Image</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RP">
+        <xs:annotation>
+          <xs:documentation>Radiotherapy Plan (a.k.a. RTPLAN)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RS">
+        <xs:annotation>
+          <xs:documentation>Radiotherapy Structure Set (a.k.a. RTSTRUCT)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RT">
+        <xs:annotation>
+          <xs:documentation>Radiation Therapy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SC">
+        <xs:annotation>
+          <xs:documentation>Secondary Capture</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SM">
+        <xs:annotation>
+          <xs:documentation>Slide Microscopy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SR">
+        <xs:annotation>
+          <xs:documentation>Structured Reporting</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TG">
+        <xs:annotation>
+          <xs:documentation>Thermography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="US">
+        <xs:annotation>
+          <xs:documentation>Ultrasound</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="VL">
+        <xs:annotation>
+          <xs:documentation>Visible Light</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="XA">
+        <xs:annotation>
+          <xs:documentation>X-Ray Angiography</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="HC">
+        <xs:annotation>
+          <xs:documentation>Hard Copy</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="OT">
+        <xs:annotation>
+          <xs:documentation>Other</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ImageModality">
+    <xs:annotation>
+      <xs:documentation>Type of the image capturing machinery</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:attribute name="value" type="ImageModality-list" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

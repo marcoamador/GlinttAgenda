@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="Test" type="Test">
+    <xs:annotation>
+      <xs:documentation>[Template] Master Definition</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Test">
+    <xs:annotation>
+      <xs:documentation>[Template] Master Definition</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="stringErr" minOccurs="0" maxOccurs="unbounded" type="string">
+            <xs:annotation>
+              <xs:documentation>Strings with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="stringCorr" minOccurs="0" maxOccurs="unbounded" type="string">
+            <xs:annotation>
+              <xs:documentation>Strings with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="booleanErr" minOccurs="0" maxOccurs="unbounded" type="boolean">
+            <xs:annotation>
+              <xs:documentation>Booleans with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="booleanCorr" minOccurs="0" maxOccurs="unbounded" type="boolean">
+            <xs:annotation>
+              <xs:documentation>Booleans with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="integerErr" minOccurs="0" maxOccurs="unbounded" type="integer">
+            <xs:annotation>
+              <xs:documentation>Integers with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="integerCorr" minOccurs="0" maxOccurs="unbounded" type="integer">
+            <xs:annotation>
+              <xs:documentation>Integers with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="decimalErr" minOccurs="0" maxOccurs="unbounded" type="decimal">
+            <xs:annotation>
+              <xs:documentation>Decimals with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="decimalCorr" minOccurs="0" maxOccurs="unbounded" type="decimal">
+            <xs:annotation>
+              <xs:documentation>Decimals with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="b64Err" minOccurs="0" maxOccurs="unbounded" type="base64Binary">
+            <xs:annotation>
+              <xs:documentation>Binaries with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="b64Corr" minOccurs="0" maxOccurs="unbounded" type="base64Binary">
+            <xs:annotation>
+              <xs:documentation>Binaries with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="instantErr" minOccurs="0" maxOccurs="unbounded" type="instant">
+            <xs:annotation>
+              <xs:documentation>Instants with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="instantCorr" minOccurs="0" maxOccurs="unbounded" type="instant">
+            <xs:annotation>
+              <xs:documentation>Instants with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="uriErr" minOccurs="0" maxOccurs="unbounded" type="uri">
+            <xs:annotation>
+              <xs:documentation>Uri's with invalid content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="uriCorr" minOccurs="0" maxOccurs="unbounded" type="uri">
+            <xs:annotation>
+              <xs:documentation>Uri's with correct content</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

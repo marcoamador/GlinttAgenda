@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="Questionnaire" type="Questionnaire">
+    <xs:annotation>
+      <xs:documentation>A set of answers to predefined lists of questions. The answers may be grouped into coherent subsets, corresponding to the structure of the grouping of the underlying questions.</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="Questionnaire">
+    <xs:annotation>
+      <xs:documentation>A set of answers to predefined lists of questions. The answers may be grouped into coherent subsets, corresponding to the structure of the grouping of the underlying questions.</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="status" minOccurs="1" maxOccurs="1" type="ObservationStatus">
+            <xs:annotation>
+              <xs:documentation>The status of the questionnaire as a whole</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="authored" minOccurs="1" maxOccurs="1" type="instant">
+            <xs:annotation>
+              <xs:documentation>The date and/or time that this version of the questionnaire was authored</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="subject" minOccurs="1" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>The subject of the questionnaires: this is the patient that the answers apply to, but this person is not necessarily the source of information</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="author" minOccurs="1" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Person that collected the answers to the questions in the Questionnaire</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="source" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>The person that answered the questions about the subject. Only used when this is not the subject him/herself</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="name" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Structured name for a predefined list of questions this questionnaire is responding to</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="identifier" minOccurs="0" maxOccurs="1" type="Identifier">
+            <xs:annotation>
+              <xs:documentation>An identifier that identifier this specific set of answers</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="visit" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Visit during which this questionnaireanswers were collected. When there were multiple visits, this is the one considered most relevant to the context of the answers.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="answer" type="Questionnaire.Answer" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Answers to questions on a questionnaire</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="section" type="Questionnaire.Section" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>A group of anwers to a possibly similarly grouped set of question in the questionnaire</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Questionnaire.Answer">
+    <xs:annotation>
+      <xs:documentation>A set of answers to predefined lists of questions. The answers may be grouped into coherent subsets, corresponding to the structure of the grouping of the underlying questions.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="name" minOccurs="1" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Code of the answer, used to relate an answer to a question in the questionnaire and/or the actual question text</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:choice minOccurs="0" maxOccurs="1" >
+            <xs:annotation>
+              <xs:documentation>The actual answer data</xs:documentation>
+            </xs:annotation>
+            <xs:element name="valueQuantity" type="Quantity"/>
+            <xs:element name="valueCodeableConcept" type="CodeableConcept"/>
+            <xs:element name="valueCoding" type="Coding"/>
+            <xs:element name="valueRatio" type="Ratio"/>
+            <xs:element name="valueChoice" type="Choice"/>
+            <xs:element name="valuePeriod" type="Period"/>
+            <xs:element name="valueDateTime" type="dateTime"/>
+            <xs:element name="valueString" type="string"/>
+            <xs:element name="valueCode" type="code"/>
+          </xs:choice>
+          <xs:element name="evidence" minOccurs="0" maxOccurs="1" type="ResourceReference">
+            <xs:annotation>
+              <xs:documentation>Data captured from the care process which supports the given answer.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="remarks" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>The remark contains information about the answer given. This is additional information about the anwer the author wishes to convey, but should not be used to contain information that is part of the answer itself.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Questionnaire.Section">
+    <xs:annotation>
+      <xs:documentation>A set of answers to predefined lists of questions. The answers may be grouped into coherent subsets, corresponding to the structure of the grouping of the underlying questions.</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="name" minOccurs="0" maxOccurs="1" type="CodeableConcept">
+            <xs:annotation>
+              <xs:documentation>Structured name for a section of a predefined list of questions this questionnaire is responding to.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="answer" type="Questionnaire.Answer" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Answers to questions on a section of a questionnaire</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="section" type="Questionnaire.Section" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>A sub-section within a section in a questionnaire</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

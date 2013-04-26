@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Copyright (c) 2011-2012, HL7, Inc.
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without modification, 
+  are permitted provided that the following conditions are met:
+  
+   * Redistributions of source code must retain the above copyright notice, this 
+     list of conditions and the following disclaimer.
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
+     and/or other materials provided with the distribution.
+   * Neither the name of HL7 nor the names of its contributors may be used to 
+     endorse or promote products derived from this software without specific 
+     prior written permission.
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  POSSIBILITY OF SUCH DAMAGE.
+  
+
+  Generated on Mon, Apr 15, 2013 13:14+1000 for FHIR v0.08 
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://hl7.org/fhir" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="http://hl7.org/fhir" elementFormDefault="qualified" version="0.08">
+  <xs:include schemaLocation="fhir-base.xsd"/>
+  <xs:element name="ValueSet" type="ValueSet">
+    <xs:annotation>
+      <xs:documentation>Value Set - a set of defined codes from one or more code systems that may be bound to a context</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="ValueSet">
+    <xs:annotation>
+      <xs:documentation>Value Set - a set of defined codes from one or more code systems that may be bound to a context</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Resource">
+        <xs:sequence>
+          <xs:element name="name" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>A free text natural language name describing the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="author" type="ValueSet.Author" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Details of the author who accepts responsibility for publishing the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="description" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>A free text natural language description of the value set - contents, reason for definition, conditions of use, etc.</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="status" minOccurs="1" maxOccurs="1" type="ValueSetStatus">
+            <xs:annotation>
+              <xs:documentation>The status of the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="date" minOccurs="1" maxOccurs="1" type="dateTime">
+            <xs:annotation>
+              <xs:documentation>The date that the value set status was last changed</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="identifier" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>The identifier that is used to identify this value set when it is referenced in a specification, model, design or an instance</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="version" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>The identifier that is used to identify this version of the value set when it is referenced in a specification, model, design or instance</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="restricts" minOccurs="0" maxOccurs="unbounded" type="uri">
+            <xs:annotation>
+              <xs:documentation>An assertion that this value set is a restriction on another value set - that it only includes codes that are part of the other value set. The value set itself must ensure that this is true - the contents of the value set are not automatically bounded by the contents of any value set identified here. This allows profile tooling to reason about the relationships between value sets without having to determine the value set contents</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="import" minOccurs="0" maxOccurs="unbounded" type="uri">
+            <xs:annotation>
+              <xs:documentation>Includes the contents of the referenced value set as part of the contents of this value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="include" type="ValueSet.Include" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Include one or more codes from a code system</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="exclude" type="ValueSet.Include" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Exclude one or more codes from the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ValueSet.Author">
+    <xs:annotation>
+      <xs:documentation>Value Set - a set of defined codes from one or more code systems that may be bound to a context</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="name" minOccurs="1" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>The name of the individual or organization that contributed to the development of the content of the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="role" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>In what fashion this named author contributed to the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="telecom" minOccurs="0" maxOccurs="unbounded" type="Contact">
+            <xs:annotation>
+              <xs:documentation>Contacts of the author to assist a user in finding and communicating with the author</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ValueSet.Include">
+    <xs:annotation>
+      <xs:documentation>Value Set - a set of defined codes from one or more code systems that may be bound to a context</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="system" minOccurs="1" maxOccurs="1" type="uri">
+            <xs:annotation>
+              <xs:documentation>The code system from which the selected codes come from</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="version" minOccurs="0" maxOccurs="1" type="string">
+            <xs:annotation>
+              <xs:documentation>The version of the code system that the codes are selected from</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="mode" minOccurs="1" maxOccurs="1" type="CodeSelectionMode">
+            <xs:annotation>
+              <xs:documentation>The mode of selection - whether the code itself, and/or its descendants are being selected</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="code" minOccurs="0" maxOccurs="unbounded" type="code">
+            <xs:annotation>
+              <xs:documentation>Specifies a code or concept to be included or excluded as specified by the mode from the value set</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="filter" type="ValueSet.Filter" minOccurs="0" maxOccurs="unbounded">
+            <xs:annotation>
+              <xs:documentation>Select concepts by specify a matching criteria based on the properties defined by the system. If multiple filters are specified, they must all be true</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ValueSet.Filter">
+    <xs:annotation>
+      <xs:documentation>Value Set - a set of defined codes from one or more code systems that may be bound to a context</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:sequence>
+          <xs:element name="property" minOccurs="1" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation>A code that identifies a property defined in the code system</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="op" minOccurs="1" maxOccurs="1" type="FilterOperator">
+            <xs:annotation>
+              <xs:documentation>The kind of operation to perform as part of the filter criteria</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+          <xs:element name="value" minOccurs="1" maxOccurs="1" type="code">
+            <xs:annotation>
+              <xs:documentation>The match value may be either a code defined by the system, or a string value which is used a regex match on the literal string of the property value</xs:documentation>
+           </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="CodeSelectionMode-list">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="code">
+        <xs:annotation>
+          <xs:documentation>Only this code is selected</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="children">
+        <xs:annotation>
+          <xs:documentation>Only the immediate children (codes with a is_a relationship) are selected, but not this code itself</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="descendants">
+        <xs:annotation>
+          <xs:documentation>All descendants of this code are selected, but not this code itself</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="all">
+        <xs:annotation>
+          <xs:documentation>This code and any descendants are selected</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="CodeSelectionMode">
+    <xs:annotation>
+      <xs:documentation>The way in which the code is selected</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:attribute name="value" type="CodeSelectionMode-list" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="ValueSetStatus-list">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="draft">
+        <xs:annotation>
+          <xs:documentation>This valueset is still under development</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="testing">
+        <xs:annotation>
+          <xs:documentation>This valueset was authored for testing purposes (or education/evaluation/evangelisation)</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="review">
+        <xs:annotation>
+          <xs:documentation>This valueset is undergoing review to check that it is ready for production use</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="production">
+        <xs:annotation>
+          <xs:documentation>This valueset is ready for use in production systems</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="withdrawn">
+        <xs:annotation>
+          <xs:documentation>This valueset has been withdrawn and should no longer be used</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="superseded">
+        <xs:annotation>
+          <xs:documentation>This valueset has been replaced and a different valueset should be used in its place</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ValueSetStatus">
+    <xs:annotation>
+      <xs:documentation>The lifecycle status of a Value Set</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:attribute name="value" type="ValueSetStatus-list" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="FilterOperator-list">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="=">
+        <xs:annotation>
+          <xs:documentation>The property value has the concept specified by the value</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="is_a">
+        <xs:annotation>
+          <xs:documentation>The property value has a concept that has an is_a relationship with the value</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="is_not_a">
+        <xs:annotation>
+          <xs:documentation>The property value has a concept that does not have an is_a relationship with the value</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="regex">
+        <xs:annotation>
+          <xs:documentation>The property value representation matches the regex specified in the value</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="FilterOperator">
+    <xs:annotation>
+      <xs:documentation>The kind of operation to perform as part of a property based filter</xs:documentation>
+      <xs:documentation>If the element is present, it must have either a @value, an @id, or extensions</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="Element">
+        <xs:attribute name="value" type="FilterOperator-list" use="optional"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

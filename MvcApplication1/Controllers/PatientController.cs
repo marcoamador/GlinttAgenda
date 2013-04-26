@@ -36,6 +36,15 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
+
+                try
+                {
+                    Common.validateXML(result, "~/xsd/patient.xsd");
+                }
+                catch (Common.InvalidXmlException ie)
+                {
+                    return Content(ie.error + result);
+                }
                 return Content(result);
             }
             else {
@@ -47,7 +56,6 @@ namespace MvcApplication1.Controllers
 
         public ActionResult SearchById(String id)
         {
-
             return Content(new Patient().byId(id)) ;
         }
 
