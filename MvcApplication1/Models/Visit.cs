@@ -91,6 +91,21 @@ namespace MvcApplication1.Models
         {
             List<Object> l = new List<Object>();
             int i = 0;
+
+            int pageNum, itemNum;
+
+            if (String.IsNullOrEmpty(v.QueryString["page"]))
+                pageNum = 1;
+            else
+                pageNum = int.Parse(v.QueryString["page"]);
+
+
+            if (String.IsNullOrEmpty(v.QueryString["results"]))
+                itemNum = 10;
+            else
+                itemNum = int.Parse(v.QueryString["results"]);
+
+
             string query1 = "Select * from g_cons_marc where ";
             foreach (string querykeys in v.QueryString.Keys)
             {
@@ -122,7 +137,7 @@ namespace MvcApplication1.Models
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
             if (res.Count() > 0)
             {
-                return generateFeed(res);
+                return generateFeed(res, res.Count(), pageNum, itemNum);
             }
             else
             {
@@ -130,7 +145,7 @@ namespace MvcApplication1.Models
             }
         }
 
-        public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res)
+        public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res, int count, int pageNum, int itemNum)
         {
             StringBuilder feed = new StringBuilder();
             feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
@@ -140,7 +155,7 @@ namespace MvcApplication1.Models
             Guid feedId;
             feedId = Guid.NewGuid();
             feed.AppendFormat(@"<id>{0}</id>", feedId.ToString());
-            feed.AppendLine(@"<link rel=""self"" href=""http://site.com"" />");
+            feed.AppendLine(@"<link rel=""self"" type=""application/atom+xml"" href=""http://site.com"" />");
 
             feed.AppendLine(@"<entry>");
             feed.AppendLine(@"<title>Search Results</title>");
@@ -155,11 +170,16 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Visit"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (res.Count() > 0)
+            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
             {
-                foreach (g_cons_marc i in res)
+                int min = 0;
+                if (res.Count() > (itemNum * pageNum))
+                    min = (itemNum * pageNum);
+                else
+                    min = res.Count();
+                for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    feed.Append(visitParser(i));
+                    feed.Append(visitParser(res.ElementAt(j)));
                 }
             }
             feed.AppendLine(@"</content>");
