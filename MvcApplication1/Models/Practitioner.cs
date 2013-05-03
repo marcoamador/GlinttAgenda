@@ -93,36 +93,40 @@ namespace MvcApplication1.Models
                 pageNum = int.Parse(pr.QueryString["page"]);
 
 
-            if (String.IsNullOrEmpty(pr.QueryString["results"]))
+            if (String.IsNullOrEmpty(pr.QueryString["_count"]))
                 itemNum = 10;
             else
-                itemNum = int.Parse(pr.QueryString["results"]);
+                itemNum = int.Parse(pr.QueryString["_count"]);
 
 
             string query1 = "Select * from g_pess_hosp_def where ";
             foreach (string querykeys in pr.QueryString.Keys)
             {
-                if (i != 0)
-                {
-                    query1 += " and ";
-                }
-                int j = 0;
-                foreach (string conver in Practitioner.ParamToDic[querykeys])
+                if (Practitioner.ParamToDic.ContainsKey(querykeys))
                 {
 
-                    if (conver != null)
+                    if (i != 0)
                     {
-                        if (j != 0)
-                        {
-                            query1 += " or ";
-                        }
-                        query1 += conver + "=" + "?";
-
-                        l.Add(pr.QueryString[querykeys]);
-                        j++;
+                        query1 += " and ";
                     }
+                    int j = 0;
+                    foreach (string conver in Practitioner.ParamToDic[querykeys])
+                    {
+
+                        if (conver != null)
+                        {
+                            if (j != 0)
+                            {
+                                query1 += " or ";
+                            }
+                            query1 += conver + "=" + "?";
+
+                            l.Add(pr.QueryString[querykeys]);
+                            j++;
+                        }
+                    }
+                    i++;
                 }
-                i++;
 
             }
 
@@ -148,11 +152,33 @@ namespace MvcApplication1.Models
             Guid feedId;
             feedId = Guid.NewGuid();
             feed.AppendFormat(@"<id>{0}</id>", feedId.ToString());
-            feed.AppendLine(@"<link rel=""self"" type=""application/atom+xml"" href=""http://site.com"" />");
+            int next = 0, prev = 0, last = 0;
+
+            if (((count - (pageNum - 1 * itemNum)) / itemNum) <= pageNum)
+                next = pageNum;
+            else
+                next = pageNum + 1;
+
+            if ((count / itemNum) <= 1)
+                last = 1;
+            else
+                last = count / itemNum;
+
+            if (((count - (pageNum - 1 * itemNum)) / itemNum) >= pageNum)
+                prev = pageNum;
+            else
+                prev = pageNum - 1;
+
+            String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
+            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + "1");
+            feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + prev.ToString());
+            feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + next.ToString());
+            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + last.ToString());
 
             feed.AppendLine(@"<entry>");
             feed.AppendLine(@"<title>Search Results</title>");
-            feed.AppendLine(@"<link rel=""self"" href=""http://site.com""/>");
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
             Guid entryId = Guid.NewGuid();
             feed.AppendFormat(@"<id>{0}</id>", entryId.ToString());
             DateTime entryTime = DateTime.Now;

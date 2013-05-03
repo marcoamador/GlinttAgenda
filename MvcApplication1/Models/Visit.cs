@@ -100,36 +100,40 @@ namespace MvcApplication1.Models
                 pageNum = int.Parse(v.QueryString["page"]);
 
 
-            if (String.IsNullOrEmpty(v.QueryString["results"]))
+            if (String.IsNullOrEmpty(v.QueryString["_count"]))
                 itemNum = 10;
             else
-                itemNum = int.Parse(v.QueryString["results"]);
+                itemNum = int.Parse(v.QueryString["_count"]);
 
 
             string query1 = "Select * from g_cons_marc where ";
             foreach (string querykeys in v.QueryString.Keys)
             {
-                if (i != 0)
-                {
-                    query1 += " and ";
-                }
-                int j = 0;
-                foreach (string conver in Visit.ParamToDic[querykeys])
+                if (Visit.ParamToDic.ContainsKey(querykeys))
                 {
 
-                    if (conver != null)
+                    if (i != 0)
                     {
-                        if (j != 0)
-                        {
-                            query1 += " or ";
-                        }
-                        query1 += conver + "=" + "?";
-
-                        l.Add(v.QueryString[querykeys]);
-                        j++;
+                        query1 += " and ";
                     }
+                    int j = 0;
+                    foreach (string conver in Visit.ParamToDic[querykeys])
+                    {
+
+                        if (conver != null)
+                        {
+                            if (j != 0)
+                            {
+                                query1 += " or ";
+                            }
+                            query1 += conver + "=" + "?";
+
+                            l.Add(v.QueryString[querykeys]);
+                            j++;
+                        }
+                    }
+                    i++;
                 }
-                i++;
 
             }
 
@@ -149,17 +153,39 @@ namespace MvcApplication1.Models
         {
             StringBuilder feed = new StringBuilder();
             feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
-            feed.AppendLine(@"<title>g-patient feed</title>");
+            feed.AppendFormat(@"<title>g-patient search page {0}</title>", pageNum.ToString());
             DateTime now = DateTime.Now;
             feed.AppendFormat(@"<updated>{0}</updated>", now.ToString());
             Guid feedId;
             feedId = Guid.NewGuid();
             feed.AppendFormat(@"<id>{0}</id>", feedId.ToString());
-            feed.AppendLine(@"<link rel=""self"" type=""application/atom+xml"" href=""http://site.com"" />");
+            int next = 0, prev = 0, last = 0;
+
+            if (((count - (pageNum - 1 * itemNum)) / itemNum) <= pageNum)
+                next = pageNum;
+            else
+                next = pageNum + 1;
+
+            if ((count / itemNum) <= 1)
+                last = 1;
+            else
+                last = count / itemNum;
+
+            if (((count - (pageNum - 1 * itemNum)) / itemNum) >= pageNum)
+                prev = pageNum;
+            else
+                prev = pageNum - 1;
+
+            String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
+            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + "1");
+            feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + prev.ToString());
+            feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + next.ToString());
+            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + last.ToString());
 
             feed.AppendLine(@"<entry>");
             feed.AppendLine(@"<title>Search Results</title>");
-            feed.AppendLine(@"<link rel=""self"" href=""http://site.com""/>");
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
             Guid entryId = Guid.NewGuid();
             feed.AppendFormat(@"<id>{0}</id>", entryId.ToString());
             DateTime entryTime = DateTime.Now;
