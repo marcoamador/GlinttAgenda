@@ -13,13 +13,13 @@ namespace MvcApplication1
         public static void validateXML(String xml, String xsd)
         {
             XmlReaderSettings settings = new XmlReaderSettings();
-            string x =  HttpContext.Current.Server.MapPath(xsd);
-            settings.Schemas.Add("http://hl7.org/fhir",x);
+            string x = HttpContext.Current.Server.MapPath(xsd);
+            settings.Schemas.Add("http://hl7.org/fhir", x);
             settings.ValidationType = ValidationType.Schema;
             settings.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
             settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
-            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;   
-            XmlReader reader = XmlReader.Create(new StringReader( xml), settings);
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+            XmlReader reader = XmlReader.Create(new StringReader(xml), settings);
 
             while (reader.Read()) ;
         }
@@ -41,8 +41,7 @@ namespace MvcApplication1
             {
             }
         }
-            
-            
-    
+
     }
 }
+

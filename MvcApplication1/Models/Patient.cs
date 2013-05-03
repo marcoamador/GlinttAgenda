@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Text;
 
 
 namespace MvcApplication1.Models
@@ -132,7 +133,7 @@ namespace MvcApplication1.Models
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res = gE.g_doente.SqlQuery(query1, l.ToArray());
             if (res.Count() > 0)
             {
-                return patientParser(res.First());
+                return generateFeed(res);
             }
             else
             {
@@ -140,8 +141,42 @@ namespace MvcApplication1.Models
             }
         }
 
+        public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res)
+        {
+            StringBuilder feed = new StringBuilder();
+            feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
+            feed.AppendLine(@"<title>g-patient feed</title>");
+            DateTime now = DateTime.Now;
+            feed.AppendFormat(@"<updated>{0}</updated>", now.ToString());
+            Guid feedId;
+            feedId = Guid.NewGuid();
+            feed.AppendFormat(@"<id>{0}</id>", feedId.ToString());
+            feed.AppendLine(@"<link rel=""self"" href=""http://site.com"" />");
 
+            feed.AppendLine(@"<entry>");
+            feed.AppendLine(@"<title>Search Results</title>");
+            feed.AppendLine(@"<link rel=""self"" href=""http://site.com""/>");
+            Guid entryId = Guid.NewGuid();
+            feed.AppendFormat(@"<id>{0}</id>", entryId.ToString());
+            DateTime entryTime = DateTime.Now;
+            feed.AppendFormat(@"<updated>{0}</updated>\n", entryTime.ToString());
+            feed.AppendFormat(@"<published>{0}</published>\n", entryTime.ToString());
+            feed.AppendLine(@"<author>");
+            feed.AppendLine(@"<name>g-patient</name>");
+            feed.AppendLine(@"</author>");
+            feed.AppendLine(@"<category term=""Patient"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+            feed.AppendLine(@"<content type=""text/xml"">");
+            if(res.Count() > 0){
+                foreach(g_doente i in res){
+                    feed.Append(patientParser(i));
+                }
+            }
+            feed.AppendLine(@"</content>");
+            feed.AppendLine(@"</entry>");
 
+            feed.Append(@"</feed>");
+            return feed.ToString();
+        }
 
     }
 }
