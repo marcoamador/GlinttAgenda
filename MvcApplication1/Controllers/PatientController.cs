@@ -8,11 +8,8 @@ using MvcApplication1.Models;
 
 namespace MvcApplication1.Controllers
 {
-
-
     public class PatientController : Controller
     {
-       
         glinttEntities gE;
         protected override void Initialize(RequestContext rc)
         {
