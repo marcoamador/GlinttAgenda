@@ -28,21 +28,15 @@ namespace MvcApplication1.Models
         public Practitioner()
         {
             gE = new glinttEntities();
-<<<<<<< HEAD
-        }
-=======
+
         }   
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
+
 
         public String practitionerParser(g_pess_hosp_def d)
         {
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
-<<<<<<< HEAD
-            
-=======
-                        
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
+
             //setup id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id= d.n_mecan;

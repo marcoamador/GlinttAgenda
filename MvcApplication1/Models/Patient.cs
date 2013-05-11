@@ -9,7 +9,7 @@ namespace MvcApplication1.Models
 {
     public class Patient
     {
-<<<<<<< HEAD
+
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
             {"_id", new List<string>(){"doente"}},
             {"active",new List<string>() {"flag_falec"}},
@@ -18,16 +18,7 @@ namespace MvcApplication1.Models
             {"birthdate-before",new List<string>(){"dt_nasc"}},
             {"birthdate-after",new List<string>(){"dt_nasc"}},
             {"family",new List<string>(){"last_name"}},
-=======
-        private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() { 
-            {"_id", new List<string>(){"doente"}}, 
-            {"active",new List<string>() {"flag_falec"}}, 
-            {"address",new List<string>() {"morada"}}, 
-            {"birthdate",new List<string>() {"dt_nasc"}},
-            {"birthdate-before",new List<string>(){"dt_nasc"}},
-            {"birthdate-after",new List<string>(){"dt_nasc"}}, 
-            {"family",new List<string>(){"last_name"}}, 
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
+
             {"gender",new List<string>(){"sexo"}},
             {"given",new List<string>(){"nome"}},
             {"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
@@ -36,10 +27,6 @@ namespace MvcApplication1.Models
             {"phonetic",null},
             {"telecom",new List<string>(){"telef1","telef2"}}
         };
-<<<<<<< HEAD
-
-=======
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
 
         glinttEntities gE;
 
@@ -70,36 +57,16 @@ namespace MvcApplication1.Models
             i2.InternalId = patient.t_doente;
             dem.Identifier.Add(i2);
             dem.InternalId = patient.t_doente;
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
             Hl7.Fhir.Model.HumanName human = new Hl7.Fhir.Model.HumanName();
             human.Text = patient.nome;
             dem.Name = new List<Hl7.Fhir.Model.HumanName>();
             dem.Name.Add(human); //falta completar
-<<<<<<< HEAD
-
-            Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
-            gender.Code = patient.sexo;
-            dem.Gender = gender;
-
-=======
             
             Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
             gender.Code = patient.sexo;
             dem.Gender = gender;
             
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
-            Hl7.Fhir.Model.Contact c1 = new Hl7.Fhir.Model.Contact();
-            Hl7.Fhir.Model.Contact c2 = new Hl7.Fhir.Model.Contact();
-            c1.Value = patient.telef1;
-            c2.Value = patient.telef2;
-            dem.Telecom = new List<Hl7.Fhir.Model.Contact>();
-            dem.Telecom.Add(c1);
-            dem.Telecom.Add(c2);
-<<<<<<< HEAD
 
             Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime();
             dt_nasc.Contents = patient.dt_nasc.ToString();
@@ -108,18 +75,7 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
             dead.Contents = patient.flag_falec == "1"; //confirmar
             dem.Deceased = dead;
-
-=======
             
-            Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime();
-            dt_nasc.Contents = patient.dt_nasc.ToString();
-            dem.BirthDate = dt_nasc;
-           
-            Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
-            dead.Contents = patient.flag_falec == "1"; //confirmar
-            dem.Deceased = dead;
-            
->>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
             Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
             address.City = patient.localidade;
             address.Country = patient.cod_pais; //confirmar
