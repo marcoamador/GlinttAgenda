@@ -21,6 +21,12 @@ namespace MvcApplication1
             );
 
             routes.MapRoute(
+                name: "Patient_Update",
+                url: "Patient/Update/{id}",
+                defaults: new { controller = "Patient", action = "Update", id="" }
+            );
+
+            routes.MapRoute(
                 name: "Patient",
                 url: "Patient/{id}",
                 defaults: new { controller = "Patient", action = "Index", id = "" }
@@ -39,6 +45,12 @@ namespace MvcApplication1
             );
 
             routes.MapRoute(
+                name: "Visit_Update",
+                url: "Visit/Update/{id}",
+                defaults: new { controller = "Visit", action = "Update", id = "" }
+            );
+
+            routes.MapRoute(
                 name: "Practitioner_Search",
                 url: "Practitioner/Search",
                 defaults: new { controller = "Practitioner", action = "Search" }
@@ -48,6 +60,12 @@ namespace MvcApplication1
                 name: "Practitioner",
                 url: "Practitioner/{id}",
                 defaults: new { controller = "Practitioner", action = "Index", id = "" }
+            );
+
+            routes.MapRoute(
+                name: "Practitioner_Update",
+                url: "Practitioner/Update/{id}",
+                defaults: new { controller = "Practitioner", action = "Update", id = "" }
             );
 
            routes.MapRoute(

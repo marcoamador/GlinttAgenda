@@ -11,12 +11,22 @@ namespace MvcApplication1.Models
 
     public class Patient
     {
-        private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() { { "_id", new List<string>(){"doente"} }, { "active",new List<string>() {"flag_falec"} }, 
-                                            { "address",new List<string>() {"morada"} }, { "birthdate",new List<string>() {"dt_nasc"} },{"birthdate-before",new List<string>(){"dt_nasc"}},
-                                            {"birthdate-after",new List<string>(){"dt_nasc"}}, {"family",new List<string>(){"last_name"}}, {"gender",new List<string>(){"sexo"}},
-                                            {"given",new List<string>(){"nome"}},{"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
-                                            {"language",null},{"name",new List<string>(){"nome"}},{"phonetic",null},
-                                            {"telecom",new List<string>(){"telef1","telef2"}}};
+        private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
+            {"_id", new List<string>(){"doente"}},
+            {"active",new List<string>() {"flag_falec"}},
+            {"address",new List<string>() {"morada"}},
+            {"birthdate",new List<string>() {"dt_nasc"}},
+            {"birthdate-before",new List<string>(){"dt_nasc"}},
+            {"birthdate-after",new List<string>(){"dt_nasc"}},
+            {"family",new List<string>(){"last_name"}},
+            {"gender",new List<string>(){"sexo"}},
+            {"given",new List<string>(){"nome"}},
+            {"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
+            {"language",null},
+            {"name",new List<string>(){"nome"}},
+            {"phonetic",null},
+            {"telecom",new List<string>(){"telef1","telef2"}}
+        };
 
 
         glinttEntities gE;
@@ -49,13 +59,16 @@ namespace MvcApplication1.Models
             i2.InternalId = patient.t_doente;
             dem.Identifier.Add(i2);
             dem.InternalId = patient.t_doente;
+
             Hl7.Fhir.Model.HumanName human = new Hl7.Fhir.Model.HumanName();
             human.Text = patient.nome;
             dem.Name = new List<Hl7.Fhir.Model.HumanName>();
             dem.Name.Add(human); //falta completar
+
             Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
             gender.Code = patient.sexo;
             dem.Gender = gender;
+
             Hl7.Fhir.Model.Contact c1 = new Hl7.Fhir.Model.Contact();
             Hl7.Fhir.Model.Contact c2 = new Hl7.Fhir.Model.Contact();
             c1.Value = patient.telef1;
@@ -63,12 +76,15 @@ namespace MvcApplication1.Models
             dem.Telecom = new List<Hl7.Fhir.Model.Contact>();
             dem.Telecom.Add(c1);
             dem.Telecom.Add(c2);
+
             Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime();
             dt_nasc.Contents = patient.dt_nasc.ToString();
             dem.BirthDate = dt_nasc;
+
             Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
             dead.Contents = patient.flag_falec == "1"; //confirmar
             dem.Deceased = dead;
+
             Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
             address.City = patient.localidade;
             address.Country = patient.cod_pais; //confirmar
@@ -90,6 +106,7 @@ namespace MvcApplication1.Models
         {
             Object[] key = { id };
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?", key);
+
             if (sqlresult.Count() == 0)
             {
                 return null;
@@ -224,6 +241,51 @@ namespace MvcApplication1.Models
 
             feed.Append(@"</feed>");
             return feed.ToString();
+        }
+
+        public String update(HttpRequestBase p, String id)
+        {
+            Object[] key = { id };
+            List<Object> l = new List<Object>();
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?", key);
+            if (sqlresult.Count() != 0)
+            {
+                
+                String query1 = "update g_doente set ";
+                foreach (string querykeys in p.QueryString.Keys)
+                {
+                    if (Patient.ParamToDic.ContainsKey(querykeys) || !querykeys.Equals("_id"))
+                    {
+
+                        int j = 0;
+
+                        foreach (string conver in Patient.ParamToDic[querykeys])
+                        {
+
+                            if (conver != null)
+                            {
+                                if (j != 0)
+                                {
+                                    query1 += " , ";
+                                }
+                                query1 += conver + "=" + "?";
+                                l.Add(p.QueryString[querykeys]);
+                                j++;
+                            }
+                        }
+                    }
+
+                }
+
+                query1 += " where t_doente = " + id + " ;";
+
+                gE.Database.ExecuteSqlCommand(query1, l.ToArray());
+                gE.SaveChanges();
+                return byId(id);
+
+            }
+
+            return null;
         }
 
     }

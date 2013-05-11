@@ -11,17 +11,17 @@ namespace MvcApplication1.Models
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() 
         {
-            { "_id", new List<string>() {"n_mecan"} }, 
-            { "address", new List<string>() {"morada"} }, 
-            { "family", null },
-            { "gender", null },
-            { "given", new List<string>() {"nome"} },
-            { "identifier", new List<string>() {"n-mecan"} },
-            { "language", null },
-            { "name", new List<string>() {"nome"} },
-            { "organization", null },
-            { "phonetic", null },
-            { "telecom", new List<string>() {"telef"} }
+            {"_id", new List<string>() {"n_mecan"}}, 
+            {"address", new List<string>() {"morada"}}, 
+            {"family", null},
+            {"gender", null},
+            {"given", new List<string>() {"nome"}},
+            {"identifier", new List<string>() {"n-mecan"}},
+            {"language", null},
+            {"name", new List<string>() {"nome"}},
+            {"organization", null},
+            {"phonetic", null},
+            {"telecom", new List<string>() {"telef"}}
         };
 
 
@@ -32,12 +32,10 @@ namespace MvcApplication1.Models
             gE = new glinttEntities();
         }
 
-
-       
-
         public String practitionerParser(g_pess_hosp_def d)
         {
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
+            p.Details = new Hl7.Fhir.Model.Demographics();
             
             //setup id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
@@ -70,8 +68,8 @@ namespace MvcApplication1.Models
 
         public String byId(string id)
         {
-            Object[] key = { id };
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=?", key);
+ 
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan='" + id + "';");
             if (sqlresult.Count() == 0)
             {
                 return null;
@@ -206,6 +204,50 @@ namespace MvcApplication1.Models
 
             feed.Append(@"</feed>");
             return feed.ToString();
+        }
+
+        public String update(HttpRequestBase p, String id)
+        {
+            Object[] key = { id };
+            List<Object> l = new List<Object>();
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=?", key);
+            if (sqlresult.Count() != 0)
+            {
+
+                String query1 = "update g_pess_hosp_def set ";
+                foreach (string querykeys in p.QueryString.Keys)
+                {
+                    if (Practitioner.ParamToDic.ContainsKey(querykeys) || !querykeys.Equals("_id"))
+                    {
+
+                        int j = 0;
+
+                        foreach (string conver in Practitioner.ParamToDic[querykeys])
+                        {
+
+                            if (conver != null)
+                            {
+                                if (j != 0)
+                                {
+                                    query1 += " , ";
+                                }
+                                query1 += conver + "=" + "?";
+                                l.Add(p.QueryString[querykeys]);
+                                j++;
+                            }
+                        }
+                    }
+
+                }
+
+                query1 += " where n_mecan = '" + id  + "' ;";
+                gE.Database.ExecuteSqlCommand(query1, l.ToArray());
+                gE.SaveChanges();
+                return query1;
+
+            }
+
+            return null;
         }
 
 

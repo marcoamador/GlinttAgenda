@@ -215,7 +215,50 @@ namespace MvcApplication1.Models
             return feed.ToString();
         }
 
+        public String update(HttpRequestBase p, String id)
+        {
+            Object[] key = { id };
+            List<Object> l = new List<Object>();
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where n_cons=?", key);
+            if (sqlresult.Count() != 0)
+            {
 
+                String query1 = "update g_cons_marc set ";
+                foreach (string querykeys in p.QueryString.Keys)
+                {
+                    if (Visit.ParamToDic.ContainsKey(querykeys) || !querykeys.Equals("_id"))
+                    {
+
+                        int j = 0;
+
+                        foreach (string conver in Visit.ParamToDic[querykeys])
+                        {
+
+                            if (conver != null)
+                            {
+                                if (j != 0)
+                                {
+                                    query1 += " , ";
+                                }
+                                query1 += conver + "=" + "?";
+                                l.Add(p.QueryString[querykeys]);
+                                j++;
+                            }
+                        }
+                    }
+
+                }
+
+                query1 += " where n_cons = " + id + " ;";
+
+                ge.Database.ExecuteSqlCommand(query1, l.ToArray());
+                ge.SaveChanges();
+                return byId(id);
+
+            }
+
+            return null;
+        }
 
 
 

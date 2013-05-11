@@ -70,5 +70,17 @@ namespace MvcApplication1.Controllers
             }
             return Content(s);
         }
+
+        public ActionResult Update(String id)
+        {
+            Patient p = new Patient();
+            String s = p.update(Request, id);
+            if (s == null)
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
+            return Content(s);
+        }
     }
 }
