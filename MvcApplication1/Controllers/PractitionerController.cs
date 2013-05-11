@@ -6,21 +6,17 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcApplication1.Models;
 
-
 namespace MvcApplication1.Controllers
 {
     public class PractitionerController : Controller
     {
-
-
         glinttEntities gE;
         protected override void Initialize(RequestContext rc)
         {
             base.Initialize(rc);
             gE = new glinttEntities();
         }
-
-
+        
         public ActionResult Index(String id)
         {
             if (Request.HttpMethod.Equals("GET"))

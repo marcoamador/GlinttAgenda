@@ -8,7 +8,6 @@ namespace MvcApplication1.Models
 {
     public class Practitioner
     {
-
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() 
         {
             {"_id", new List<string>() {"n_mecan"}}, 
@@ -24,19 +23,26 @@ namespace MvcApplication1.Models
             {"telecom", new List<string>() {"telef"}}
         };
 
-
         glinttEntities gE;
 
         public Practitioner()
         {
             gE = new glinttEntities();
+<<<<<<< HEAD
         }
+=======
+        }   
+>>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
 
         public String practitionerParser(g_pess_hosp_def d)
         {
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
+<<<<<<< HEAD
             
+=======
+                        
+>>>>>>> fb2d792b90fa911d2bdcf2031439307722feef01
             //setup id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id= d.n_mecan;
@@ -54,15 +60,13 @@ namespace MvcApplication1.Models
             tel.Value = d.telef;
             Hl7.Fhir.Model.Contact mail = new Hl7.Fhir.Model.Contact();
             mail.Value = d.email;
-
-
+            
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
             p.Role = new List<Hl7.Fhir.Model.CodeableConcept>(){role};
             p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
             p.Details.Name = new List<Hl7.Fhir.Model.HumanName>(){name};
             p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };
             
-
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
