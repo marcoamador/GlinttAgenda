@@ -42,6 +42,12 @@ namespace MvcApplication1
             }
         }
 
+        public static string GetDate(DateTime DateTime)
+        {
+            DateTime UtcDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime);
+            return XmlConvert.ToString(UtcDateTime, XmlDateTimeSerializationMode.Utc);
+        }
+
     }
 }
 
