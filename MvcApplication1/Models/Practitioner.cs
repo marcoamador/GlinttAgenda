@@ -150,7 +150,7 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)count - ((pageNum - 1) * itemNum) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
@@ -160,7 +160,7 @@ namespace MvcApplication1.Models
             else
                 last = (int)Math.Ceiling((decimal)count / itemNum);
 
-            if (Math.Ceiling((decimal)count - (pageNum - 1) * itemNum) / itemNum >= pageNum)
+            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
                 prev = pageNum;
             else
                 prev = pageNum - 1;

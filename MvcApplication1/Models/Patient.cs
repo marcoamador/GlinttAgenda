@@ -178,7 +178,7 @@ namespace MvcApplication1.Models
            
             int next = 0, prev = 0, last = 0;
 
-            if ( Math.Ceiling((decimal)count-((pageNum-1)*itemNum) / itemNum) <= pageNum)
+            if ( Math.Ceiling((decimal)(count- ((pageNum-1)*itemNum)) / itemNum) <= pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
@@ -186,15 +186,15 @@ namespace MvcApplication1.Models
             if (Math.Ceiling((decimal)count / itemNum) <= 1)
                 last = 1;
             else
-                last = (int) Math.Ceiling((decimal)count / itemNum);
+                last = (int) Math.Ceiling((decimal) count / itemNum );
 
-            if ( Math.Ceiling( (decimal)count - (pageNum - 1) * itemNum) / itemNum >= pageNum)
+            if ( Math.Ceiling( (decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "visit";
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
             feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
             if(!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
