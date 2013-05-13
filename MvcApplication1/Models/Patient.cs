@@ -178,17 +178,17 @@ namespace MvcApplication1.Models
            
             int next = 0, prev = 0, last = 0;
 
-            if (( (count-(pageNum-1*itemNum)) / itemNum) <= pageNum)
+            if ( Math.Ceiling((decimal)count-((pageNum-1)*itemNum) / itemNum) <= pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
 
-            if ((count / itemNum) <= 1)
+            if (Math.Ceiling((decimal)count / itemNum) <= 1)
                 last = 1;
             else
-                last = count/itemNum;
+                last = (int) Math.Ceiling((decimal)count / itemNum);
 
-            if (((count - (pageNum - 1 * itemNum)) / itemNum) >= pageNum)
+            if ( Math.Ceiling( (decimal)count - (pageNum - 1) * itemNum) / itemNum >= pageNum)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
