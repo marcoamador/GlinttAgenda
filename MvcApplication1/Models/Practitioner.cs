@@ -166,6 +166,7 @@ namespace MvcApplication1.Models
                 prev = pageNum - 1;
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
             feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
             if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
@@ -200,6 +201,7 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
                     feed.Append(practitionerParser(res.ElementAt(j)));
                 }
             }
