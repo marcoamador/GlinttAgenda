@@ -60,8 +60,8 @@ namespace MvcApplication1.Models
             p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
             p.Details.Name = new List<Hl7.Fhir.Model.HumanName>(){name};
             p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };
-            
-            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
+
+            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", "");
         }
 
         public String byId(string id)
@@ -141,13 +141,13 @@ namespace MvcApplication1.Models
         public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res, int count, int pageNum, int itemNum)
         {
             StringBuilder feed = new StringBuilder();
-            feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
+            feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"">");
             feed.AppendLine(@"<title>g-patient feed</title>");
             DateTime now = DateTime.Now;
-            feed.AppendFormat(@"<updated>{0}</updated>", now.ToString());
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(now)).ToString());
             Guid feedId;
             feedId = Guid.NewGuid();
-            feed.AppendFormat(@"<id>{0}</id>", feedId.ToString());
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
             if (((count - (pageNum - 1 * itemNum)) / itemNum) <= pageNum)
@@ -166,20 +166,26 @@ namespace MvcApplication1.Models
                 prev = pageNum - 1;
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
-            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + "1");
-            feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + prev.ToString());
-            feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + next.ToString());
-            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + last.ToString());
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
+            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
+            if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + prev.ToString()));
+            if (!(url.Remove(url.Length - 1) + next.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + next.ToString()));
+            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + last.ToString()));
+
+            feed.AppendLine(@"<author>");
+            feed.AppendLine(@"<name>g-patient</name>");
+            feed.AppendLine(@"</author>");
 
             feed.AppendLine(@"<entry>");
             feed.AppendLine(@"<title>Search Results</title>");
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
             Guid entryId = Guid.NewGuid();
-            feed.AppendFormat(@"<id>{0}</id>", entryId.ToString());
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
             DateTime entryTime = DateTime.Now;
-            feed.AppendFormat(@"<updated>{0}</updated>", entryTime.ToString());
-            feed.AppendFormat(@"<published>{0}</published>", entryTime.ToString());
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
+            feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
             feed.AppendLine(@"<author>");
             feed.AppendLine(@"<name>g-patient</name>");
             feed.AppendLine(@"</author>");
