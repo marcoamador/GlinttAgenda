@@ -72,7 +72,7 @@ namespace MvcApplication1.Models
             v.Contact = new Hl7.Fhir.Model.ResourceReference();
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
 
-            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
+            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", "");
         }
 
         public String byId(string id)
@@ -155,42 +155,45 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
             feed.AppendFormat(@"<title>g-patient search page {0}</title>", pageNum.ToString());
             DateTime now = DateTime.Now;
-            feed.AppendFormat(@"<updated>{0}</updated>", now.ToString());
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(now)).ToString());
             Guid feedId;
             feedId = Guid.NewGuid();
-            feed.AppendFormat(@"<id>{0}</id>", feedId.ToString());
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (((count - (pageNum - 1 * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
 
-            if ((count / itemNum) <= 1)
+            if (Math.Ceiling((decimal)count / itemNum) <= 1)
                 last = 1;
             else
-                last = count / itemNum;
+                last = (int)Math.Ceiling((decimal)count / itemNum);
 
-            if (((count - (pageNum - 1 * itemNum)) / itemNum) >= pageNum)
+            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
-            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + "1");
-            feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + prev.ToString());
-            feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + next.ToString());
-            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", url.Remove(url.Length - 1) + last.ToString());
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "visit";
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
+            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
+            if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + prev.ToString()));
+            if (!(url.Remove(url.Length - 1) + next.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + next.ToString()));
+            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + last.ToString()));
 
             feed.AppendLine(@"<entry>");
             feed.AppendLine(@"<title>Search Results</title>");
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", url);
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
             Guid entryId = Guid.NewGuid();
-            feed.AppendFormat(@"<id>{0}</id>", entryId.ToString());
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
             DateTime entryTime = DateTime.Now;
-            feed.AppendFormat(@"<updated>{0}</updated>\n", entryTime.ToString());
-            feed.AppendFormat(@"<published>{0}</published>\n", entryTime.ToString());
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
+            feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
             feed.AppendLine(@"<author>");
             feed.AppendLine(@"<name>g-patient</name>");
             feed.AppendLine(@"</author>");
@@ -205,6 +208,7 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
                     feed.Append(visitParser(res.ElementAt(j)));
                 }
             }

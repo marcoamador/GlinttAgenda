@@ -43,6 +43,11 @@ namespace MvcApplication1
             }
         }
 
+		public static string GetDate(DateTime DateTime)
+        {
+            DateTime UtcDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime);
+            return XmlConvert.ToString(UtcDateTime, XmlDateTimeSerializationMode.Utc);
+        }
 
         public static string ToJSON(this object obj)
         {
@@ -56,7 +61,6 @@ namespace MvcApplication1
             serializer.RecursionLimit = recursionDepth;
             return serializer.Serialize(obj);
         }
-
 
     }
 }
