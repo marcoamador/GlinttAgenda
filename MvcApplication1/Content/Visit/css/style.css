@@ -1,0 +1,503 @@
+
+@font-face {  
+  font-family: Roboto Condensed ;  
+  src: url( Roboto-Condensed.ttf) format("truetype");  
+} 
+@font-face {  
+  font-family: Roboto Bold Condensed ;  
+  src: url( Roboto-BoldCondensed.ttf) format("truetype");  
+} 
+
+@font-face {  
+  font-family: Roboto Light ;  
+  src: url( Roboto-Light.ttf) format("truetype");  
+} 
+
+
+
+.boldFont{
+	font-family: 'Roboto Bold Condensed', sans-serif;
+
+}
+
+#plusBtn{
+	display: none;
+}
+
+html{
+
+	overflow: hidden;
+	font-family: 'Roboto Condensed', sans-serif;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+body{
+background-color: rgba(26,26,26,1);
+margin: 0;
+}
+body>div{
+ display: inline-table;
+ float: left;
+ border: 0;
+
+}
+
+#sidebar{
+	display: inline-block;
+	float: left;
+	height: 100%;
+	color:white;
+	width: 20%;
+
+
+}
+
+#content{
+		display: inline-block;
+	float: left;
+	height: 100%;
+	width: 80%;
+}
+
+.orange{
+	color: white;
+	background-image: linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -o-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -moz-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -webkit-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -ms-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(92,0,3)),
+		color-stop(0.11, rgb(176,10,7))
+	);
+
+}
+#topmargin{
+	display: block;
+	height: 0.7%;
+	min-height: 5.6px;
+	width: 100%;
+	background-image: linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -o-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -moz-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -webkit-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+	background-image: -ms-linear-gradient(bottom, rgb(92,0,3) 0%, rgb(176,10,7) 11%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(92,0,3)),
+		color-stop(0.11, rgb(176,10,7))
+	);
+}
+
+#content>div{
+	display: inline-block;
+	height: 99.3%;
+	float: left;
+	
+}
+
+#eventList{
+	display: inline-block;
+	float: left;
+	height: 99.3%;
+	width: 37.5%;
+	overflow: auto;
+	
+
+}
+
+.event_item:not(:first-child){
+	
+}
+
+.event_item{
+	display: block;
+	height: 80px;
+	max-height: 80px;
+	padding-top: 5%;
+	//padding-bottom: 5%;
+	
+
+}
+
+
+.event_item:after {
+  content : "";
+  position: relative;
+ 	display: block;
+  left    : 0;
+  bottom  : 0;
+  height  : 2px;
+  width   : 100%;  
+  margin: 0;
+ 	background-image: url("item_border.png");
+ 	background-size: 2px;
+ 	background-repeat: repeat-x;
+	
+
+}
+
+
+
+.item_content{
+
+	display: block;
+	width: 90%;
+	height: 90%;
+	//	padding: 5%;
+	//padding-bottom: 0;
+	padding-left: 5%;
+	padding-right: 5%;
+}
+
+.item_date_time{
+	display: inline-block;
+	float: left;
+	
+	//padding-right: 0;
+
+	width: 20%;
+	height: 80%;
+}
+.item_data:before{
+content : "";
+	position: relative;
+ 	display: inline-block;
+ 	float: left;
+  left    : 0;
+  top:-7px;
+  //padding: 5%;
+  padding-right: 5%;
+  height  : 110%;
+  width   : 3px;  
+background-image: #999999; /* Old browsers */
+background-image: -moz-linear-gradient(left, #999999 0%, #ffffff 37%, #ffffff 61%, #999999 100%); /* FF3.6+ */
+background-image: -webkit-gradient(linear, left top, right top, color-stop(0%,#999999), color-stop(37%,#ffffff), color-stop(61%,#ffffff), color-stop(100%,#999999)); /* Chrome,Safari4+ */
+background-image: -webkit-linear-gradient(left, #999999 0%,#ffffff 37%,#ffffff 61%,#999999 100%); /* Chrome10+,Safari5.1+ */
+background-image: -o-linear-gradient(left, #999999 0%,#ffffff 37%,#ffffff 61%,#999999 100%); /* Opera 11.10+ */
+background-image: -ms-linear-gradient(left, #999999 0%,#ffffff 37%,#ffffff 61%,#999999 100%); /* IE10+ */
+background-image: linear-gradient(to right, #999999 0%,#ffffff 37%,#ffffff 61%,#999999 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#999999', endColorstr='#999999',GradientType=1 ); /* IE6-9 */
+background-size: 3px;
+ 	background-repeat: repeat-y;
+
+	
+}
+.item_date{
+	font-size: 17px;
+	margin-bottom: 3px;
+}
+
+.item_time{
+	color:rgb(176,10,7);
+	font-size: 12px;
+}
+
+.item_data{
+	display: inline-table;
+	float: left;
+	//padding-left: 5%;
+	//padding: 5%;
+	padding-left: 0%;
+	width: 50%;
+	height: 80%;
+}
+
+.item_data_title{
+	font-size: 22px;
+
+}
+
+.item_data_subtitle{
+	font-size: 12px;
+
+}
+
+.item_goto_details{
+	display: inline-block;
+	float: right;
+	height: 100%;
+vertical-align: middle;
+padding: 10px;
+
+}
+
+.item_goto_details>span{
+	display: block;
+	font-size: 30px;
+	height: 2ex;
+	margin-top: 50%;
+}
+
+.white_solid_bg{
+	background-color: rgb(236,236,236);
+}
+
+.white_bg{
+	background-color: rgb(216,216,216) 0%, rgb(240,240,240) 66%);
+	background-image: -o-linear-gradient(bottom, rgb(216,216,216) 0%, rgb(240,240,240) 66%);
+	background-image: -moz-linear-gradient(bottom, rgb(216,216,216) 0%, rgb(240,240,240) 66%);
+	background-image: -webkit-linear-gradient(bottom, rgb(216,216,216) 0%, rgb(240,240,240) 66%);
+	background-image: -ms-linear-gradient(bottom, rgb(216,216,216) 0%, rgb(240,240,240) 66%);
+
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(216,216,216)),
+		color-stop(0.66, rgb(240,240,240))
+	);
+
+}
+
+#calendarScroller{
+	display: none;
+}
+
+
+#detailZone{
+	display: inline-block;
+	float: left;
+	height: 99.3%;
+	width: 62.5%;
+	background-image: url('details_bg.png');
+	background-repeat: repeat;
+}
+
+.round{
+	border-radius: 2% / 14%;
+
+}
+
+.deeper{
+	background-color: rgba(0,0,0,0.3);
+}
+
+
+#notificationsButton>*{
+	display: table-cell;
+	position: relative;
+	vertical-align: middle;
+	left: 5%;
+
+}
+
+#notificationsButton>*>*{
+	display: block;
+
+}
+
+#notificationsButton>*>*>*{
+	display: inline-block;
+
+}
+#notifCounter{
+	font-family: 'Roboto Light', sans-serif;
+	height: 1em;
+	width: 1em;
+	padding: 2%;
+	//right: 50%;
+	float: right;
+	margin-right: 10%;
+	text-align: center;
+	font-size: 1.5ex;
+	line-height: 1.5ex;
+	border-radius: 20% / 20%;
+	margin: 5%;
+	margin-right: 7%;
+}
+
+.notifIcon{
+	
+	height: 1em;
+	margin: 5%;
+}
+
+#notifText{
+	font-size: 1.5ex;
+	
+	height: 1em;
+	margin: 5%;
+}
+
+#notificationsButton{
+	display: table;
+	
+	margin: 7.5%;
+	width: 85%;
+	//min-width: 220px;
+	height: 4.5%;
+	min-height: 35px;
+	margin-bottom: 0;
+
+}
+
+#upperBtnBar{
+	height: 6.25%;
+	width: 100%;
+	margin: 0;
+	min-height: 50;
+
+}
+
+#selectedDay{
+	width: 100%;
+	height: 19vh;
+	padding: 1.5vh;
+	min-height: 0px;
+	text-align: center;
+	vertical-align: middle;
+	box-shadow: 1px 1px 2px #000, -1px -1px 2px #000;
+	background-color: rgb(33,33,33);
+}
+#selectedDay>div{
+	
+	width: 100%;
+}
+
+#daySelected{
+	margin-top: 1.5vh;
+	height: 14vh;
+	line-height: 13vh;
+font-size: 16vh;
+margin-bottom: 0;
+
+}
+
+#monthSelected{
+	height: 5vh;
+	margin-top: -1vh;
+	font-size: 4vh;
+	text-transform:uppercase;
+}
+
+button{
+	background-color: rgb(33,33,33);
+	color: white;
+	padding: 1%;
+	text-align: center;
+	border-radius: 6px/6px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: black;
+}
+button:active{
+	background-color: rgb(20,20,20);
+	color: rgb(128,128,128);
+
+}
+#monthCalendar{
+
+	width: 60%;
+	font-size: 1.7ex;
+	line-height: 1.7ex;
+	height: 1.7ex;
+	margin: 0.6ex;
+}
+#calendar{
+	margin-top: 2vh;
+
+}
+#calendarMonthBar{
+	text-align: center;
+	width: 100%;
+}
+
+#calendarMonthBar>*{
+	display: inline-block;
+}
+
+#prevMonth{
+	float: left;
+	height: 4ex;
+	width: 4ex;
+	margin-left: 1vw;
+}
+
+#monthCalendar{
+	text-transform:uppercase;
+}
+#nextMonth{
+	float: right;
+	height: 4ex;
+	width: 4ex;
+	margin-right: 1vw;
+}
+#calendarTab{
+	font-family: 'Roboto Light', sans-serif;
+	display: table;
+	margin-left: 10%;
+	width: 80%;
+	min-height: 164px;
+	height: 22vh;
+	min-height: 164px;
+}
+
+
+.week{
+	display: table-row;
+	width: 100%;
+	text-align: center;
+	font-size: 12px;
+	color: rgb(96,96,96);
+}
+
+#weekTitle{
+	font-family: 'Roboto Condensed', sans-serif;
+	color: rgb(128,128,128);
+}
+
+.week:not(:first-child){
+	margin-top: 1vh;
+}
+
+#calendarTab>div>*{
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#sidebarWrapper{
+	width: 100%;
+
+}
+.week>*{
+	height: 3ex;
+}
+.week>.disabled{
+	color: black;
+}
+
+.week>.clicable{
+	color: white;
+}
+
+.week>.selected{
+	background-color: rgba(0,0,0,0.5);
+	color:rgb(176,10,7); 
+	border-radius: 20%/16%;
+
+}
+#bottomBtnBar{
+	margin-top: 0.6vh;
+	text-align: center;
+}
+
+#bottomBtnBar>*{
+	display: inline-block;
+	padding: 0.8vw;
+	padding-bottom: 1vh;
+	padding-top: 1.3vh;
+}
+

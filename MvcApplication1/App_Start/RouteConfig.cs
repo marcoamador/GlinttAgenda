@@ -68,11 +68,28 @@ namespace MvcApplication1
                 defaults: new { controller = "Practitioner", action = "Update", id = "" }
             );
 
+
+            routes.MapRoute(
+               name: "Register_LoginClient",
+               url: "Login/register/{response_uri}",
+               defaults: new { controller = "Login", action = "registerClient" }
+           );
+
+            routes.MapRoute(
+               name: "Authorize_Login",
+               url: "Login/authorize/",
+               defaults: new { controller = "Login", action = "AuthorizeLogin" }
+           );
+
+
            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+           
+            
 
 
           

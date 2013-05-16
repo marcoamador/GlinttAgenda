@@ -26,7 +26,7 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
-                Practitioner p = new Practitioner();
+                MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
                 String result = p.byId(id);
                 if (result == null)
                 {
@@ -59,7 +59,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            Practitioner pr = new Practitioner();
+            MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
             String s = pr.search(Request);
             if (s == null)
             {
@@ -71,7 +71,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
-            Practitioner pr = new Practitioner();
+            MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
             String s = pr.update(Request, id);
             if (s == null)
             {

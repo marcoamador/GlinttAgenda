@@ -31,7 +31,7 @@ namespace MvcApplication1.Controllers
                     return null;
                 }
 
-                Visit v = new Visit();
+                MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
                 String result = v.byId(id);
                 if (result == null)
                 {
@@ -64,7 +64,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            Visit v = new Visit();
+            MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
             String s = v.search(Request);
             if (s == null)
             {
@@ -76,7 +76,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
-            Visit v = new Visit();
+            MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
             String s = v.update(Request, id);
             if (s == null)
             {

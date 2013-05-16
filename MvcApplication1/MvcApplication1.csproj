@@ -60,6 +60,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Entity.Design" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -135,48 +136,88 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="Contact.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PractitionerController.cs" />
     <Compile Include="Controllers\VisitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="GlinttLocalModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlinttLocalModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GlinttLocalModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GlinttLocalModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlinttLocalModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="GlinttModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlinttModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GlinttModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlinttModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GlinttModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlinttModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="g_cons_marc.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>GlinttModel.tt</DependentUpon>
     </Compile>
     <Compile Include="g_doente.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>GlinttModel.tt</DependentUpon>
     </Compile>
     <Compile Include="g_pess_hosp_def.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>GlinttModel.tt</DependentUpon>
     </Compile>
     <Compile Include="g_serv.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>GlinttModel.tt</DependentUpon>
     </Compile>
     <Compile Include="g_t_act_med.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>GlinttModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
+    <Compile Include="Language.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="LanguagePatient.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Model1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <Compile Include="LanguagePractitioner.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Practitioner.cs" />
     <Compile Include="Models\Visit.cs" />
+    <Compile Include="OauthClients.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Patient.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Practitioner.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visit.cs">
+      <DependentUpon>GlinttLocalModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -235,22 +276,39 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <EntityDeploy Include="Model1.edmx">
+    <EntityDeploy Include="GlinttModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>GlinttModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Model1.Context.tt">
+    <Content Include="GlinttModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
+      <DependentUpon>GlinttModel.edmx</DependentUpon>
+      <LastGenOutput>GlinttModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <Content Include="GlinttModel.edmx.diagram">
+      <DependentUpon>GlinttModel.edmx</DependentUpon>
     </Content>
-    <Content Include="Model1.tt">
+    <Content Include="GlinttModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
+      <DependentUpon>GlinttModel.edmx</DependentUpon>
+      <LastGenOutput>GlinttModel.cs</LastGenOutput>
+    </Content>
+    <EntityDeploy Include="GlinttLocalModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GlinttLocalModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="GlinttLocalModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GlinttLocalModel.edmx</DependentUpon>
+      <LastGenOutput>GlinttLocalModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="GlinttLocalModel.edmx.diagram">
+      <DependentUpon>GlinttLocalModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="GlinttLocalModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>GlinttLocalModel.edmx</DependentUpon>
+      <LastGenOutput>GlinttLocalModel.cs</LastGenOutput>
     </Content>
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />

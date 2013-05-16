@@ -26,7 +26,7 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
-                Patient p = new Patient();
+                MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
                 String result = p.byId(id);
                 if (result == null)
                 {
@@ -53,12 +53,12 @@ namespace MvcApplication1.Controllers
 
         public ActionResult SearchById(String id)
         {
-            return Content(new Patient().byId(id)) ;
+            return Content(new MvcApplication1.Models.Patient().byId(id));
         }
 
         public ActionResult Search()
         {
-            Patient p = new Patient();
+            MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
             String s = p.search(Request);
             if (s == null)
             {
@@ -70,7 +70,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
-            Patient p = new Patient();
+            MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
             String s = p.update(Request, id);
             if (s == null)
             {

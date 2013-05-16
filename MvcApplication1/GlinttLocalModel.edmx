@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="glinttLocalModelStoreContainer">
+          <EntitySet Name="Contact" EntityType="glinttLocalModel.Store.Contact" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="Language" EntityType="glinttLocalModel.Store.Language" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.Store.LanguagePatient" store:Type="Tables" store:Schema="glinttLocal" store:Name="LanguagePatient">
+            <DefiningQuery>SELECT
+      `LanguagePatient`.`doente`, 
+      `LanguagePatient`.`language`
+      FROM `LanguagePatient` AS `LanguagePatient`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.Store.LanguagePractitioner" store:Type="Tables" store:Schema="glinttLocal" store:Name="LanguagePractitioner">
+            <DefiningQuery>SELECT
+      `LanguagePractitioner`.`id`, 
+      `LanguagePractitioner`.`language`
+      FROM `LanguagePractitioner` AS `LanguagePractitioner`</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="OauthClients" EntityType="glinttLocalModel.Store.OauthClients" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="Patient" EntityType="glinttLocalModel.Store.Patient" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Store.Practitioner" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="Visit" EntityType="glinttLocalModel.Store.Visit" store:Type="Tables" Schema="glinttLocal" />
+        </EntityContainer>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="telecom" Type="int" Nullable="false" />
+          <Property Name="gender" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="birthDate" Type="varchar" MaxLength="255" />
+          <Property Name="deceased" Type="bool" />
+          <Property Name="address" Type="varchar" MaxLength="255" />
+          <Property Name="photo" Type="varchar" MaxLength="255" />
+          <Property Name="maritalStatus" Type="varchar" MaxLength="255" />
+          <Property Name="organization" Type="varchar" MaxLength="255" />
+          <Property Name="doente" Type="int" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="language" />
+          </Key>
+          <Property Name="language" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="mode" Type="varchar" MaxLength="255" />
+          <Property Name="proficiencyLevel" Type="varchar" MaxLength="255" />
+          <Property Name="preference" Type="bool" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'glinttLocal.LanguagePatient' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="LanguagePatient">
+          <Key>
+            <PropertyRef Name="doente" />
+            <PropertyRef Name="language" />
+          </Key>
+          <Property Name="doente" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="language" Type="varchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'glinttLocal.LanguagePractitioner' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="LanguagePractitioner">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="language" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="language" Type="varchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="OauthClients">
+          <Key>
+            <PropertyRef Name="clientID" />
+          </Key>
+          <Property Name="clientID" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="clientSecret" Type="varchar" MaxLength="255" />
+          <Property Name="responseUri" Type="varchar" MaxLength="255" />
+          <Property Name="accessToken" Type="varchar" MaxLength="255" />
+          <Property Name="timestamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="doente" />
+            <PropertyRef Name="t_doente" />
+          </Key>
+          <Property Name="doente" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="12" />
+          <Property Name="link" Type="varchar" MaxLength="255" />
+          <Property Name="deceased" Type="bool" />
+          <Property Name="photo" Type="bool" />
+          <Property Name="relationship" Type="varchar" MaxLength="255" />
+          <Property Name="password" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Practitioner">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="identifier" Type="int" />
+          <Property Name="gender" Type="char" MaxLength="1" />
+          <Property Name="birthDate" Type="varchar" MaxLength="255" />
+          <Property Name="deceased" Type="bool" />
+          <Property Name="address" Type="varchar" MaxLength="255" />
+          <Property Name="photo" Type="bool" />
+          <Property Name="maritalStatus" Type="char" MaxLength="1" />
+          <Property Name="code" Type="char" MaxLength="1" />
+          <Property Name="period" Type="varchar" MaxLength="255" />
+          <Property Name="issuer" Type="bool" />
+          <Property Name="password" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="contact" Type="int" />
+          <Property Name="fulfills" Type="bool" />
+          <Property Name="setting" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'glinttLocal.LanguageContact' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="LanguageContact">
+        <Property Name="id" Type="int" />
+        <Property Name="language" Type="varchar" MaxLength="255" />
+      </EntityType>-->
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="glinttLocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="glinttLocalEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Contact" EntityType="glinttLocalModel.Contact" />
+          <EntitySet Name="Language" EntityType="glinttLocalModel.Language" />
+          <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.LanguagePatient" />
+          <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.LanguagePractitioner" />
+          <EntitySet Name="OauthClients" EntityType="glinttLocalModel.OauthClients" />
+          <EntitySet Name="Patient" EntityType="glinttLocalModel.Patient" />
+          <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Practitioner" />
+          <EntitySet Name="Visit" EntityType="glinttLocalModel.Visit" />
+        </EntityContainer>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="telecom" Type="Int32" Nullable="false" />
+          <Property Name="gender" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="deceased" Type="Boolean" />
+          <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="photo" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="maritalStatus" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="organization" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="doente" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="language1" />
+          </Key>
+          <Property Name="language1" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="mode" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="proficiencyLevel" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="preference" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="LanguagePatient">
+          <Key>
+            <PropertyRef Name="doente" />
+            <PropertyRef Name="language" />
+          </Key>
+          <Property Name="doente" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="language" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="LanguagePractitioner">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="language" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="language" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="OauthClients">
+          <Key>
+            <PropertyRef Name="clientID" />
+          </Key>
+          <Property Name="clientID" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="clientSecret" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="responseUri" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="accessToken" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="timestamp" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="doente" />
+            <PropertyRef Name="t_doente" />
+          </Key>
+          <Property Name="doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="t_doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="false" />
+          <Property Name="link" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="deceased" Type="Boolean" />
+          <Property Name="photo" Type="Boolean" />
+          <Property Name="relationship" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Practitioner">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="identifier" Type="Int32" />
+          <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="deceased" Type="Boolean" />
+          <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="photo" Type="Boolean" />
+          <Property Name="maritalStatus" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="code" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="period" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="issuer" Type="Boolean" />
+          <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="contact" Type="Int32" />
+          <Property Name="fulfills" Type="Boolean" />
+          <Property Name="setting" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="glinttLocalModelStoreContainer" CdmEntityContainer="glinttLocalEntities">
+          <EntitySetMapping Name="Contact">
+            <EntityTypeMapping TypeName="glinttLocalModel.Contact">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="telecom" ColumnName="telecom" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
+                <ScalarProperty Name="deceased" ColumnName="deceased" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
+                <ScalarProperty Name="organization" ColumnName="organization" />
+                <ScalarProperty Name="doente" ColumnName="doente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Language">
+            <EntityTypeMapping TypeName="glinttLocalModel.Language">
+              <MappingFragment StoreEntitySet="Language">
+                <ScalarProperty Name="language1" ColumnName="language" />
+                <ScalarProperty Name="mode" ColumnName="mode" />
+                <ScalarProperty Name="proficiencyLevel" ColumnName="proficiencyLevel" />
+                <ScalarProperty Name="preference" ColumnName="preference" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LanguagePatient">
+            <EntityTypeMapping TypeName="glinttLocalModel.LanguagePatient">
+              <MappingFragment StoreEntitySet="LanguagePatient">
+                <ScalarProperty Name="doente" ColumnName="doente" />
+                <ScalarProperty Name="language" ColumnName="language" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LanguagePractitioner">
+            <EntityTypeMapping TypeName="glinttLocalModel.LanguagePractitioner">
+              <MappingFragment StoreEntitySet="LanguagePractitioner">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="language" ColumnName="language" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OauthClients">
+            <EntityTypeMapping TypeName="glinttLocalModel.OauthClients">
+              <MappingFragment StoreEntitySet="OauthClients">
+                <ScalarProperty Name="clientID" ColumnName="clientID" />
+                <ScalarProperty Name="clientSecret" ColumnName="clientSecret" />
+                <ScalarProperty Name="responseUri" ColumnName="responseUri" />
+                <ScalarProperty Name="accessToken" ColumnName="accessToken" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patient">
+            <EntityTypeMapping TypeName="glinttLocalModel.Patient">
+              <MappingFragment StoreEntitySet="Patient">
+                <ScalarProperty Name="doente" ColumnName="doente" />
+                <ScalarProperty Name="t_doente" ColumnName="t_doente" />
+                <ScalarProperty Name="link" ColumnName="link" />
+                <ScalarProperty Name="deceased" ColumnName="deceased" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="relationship" ColumnName="relationship" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Practitioner">
+            <EntityTypeMapping TypeName="glinttLocalModel.Practitioner">
+              <MappingFragment StoreEntitySet="Practitioner">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="identifier" ColumnName="identifier" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
+                <ScalarProperty Name="deceased" ColumnName="deceased" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="period" ColumnName="period" />
+                <ScalarProperty Name="issuer" ColumnName="issuer" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Visit">
+            <EntityTypeMapping TypeName="glinttLocalModel.Visit">
+              <MappingFragment StoreEntitySet="Visit">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="fulfills" ColumnName="fulfills" />
+                <ScalarProperty Name="setting" ColumnName="setting" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -107,18 +107,18 @@
           <Key>
             <PropertyRef Name="n_cons" />
           </Key>
-          <Property Name="n_cons" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="true" />
-          <Property Name="t_doente" Type="String" MaxLength="5" Unicode="false" FixedLength="true" />
-          <Property Name="doente" Type="String" MaxLength="12" Unicode="false" FixedLength="true" />
-          <Property Name="n_cred" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
-          <Property Name="cod_serv" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="cod_act_med" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="medico" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="cod_gab" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="cod_serv_req" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="dt_cons" Type="DateTime" Precision="0" />
-          <Property Name="duracao_cons" Type="DateTime" Precision="0" />
-          <Property Name="flag_estado" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="true" />
+          <Property Name="n_cons" Type="String" Nullable="false" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="t_doente" Type="String" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="doente" Type="String" MaxLength="12" Unicode="false" FixedLength="false" />
+          <Property Name="n_cred" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="cod_serv" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="cod_act_med" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="medico" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="cod_gab" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="cod_serv_req" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="dt_cons" Type="DateTime" />
+          <Property Name="duracao_cons" Type="DateTime" />
+          <Property Name="flag_estado" Type="String" Nullable="false" MaxLength="2" Unicode="false" FixedLength="false" />
           <Property Name="observ_cons" Type="String" MaxLength="65535" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="g_doente">
@@ -126,61 +126,61 @@
             <PropertyRef Name="t_doente" />
             <PropertyRef Name="doente" />
           </Key>
-          <Property Name="t_doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="true" />
-          <Property Name="doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="true" />
-          <Property Name="nome" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
-          <Property Name="dt_nasc" Type="DateTime" Precision="0" />
-          <Property Name="morada" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
-          <Property Name="cod_pais" Type="String" MaxLength="4" Unicode="false" FixedLength="true" />
-          <Property Name="localidade" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
-          <Property Name="cod_postal" Type="String" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="telef1" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
-          <Property Name="telef2" Type="String" MaxLength="15" Unicode="false" FixedLength="true" />
-          <Property Name="sexo" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
-          <Property Name="grupo_sang" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
-          <Property Name="escolaridade" Type="String" MaxLength="3" Unicode="false" FixedLength="true" />
-          <Property Name="raca" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
-          <Property Name="religiao" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
-          <Property Name="n_bi" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
-          <Property Name="n_contrib" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
-          <Property Name="nome_mae" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
-          <Property Name="nome_pai" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
-          <Property Name="estado_civil" Type="String" MaxLength="2" Unicode="false" FixedLength="true" />
-          <Property Name="nome_conjuge" Type="String" MaxLength="60" Unicode="false" FixedLength="true" />
-          <Property Name="flag_falec" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
-          <Property Name="dt_falec" Type="DateTime" Precision="0" />
-          <Property Name="e_mail" Type="String" MaxLength="60" Unicode="false" FixedLength="true" />
-          <Property Name="cartao_europeu_saude" Type="String" MaxLength="30" Unicode="false" FixedLength="true" />
+          <Property Name="t_doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
+          <Property Name="doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="false" />
+          <Property Name="nome" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="dt_nasc" Type="DateTime" />
+          <Property Name="morada" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="cod_pais" Type="String" MaxLength="4" Unicode="false" FixedLength="false" />
+          <Property Name="localidade" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="cod_postal" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="telef1" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="telef2" Type="String" MaxLength="15" Unicode="false" FixedLength="false" />
+          <Property Name="sexo" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="grupo_sang" Type="String" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="escolaridade" Type="String" MaxLength="3" Unicode="false" FixedLength="false" />
+          <Property Name="raca" Type="String" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="religiao" Type="String" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="n_bi" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="n_contrib" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="nome_mae" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="nome_pai" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="estado_civil" Type="String" MaxLength="2" Unicode="false" FixedLength="false" />
+          <Property Name="nome_conjuge" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="flag_falec" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="dt_falec" Type="DateTime" />
+          <Property Name="e_mail" Type="String" MaxLength="60" Unicode="false" FixedLength="false" />
+          <Property Name="cartao_europeu_saude" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="g_pess_hosp_def">
           <Key>
             <PropertyRef Name="n_mecan" />
           </Key>
-          <Property Name="n_mecan" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="nome" Type="String" MaxLength="80" Unicode="false" FixedLength="true" />
-          <Property Name="abr" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
-          <Property Name="titulo" Type="String" MaxLength="12" Unicode="false" FixedLength="true" />
+          <Property Name="n_mecan" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="nome" Type="String" MaxLength="80" Unicode="false" FixedLength="false" />
+          <Property Name="abr" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="titulo" Type="String" MaxLength="12" Unicode="false" FixedLength="false" />
           <Property Name="email" Type="String" MaxLength="65535" Unicode="false" FixedLength="false" />
-          <Property Name="telef" Type="String" MaxLength="20" Unicode="false" FixedLength="true" />
+          <Property Name="telef" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="g_serv">
           <Key>
             <PropertyRef Name="cod_serv" />
           </Key>
-          <Property Name="cod_serv" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="descr_serv" Type="String" MaxLength="40" Unicode="false" FixedLength="true" />
-          <Property Name="local_serv" Type="String" MaxLength="30" Unicode="false" FixedLength="true" />
-          <Property Name="obs" Type="String" MaxLength="100" Unicode="false" FixedLength="true" />
+          <Property Name="cod_serv" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="descr_serv" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="local_serv" Type="String" MaxLength="30" Unicode="false" FixedLength="false" />
+          <Property Name="obs" Type="String" MaxLength="100" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="g_t_act_med">
           <Key>
             <PropertyRef Name="cod_serv" />
             <PropertyRef Name="cod_act_med" />
           </Key>
-          <Property Name="cod_serv" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="true" />
-          <Property Name="cod_act_med" Type="String" Nullable="false" MaxLength="4" Unicode="false" FixedLength="true" />
-          <Property Name="descr" Type="String" MaxLength="40" Unicode="false" FixedLength="true" />
-          <Property Name="dur" Type="DateTime" Precision="0" />
+          <Property Name="cod_serv" Type="String" Nullable="false" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="cod_act_med" Type="String" Nullable="false" MaxLength="4" Unicode="false" FixedLength="false" />
+          <Property Name="descr" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="dur" Type="DateTime" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -284,7 +284,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
