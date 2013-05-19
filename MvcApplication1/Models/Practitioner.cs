@@ -61,7 +61,7 @@ namespace MvcApplication1.Models
             p.Details.Name = new List<Hl7.Fhir.Model.HumanName>(){name};
             p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };
 
-            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", "");
+            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
         public String byId(string id)
@@ -128,9 +128,13 @@ namespace MvcApplication1.Models
 
             query1 += ";";
             System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res = gE.g_pess_hosp_def.SqlQuery(query1, l.ToArray());
-            if (res.Count() > 0)
+            if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);
+            }
+            else if (res.Count() == 1)
+            {
+                return practitionerParser(res.First());
             }
             else
             {
@@ -202,7 +206,7 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
-                    feed.Append(practitionerParser(res.ElementAt(j)));
+                    feed.Append(practitionerParser(res.ElementAt(j)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
