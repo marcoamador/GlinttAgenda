@@ -72,7 +72,7 @@ namespace MvcApplication1.Models
             v.Contact = new Hl7.Fhir.Model.ResourceReference();
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
 
-            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", "");
+            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
         }
 
         public String byId(string id)
@@ -139,9 +139,13 @@ namespace MvcApplication1.Models
 
             query1 += ";";
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
-            if (res.Count() > 0)
+            if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);
+            }
+            else if (res.Count() == 1)
+            {
+                return visitParser(res.First());
             }
             else
             {
@@ -209,7 +213,7 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
-                    feed.Append(visitParser(res.ElementAt(j)));
+                    feed.Append(visitParser(res.ElementAt(j)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");

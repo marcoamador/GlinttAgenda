@@ -97,7 +97,7 @@ namespace MvcApplication1.Models
 
             //falta familiares
 
-            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", "");
+            return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
         public String byId(string id)
@@ -165,9 +165,13 @@ namespace MvcApplication1.Models
             query1 += ";";
             Console.WriteLine(query1);
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res = gE.g_doente.SqlQuery(query1, l.ToArray());
-            if (res.Count() > 0)
+            if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);
+            }
+            else if (res.Count() == 1)
+            {
+                return patientParser(res.First());
             }
             else
             {
@@ -242,7 +246,7 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).t_doente));
-                    feed.Append(patientParser(res.ElementAt(j)));
+                    feed.Append(patientParser(res.ElementAt(j)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
