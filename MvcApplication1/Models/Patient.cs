@@ -12,7 +12,7 @@ namespace MvcApplication1.Models
     {
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
-            {"_id", new List<string>(){"doente"}},
+            {"_id", new List<string>(){"doente", "t_doente"}},
             {"active",new List<string>() {"flag_falec"}},
             {"address",new List<string>() {"morada"}},
             {"birthdate",new List<string>() {"dt_nasc"}},
@@ -69,9 +69,8 @@ namespace MvcApplication1.Models
             dem.Gender = gender;
             
 
-            Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime();
-            dt_nasc.Contents = patient.dt_nasc.ToString();
-            dem.BirthDate = dt_nasc;
+            Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime(patient.dt_nasc.ToString());
+            dem.BirthDate = new Hl7.Fhir.Model.FhirDateTime(patient.dt_nasc.ToString());
 
             Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
             dead.Contents = patient.flag_falec == "1"; //confirmar
@@ -141,13 +140,28 @@ namespace MvcApplication1.Models
 
                         if (conver != null)
                         {
-                            if (j != 0)
+                            if (j != 0 && querykeys != "_id")
                             {
                                 query1 += " or ";
                             }
+                            if (j != 0 && querykeys == "_id")
+                            {
+                                query1 += " and ";
+                            }
+                            
                             query1 += conver + "=" + "?";
 
-                            l.Add(p.QueryString[querykeys]);
+                            if (j == 0 && querykeys == "_id")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('_').ElementAt(0));
+                            }
+                            else if (j != 0 && querykeys == "_id")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
+                            }
+                            else
+                                l.Add(p.QueryString[querykeys]);
+
                             j++;
                         }
                     }
