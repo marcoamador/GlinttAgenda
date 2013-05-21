@@ -76,11 +76,14 @@
           <Key>
             <PropertyRef Name="clientID" />
           </Key>
-          <Property Name="clientID" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="clientID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="clientSecret" Type="varchar" MaxLength="255" />
           <Property Name="responseUri" Type="varchar" MaxLength="255" />
           <Property Name="accessToken" Type="varchar" MaxLength="255" />
           <Property Name="timestamp" Type="datetime" />
+          <Property Name="isAdmin" Type="tinyint" Nullable="false" />
+          <Property Name="userid" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="t_doente" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="Patient">
           <Key>
@@ -188,11 +191,14 @@
           <Key>
             <PropertyRef Name="clientID" />
           </Key>
-          <Property Name="clientID" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="clientID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="clientSecret" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="responseUri" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="accessToken" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="timestamp" Type="DateTime" />
+          <Property Name="isAdmin" Type="SByte" Nullable="false" />
+          <Property Name="userid" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="t_doente" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="Patient">
           <Key>
@@ -290,6 +296,9 @@
                 <ScalarProperty Name="responseUri" ColumnName="responseUri" />
                 <ScalarProperty Name="accessToken" ColumnName="accessToken" />
                 <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="t_doente" ColumnName="t_doente" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

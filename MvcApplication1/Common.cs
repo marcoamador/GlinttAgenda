@@ -62,6 +62,22 @@ namespace MvcApplication1
             return serializer.Serialize(obj);
         }
 
+
+        public static string addtoxml(string xml, string error)
+        {
+            XmlDocument xdoc = new XmlDocument();
+            xdoc.LoadXml(xml);
+            XmlDocumentFragment frag = xdoc.CreateDocumentFragment();
+            frag.InnerXml = "<!--<xsdvalidationerrors>" + error + "</xsdvalidationerrors>-->";
+            xdoc.DocumentElement.AppendChild(frag);
+
+            StringWriter sw = new StringWriter();
+            XmlWriter xmlw = XmlWriter.Create(sw);
+            xdoc.WriteTo(xmlw);
+            xmlw.Flush();
+
+            return sw.GetStringBuilder().ToString();
+        }
     }
 }
 

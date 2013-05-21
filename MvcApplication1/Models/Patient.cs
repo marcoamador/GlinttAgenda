@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Text;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 
 namespace MvcApplication1.Models
@@ -70,7 +71,12 @@ namespace MvcApplication1.Models
             
 
             Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime();
-            dt_nasc.Contents = patient.dt_nasc.ToString();
+
+            Regex rgx = new Regex(" |/");
+
+            dt_nasc.Contents = rgx.Replace(patient.dt_nasc.ToString(), "-"); ;
+
+            //dt_nasc.Contents = patient.dt_nasc.ToString();
             dem.BirthDate = dt_nasc;
 
             Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
