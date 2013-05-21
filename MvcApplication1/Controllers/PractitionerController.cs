@@ -36,11 +36,11 @@ namespace MvcApplication1.Controllers
 
                 try
                 {
-                    Common.validateXML(result, "~/xsd/practitioner.xsd");
+                    Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
                 }
                 catch (Common.InvalidXmlException ie)
                 {
-                    return Content(ie.error + result);
+                    return Content(Common.addtoxml(result, ie.error));
                 }
                 return Content(result);
             }

@@ -14,10 +14,13 @@ namespace MvcApplication1
     
     public partial class OauthClients
     {
-        public string clientID { get; set; }
+        public int clientID { get; set; }
         public string clientSecret { get; set; }
         public string responseUri { get; set; }
         public string accessToken { get; set; }
         public Nullable<System.DateTime> timestamp { get; set; }
+        public sbyte isAdmin { get; set; }
+        public string userid { get; set; }
+        public string t_doente { get; set; }
     }
 }

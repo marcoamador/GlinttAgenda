@@ -310,6 +310,7 @@
       <DependentUpon>GlinttLocalModel.edmx</DependentUpon>
       <LastGenOutput>GlinttLocalModel.cs</LastGenOutput>
     </Content>
+    <None Include="Properties\PublishProfiles\gpatient.pubxml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -353,154 +354,154 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Patient.cshtml" />
-    <None Include="Xsd\adversereaction.xsd">
+    <None Include="Content\Xsd\adversereaction.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\allergyintolerance.xsd">
+    <None Include="Content\Xsd\allergyintolerance.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\binary.xsd">
+    <None Include="Content\Xsd\binary.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\careplan.xsd">
+    <None Include="Content\Xsd\careplan.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\category.xsd">
+    <None Include="Content\Xsd\category.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\conformance.xsd">
+    <None Include="Content\Xsd\conformance.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\coverage.xsd">
+    <None Include="Content\Xsd\coverage.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\device.xsd">
+    <None Include="Content\Xsd\device.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\devicecapabilities.xsd">
+    <None Include="Content\Xsd\devicecapabilities.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\devicelog.xsd">
+    <None Include="Content\Xsd\devicelog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\deviceobservation.xsd">
+    <None Include="Content\Xsd\deviceobservation.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\diagnosticreport.xsd">
+    <None Include="Content\Xsd\diagnosticreport.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\document.xsd">
+    <None Include="Content\Xsd\document.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\documentreference.xsd">
+    <None Include="Content\Xsd\documentreference.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\familyhistory.xsd">
+    <None Include="Content\Xsd\familyhistory.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\fhir-all.xsd">
+    <None Include="Content\Xsd\fhir-all.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\fhir-atom.xsd">
+    <None Include="Content\Xsd\fhir-atom.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\fhir-base.xsd">
+    <None Include="Content\Xsd\fhir-base.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\group.xsd">
+    <None Include="Content\Xsd\group.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\imagingstudy.xsd">
+    <None Include="Content\Xsd\imagingstudy.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\immunization.xsd">
+    <None Include="Content\Xsd\immunization.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\immunizationprofile.xsd">
+    <None Include="Content\Xsd\immunizationprofile.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\issuereport.xsd">
+    <None Include="Content\Xsd\issuereport.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\list.xsd">
+    <None Include="Content\Xsd\list.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\location.xsd">
+    <None Include="Content\Xsd\location.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\medicationadministration.xsd">
+    <None Include="Content\Xsd\medicationadministration.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\message.xsd">
+    <None Include="Content\Xsd\message.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\observation.xsd">
+    <None Include="Content\Xsd\observation.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\order.xsd">
+    <None Include="Content\Xsd\order.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\orderresponse.xsd">
+    <None Include="Content\Xsd\orderresponse.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\organization.xsd">
+    <None Include="Content\Xsd\organization.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\patient.xsd">
+    <None Include="Content\Xsd\patient.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\picture.xsd">
+    <None Include="Content\Xsd\picture.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\practitioner.xsd">
+    <None Include="Content\Xsd\practitioner.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\prescription.xsd">
+    <None Include="Content\Xsd\prescription.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\problem.xsd">
+    <None Include="Content\Xsd\problem.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\procedure.xsd">
+    <None Include="Content\Xsd\procedure.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\profile.xsd">
+    <None Include="Content\Xsd\profile.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\provenance.xsd">
+    <None Include="Content\Xsd\provenance.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\questionnaire.xsd">
+    <None Include="Content\Xsd\questionnaire.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\securityevent.xsd">
+    <None Include="Content\Xsd\securityevent.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\specimen.xsd">
+    <None Include="Content\Xsd\specimen.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\substance.xsd">
+    <None Include="Content\Xsd\substance.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\test.xsd">
+    <None Include="Content\Xsd\test.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\tombstone.xsd">
+    <None Include="Content\Xsd\tombstone.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\valueset.xsd">
+    <None Include="Content\Xsd\valueset.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\visit.xsd">
+    <None Include="Content\Xsd\visit.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\xhtml1-strict.xsd">
+    <None Include="Content\Xsd\xhtml1-strict.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\xml.xsd">
+    <None Include="Content\Xsd\xml.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Xsd\xmldsig-core-schema.xsd">
+    <None Include="Content\Xsd\xmldsig-core-schema.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

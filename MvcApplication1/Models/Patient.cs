@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Text;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 
 namespace MvcApplication1.Models
@@ -69,9 +70,9 @@ namespace MvcApplication1.Models
             dem.Gender = gender;
             
 
+      
             Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime(patient.dt_nasc.ToString());
             dem.BirthDate = new Hl7.Fhir.Model.FhirDateTime(patient.dt_nasc.ToString());
-
             Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
             dead.Contents = patient.flag_falec == "1"; //confirmar
             dem.Deceased = dead;
