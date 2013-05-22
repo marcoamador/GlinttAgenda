@@ -15,7 +15,7 @@ namespace MvcApplication1.Models
             {"family", null},
             {"gender", null},
             {"given", new List<string>() {"nome"}},
-            {"identifier", new List<string>() {"n-mecan"}},
+            {"identifier", new List<string>() {"n_mecan"}},
             {"language", null},
             {"name", new List<string>() {"nome"}},
             {"organization", null},

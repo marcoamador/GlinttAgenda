@@ -36,8 +36,8 @@ namespace MvcApplication1.Controllers
 
                 MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
                 g_cons_marc r = v.byId(id);
-                int access = Common.getPrivileges(Request.Headers["accessToken"]);
-                if (access == 0 || access.ToString() == r.doente)
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0" || access == id)
                 {
                     string result = v.visitParser(r);
                     if (result == null)
@@ -72,31 +72,27 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0 || Request["doente"] == access.ToString() )
-            {
-                MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-                string s = v.search(Request);
-                if (s == null)
-                {
-                    Response.StatusCode = 404;
-                    return null;
-                }
-                return Content(s);
-            }
-            else
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+
+            string s = v.search(Request,access);
+
+            if (s == null)
             {
                 Response.StatusCode = 403;
                 return null;
             }
+            return Content(s);
+
+
         }
 
         public ActionResult Update(String id)
         {
             MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0)
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0")
             {
                 g_cons_marc r = v.update(Request, id);
                 string s = v.visitParser(r);

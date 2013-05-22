@@ -69,7 +69,7 @@ namespace MvcApplication1.Controllers
 
             string clientid = Request.QueryString["clientid"];
             string clientsecret = Request.QueryString["clientsecret"];
-            //string accessToken = Request.Headers["accesstoken"]; 
+            //string accessToken = Request.QueryString["accesstoken"]; 
             string email = Request.QueryString["email"];
             string password = Request.QueryString["password"];
             
@@ -98,12 +98,16 @@ namespace MvcApplication1.Controllers
                                 //TODO tokens must expire
                                 string tokenstring = generateRandomSequence(32);
 
+                                
                                 Accesstokens t = new Accesstokens();
                                 t.clientid = c.clientID;
                                 t.userid = patientquery.doente;
+                                t.t_doente = patientquery.t_doente;
                                 t.Timestamp = DateTime.Now;
                                 t.Token = tokenstring;
                                 t.isAdmin = 0;
+                                
+                                gle.Accesstokens.Add(t);
 
                                 gle.SaveChanges();
 
@@ -132,6 +136,8 @@ namespace MvcApplication1.Controllers
                                 t.Timestamp = DateTime.Now;
                                 t.isAdmin = 1;
                                 t.clientid = Convert.ToInt32(practitionerquery.n_mecan);
+
+                                gle.Accesstokens.Add(t);
                                 gle.SaveChanges();
 
                                 Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "?userid=" + practitionerquery.n_mecan);
@@ -145,6 +151,14 @@ namespace MvcApplication1.Controllers
                 return Content("");
             }
             return Content("");
+        }
+
+        public ActionResult isTokenValid()
+        {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            if (Common.getPrivileges(Request.QueryString["accesstoken"]) != "-1")
+                return Content("1");
+            return Content("0");
         }
     }
 }

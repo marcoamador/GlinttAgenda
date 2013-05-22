@@ -28,8 +28,8 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
-                int access = Common.getPrivileges(Request.Headers["accessToken"]);
-                if (access == 0)
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0")
                 {
                     MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
                     String result = p.byId(id);
@@ -65,8 +65,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0)
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0")
             {
                 MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
                 String s = pr.search(Request);
@@ -86,8 +86,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0)
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0")
             {
                 MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
                 String s = pr.update(Request, id);

@@ -81,6 +81,12 @@ namespace MvcApplication1
                defaults: new { controller = "Login", action = "AuthorizeLogin" }
            );
 
+           
+            routes.MapRoute(
+                name: "Validate_Token",
+                url: "Login/validatetoken/",
+                defaults: new { controller = "Login", action = "isTokenValid" }
+            );
 
            routes.MapRoute(
                 name: "Default",
@@ -88,11 +94,7 @@ namespace MvcApplication1
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
-           
-            
 
-
-          
 
             /*routes.MapRoute(
               name: "Default1",

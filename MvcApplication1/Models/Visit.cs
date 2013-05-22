@@ -87,7 +87,7 @@ namespace MvcApplication1.Models
             return sqlresult.First();
         }
 
-        public string search(HttpRequestBase v)
+        public string search(HttpRequestBase v, string tokenaccess)
         {
             List<Object> l = new List<Object>();
             int i = 0;
@@ -140,6 +140,7 @@ namespace MvcApplication1.Models
 
             query1 += ";";
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
+            //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
             if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);
