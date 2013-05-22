@@ -12,10 +12,14 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class OauthClients
+    public partial class Accesstokens
     {
-        public int clientID { get; set; }
-        public string clientSecret { get; set; }
-        public string responseUri { get; set; }
+        public int idAccesstokens { get; set; }
+        public string Token { get; set; }
+        public System.DateTime Timestamp { get; set; }
+        public int clientid { get; set; }
+        public sbyte isAdmin { get; set; }
+        public string userid { get; set; }
+        public string t_doente { get; set; }
     }
 }

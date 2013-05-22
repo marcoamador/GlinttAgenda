@@ -62,11 +62,11 @@ namespace MvcApplication1
             return serializer.Serialize(obj);
         }
 
-        public static int getPrivileges (string clientsecret)
+        public static int getPrivileges (string accesstoken)
         {
             glinttLocalEntities g = new glinttLocalEntities();
-            List<object> l = new List<object>() { clientsecret };
-            OauthClients oc = g.OauthClients.SqlQuery("select * from OauthClients where clientSecret = ?", l.ToArray()).FirstOrDefault();
+            List<object> l = new List<object>() { accesstoken };
+            Accesstokens oc = g.Accesstokens.SqlQuery("select * from Accesstokens where Token = ?", l.ToArray()).FirstOrDefault();
             if (oc != null)
             {
                 if (oc.isAdmin == 1)

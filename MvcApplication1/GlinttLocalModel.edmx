@@ -6,6 +6,7 @@
     <edmx:StorageModels>
       <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="glinttLocalModelStoreContainer">
+          <EntitySet Name="Accesstokens" EntityType="glinttLocalModel.Store.Accesstokens" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Contact" EntityType="glinttLocalModel.Store.Contact" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Language" EntityType="glinttLocalModel.Store.Language" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.Store.LanguagePatient" store:Type="Tables" store:Schema="glinttLocal" store:Name="LanguagePatient">
@@ -25,6 +26,18 @@
           <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Store.Practitioner" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Visit" EntityType="glinttLocalModel.Store.Visit" store:Type="Tables" Schema="glinttLocal" />
         </EntityContainer>
+        <EntityType Name="Accesstokens">
+          <Key>
+            <PropertyRef Name="idAccesstokens" />
+          </Key>
+          <Property Name="idAccesstokens" Type="int" Nullable="false" />
+          <Property Name="Token" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="Timestamp" Type="datetime" Nullable="false" />
+          <Property Name="clientid" Type="int" Nullable="false" />
+          <Property Name="isAdmin" Type="tinyint" Nullable="false" />
+          <Property Name="userid" Type="varchar" Nullable="false" MaxLength="45" />
+          <Property Name="t_doente" Type="varchar" MaxLength="45" />
+        </EntityType>
         <EntityType Name="Contact">
           <Key>
             <PropertyRef Name="id" />
@@ -77,13 +90,8 @@
             <PropertyRef Name="clientID" />
           </Key>
           <Property Name="clientID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="clientSecret" Type="varchar" MaxLength="255" />
-          <Property Name="responseUri" Type="varchar" MaxLength="255" />
-          <Property Name="accessToken" Type="varchar" MaxLength="255" />
-          <Property Name="timestamp" Type="datetime" />
-          <Property Name="isAdmin" Type="tinyint" Nullable="false" />
-          <Property Name="userid" Type="varchar" Nullable="false" MaxLength="255" />
-          <Property Name="t_doente" Type="varchar" MaxLength="45" />
+          <Property Name="clientSecret" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="responseUri" Type="varchar" Nullable="false" MaxLength="255" />
         </EntityType>
         <EntityType Name="Patient">
           <Key>
@@ -137,6 +145,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="glinttLocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="glinttLocalEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Accesstokens" EntityType="glinttLocalModel.Accesstokens" />
           <EntitySet Name="Contact" EntityType="glinttLocalModel.Contact" />
           <EntitySet Name="Language" EntityType="glinttLocalModel.Language" />
           <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.LanguagePatient" />
@@ -146,6 +155,18 @@
           <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Practitioner" />
           <EntitySet Name="Visit" EntityType="glinttLocalModel.Visit" />
         </EntityContainer>
+        <EntityType Name="Accesstokens">
+          <Key>
+            <PropertyRef Name="idAccesstokens" />
+          </Key>
+          <Property Name="idAccesstokens" Type="Int32" Nullable="false" />
+          <Property Name="Token" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="clientid" Type="Int32" Nullable="false" />
+          <Property Name="isAdmin" Type="SByte" Nullable="false" />
+          <Property Name="userid" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
+          <Property Name="t_doente" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
+        </EntityType>
         <EntityType Name="Contact">
           <Key>
             <PropertyRef Name="id" />
@@ -192,13 +213,8 @@
             <PropertyRef Name="clientID" />
           </Key>
           <Property Name="clientID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="clientSecret" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="responseUri" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="accessToken" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="timestamp" Type="DateTime" />
-          <Property Name="isAdmin" Type="SByte" Nullable="false" />
-          <Property Name="userid" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="t_doente" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
+          <Property Name="clientSecret" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="responseUri" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="Patient">
           <Key>
@@ -245,6 +261,19 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="glinttLocalModelStoreContainer" CdmEntityContainer="glinttLocalEntities">
+          <EntitySetMapping Name="Accesstokens">
+            <EntityTypeMapping TypeName="glinttLocalModel.Accesstokens">
+              <MappingFragment StoreEntitySet="Accesstokens">
+                <ScalarProperty Name="idAccesstokens" ColumnName="idAccesstokens" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="clientid" ColumnName="clientid" />
+                <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="t_doente" ColumnName="t_doente" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Contact">
             <EntityTypeMapping TypeName="glinttLocalModel.Contact">
               <MappingFragment StoreEntitySet="Contact">
@@ -294,11 +323,6 @@
                 <ScalarProperty Name="clientID" ColumnName="clientID" />
                 <ScalarProperty Name="clientSecret" ColumnName="clientSecret" />
                 <ScalarProperty Name="responseUri" ColumnName="responseUri" />
-                <ScalarProperty Name="accessToken" ColumnName="accessToken" />
-                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
-                <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
-                <ScalarProperty Name="userid" ColumnName="userid" />
-                <ScalarProperty Name="t_doente" ColumnName="t_doente" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

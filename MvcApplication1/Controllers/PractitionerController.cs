@@ -61,11 +61,6 @@ namespace MvcApplication1.Controllers
             }
         }
 
-        public ActionResult Hello(string resource,string res_action, string id)
-        {
-            return Json(new { resource = resource , resource_action = res_action,id = Int32.Parse(id),count=gE.g_pess_hosp_def.Count() }, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Search()
         {
             int access = Common.getPrivileges(Request.Headers["accessToken"]);

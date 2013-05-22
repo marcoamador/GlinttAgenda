@@ -32,6 +32,9 @@ namespace MvcApplication1.Controllers
             //check if response_uri exists
             //create respective clientID and ClientSecret
             //save responseUri
+
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             glinttEntities e = new glinttEntities();
 
             glinttLocalEntities gle = new glinttLocalEntities();
@@ -52,7 +55,7 @@ namespace MvcApplication1.Controllers
             Response.Headers["clientid"] = oc.clientID.ToString();
             Response.Headers["clientsecret"] = oc.clientSecret;
 
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            
 
             Response.Redirect(response_uri);
             Response.End();
@@ -62,16 +65,18 @@ namespace MvcApplication1.Controllers
 
         public ActionResult AuthorizeLogin()
         {
-            string clientid =  Request.Headers["clientid"];
-            string clientsecret = Request.Headers["clientsecret"];
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
+            string clientid = Request.QueryString["clientid"];
+            string clientsecret = Request.QueryString["clientsecret"];
             //string accessToken = Request.Headers["accesstoken"]; 
-            string email = Request.Headers["email"];
-            string password = Request.Headers["password"];
+            string email = Request.QueryString["email"];
+            string password = Request.QueryString["password"];
             
             glinttLocalEntities gle = new glinttLocalEntities();
             glinttEntities ge = new glinttEntities();
 
-            OauthClients c =  gle.OauthClients.Find(clientid);
+            OauthClients c =  gle.OauthClients.Find(Convert.ToInt32(clientid));
             if (c != null)
             {
                 if (c.clientSecret == clientsecret)
@@ -91,18 +96,19 @@ namespace MvcApplication1.Controllers
                             {
                                 //authentication successful
                                 //TODO tokens must expire
-                                string s = generateRandomSequence(32);
-                                c.accessToken = s;
-                                c.timestamp = DateTime.Now;
-                                c.isAdmin = 0;
-                                c.userid = patientquery.doente;
-                                c.t_doente = patientquery.t_doente;
-                                gle.SaveChanges();
-                                Response.AppendHeader("Access-Control-Allow-Origin", "*");
-                                Response.Headers["user"] = email;
-                                Response.Headers["acessToken"] = s;
+                                string tokenstring = generateRandomSequence(32);
 
-                                Response.Redirect(c.responseUri);
+                                Accesstokens t = new Accesstokens();
+                                t.clientid = c.clientID;
+                                t.userid = patientquery.doente;
+                                t.Timestamp = DateTime.Now;
+                                t.Token = tokenstring;
+                                t.isAdmin = 0;
+
+
+                                gle.SaveChanges();
+
+                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring);
                                 Response.End();
                                 return Content("");
                             }
@@ -121,25 +127,25 @@ namespace MvcApplication1.Controllers
 
                             if (practitionerquery1.password == password) //admin login
                             {
-                                string s = generateRandomSequence(32);
-                                c.accessToken = s;
-                                c.timestamp = DateTime.Now;
-                                c.isAdmin = 1;
-                                c.userid = practitionerquery.n_mecan;
+                                string tokenstring = generateRandomSequence(32);
+                                Accesstokens t = new Accesstokens();
+                                t.Token = tokenstring;
+                                t.Timestamp = DateTime.Now;
+                                t.isAdmin = 1;
+                                t.clientid = Convert.ToInt32(practitionerquery.n_mecan);
                                 gle.SaveChanges();
-                                Response.AppendHeader("Access-Control-Allow-Origin", "*");
-                                Response.Headers["user"] = email;
-                                Response.Headers["acessToken"] = s;
-                                Response.Redirect(c.responseUri);
+
+                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring);
                                 Response.End();
                                 return Content("");
                             }
                         }
                     }
                 }
+                Response.Redirect(c.responseUri + "?username=" + email + "&password=" + password + "&error=1");
+                return Content("");
             }
-            
-            return null;
+            return Content("");
         }
     }
 }

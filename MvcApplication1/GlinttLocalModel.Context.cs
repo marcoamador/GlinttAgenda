@@ -25,6 +25,7 @@ namespace MvcApplication1
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<Accesstokens> Accesstokens { get; set; }
         public DbSet<Contact> Contact { get; set; }
         public DbSet<Language> Language { get; set; }
         public DbSet<LanguagePatient> LanguagePatient { get; set; }
