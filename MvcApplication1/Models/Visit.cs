@@ -125,7 +125,13 @@ namespace MvcApplication1.Models
                             {
                                 query1 += " or ";
                             }
-                            query1 += conver + "=" + "?";
+
+                            if (querykeys == "birthdate-before")
+                                query1 += conver + "<" + "?";
+                            else if (querykeys == "birthdate-after")
+                                query1 += conver + ">" + "?";
+                            else
+                                query1 += conver + "=" + "?";
 
                             l.Add(v.QueryString[querykeys]);
                             j++;
