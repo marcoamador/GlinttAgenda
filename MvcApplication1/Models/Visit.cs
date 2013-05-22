@@ -83,6 +83,7 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
+
             return sqlresult.First();
         }
 
@@ -126,12 +127,7 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
-                            if (querykeys == "birthdate-before")
-                                query1 += conver + "<" + "?";
-                            else if (querykeys == "birthdate-after")
-                                query1 += conver + ">" + "?";
-                            else
-                                query1 += conver + "=" + "?";
+                            query1 += conver + "=" + "?";
 
                             l.Add(v.QueryString[querykeys]);
                             j++;

@@ -31,13 +31,17 @@ namespace MvcApplication1.Models
         };
 
         glinttEntities gE;
+        glinttLocalEntities glE;
 
         public Patient()
         {
             gE = new glinttEntities();
+            glE = new glinttLocalEntities();
         }
 
-        public String patientParser(g_doente patient)
+
+        //Faltam dados da base de dados local
+        public String patientParser(g_doente patient, MvcApplication1.Patient remaining)
         {
             Hl7.Fhir.Model.Patient p = new Hl7.Fhir.Model.Patient();
             Hl7.Fhir.Model.Identifier i = new Hl7.Fhir.Model.Identifier();
@@ -96,15 +100,22 @@ namespace MvcApplication1.Models
 
         public String byId(string id)
         {
-            Object[] key = { id };
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?", key);
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
 
             if (sqlresult.Count() == 0)
             {
                 return null;
             }
             g_doente patient = sqlresult.First();
-            return patientParser(patient);
+
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> secondResult = glE.Patient.SqlQuery("Select * from Patient where t_doente="+ id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
+            if (secondResult.Count() == 0)
+            {
+                return null;
+            }
+            MvcApplication1.Patient remaining = secondResult.First();
+
+            return patientParser(patient, remaining);
         }
 
         public string search(HttpRequestBase p)
@@ -180,13 +191,16 @@ namespace MvcApplication1.Models
             query1 += ";";
             Console.WriteLine(query1);
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res = gE.g_doente.SqlQuery(query1, l.ToArray());
+
             if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);
             }
             else if (res.Count() == 1)
             {
-                return patientParser(res.First());
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + res.First().t_doente + " and doente=" + res.First().doente + ";");
+                MvcApplication1.Patient remaining = rem.First();
+                return patientParser(res.First(), remaining);
             }
             else
             {
@@ -251,6 +265,8 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Patient"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
+
+
             if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
             {
                 int min = 0;
@@ -260,8 +276,14 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + res.ElementAt(j).t_doente + " and doente=" + res.ElementAt(j).doente + ";");
+                    if (rem.Count() == 0)
+                    {
+                        return null;
+                    }
+                    MvcApplication1.Patient remaining = rem.First();
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).t_doente));
-                    feed.Append(patientParser(res.ElementAt(j)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.Append(patientParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");

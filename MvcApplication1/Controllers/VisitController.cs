@@ -12,6 +12,7 @@ namespace MvcApplication1.Controllers
     public class VisitController : Controller
     {
         glinttEntities gE;
+        glinttLocalEntities glE;
 
         
 
@@ -19,6 +20,7 @@ namespace MvcApplication1.Controllers
         {
             base.Initialize(rc);
             gE = new glinttEntities();
+            glE = new glinttLocalEntities();
         }
 
         public ActionResult Index(String id)
