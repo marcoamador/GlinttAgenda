@@ -92,10 +92,11 @@ namespace MvcApplication1.Controllers
         public ActionResult Update(String id)
         {
             MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-            g_cons_marc r = v.update(Request, id);
+
             int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0 || access.ToString() == r.doente)
+            if (access == 0)
             {
+                g_cons_marc r = v.update(Request, id);
                 string s = v.visitParser(r);
                 if (s == null)
                 {

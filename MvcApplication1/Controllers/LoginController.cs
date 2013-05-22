@@ -105,10 +105,9 @@ namespace MvcApplication1.Controllers
                                 t.Token = tokenstring;
                                 t.isAdmin = 0;
 
-
                                 gle.SaveChanges();
 
-                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring);
+                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "&userid=" + patientquery.t_doente + "_" + patientquery.doente);
                                 Response.End();
                                 return Content("");
                             }
@@ -135,7 +134,7 @@ namespace MvcApplication1.Controllers
                                 t.clientid = Convert.ToInt32(practitionerquery.n_mecan);
                                 gle.SaveChanges();
 
-                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring);
+                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "?userid=" + practitionerquery.n_mecan);
                                 Response.End();
                                 return Content("");
                             }
