@@ -24,15 +24,17 @@ namespace MvcApplication1.Models
         };
 
         glinttEntities gE;
+        glinttLocalEntities glE;
 
         public Practitioner()
         {
             gE = new glinttEntities();
+            glE = new glinttLocalEntities();
 
         }   
 
 
-        public String practitionerParser(g_pess_hosp_def d)
+        public String practitionerParser(g_pess_hosp_def d, MvcApplication1.Practitioner remain)
         {
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
@@ -73,7 +75,14 @@ namespace MvcApplication1.Models
                 return null;
             }
             g_pess_hosp_def practitioner = sqlresult.First();
-            return practitionerParser(practitioner);
+
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + id + ";");
+            if (secondResult.Count() == 0)
+            {
+                return null;
+            }
+            MvcApplication1.Practitioner remaining = secondResult.First();
+            return practitionerParser(practitioner, remaining);
         }
 
         public string search(HttpRequestBase pr)
@@ -116,12 +125,7 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
-                            if (querykeys == "birthdate-before")
-                                query1 += conver + "<" + "?";
-                            else if (querykeys == "birthdate-after")
-                                query1 += conver + ">" + "?";
-                            else
-                                query1 += conver + "=" + "?";
+                            query1 += conver + "=" + "?";
 
                             l.Add(pr.QueryString[querykeys]);
                             j++;
@@ -140,7 +144,14 @@ namespace MvcApplication1.Models
             }
             else if (res.Count() == 1)
             {
-                return practitionerParser(res.First());
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
+                if (secondResult.Count() == 0)
+                {
+                    return null;
+                }
+                MvcApplication1.Practitioner remaining = secondResult.First();
+
+                return practitionerParser(res.First(), remaining);
             }
             else
             {
@@ -211,8 +222,15 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
+                    if (secondResult.Count() == 0)
+                    {
+                        return null;
+                    }
+                    MvcApplication1.Practitioner remaining = secondResult.First();
+
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
-                    feed.Append(practitionerParser(res.ElementAt(j)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.Append(practitionerParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
