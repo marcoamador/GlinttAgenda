@@ -23,6 +23,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index(String id)
         {
+
             if (Request.HttpMethod.Equals("GET"))
             {
                 if (id == null || id.Equals(""))
@@ -32,22 +33,32 @@ namespace MvcApplication1.Controllers
                 }
 
                 MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-                String result = v.byId(id);
-                if (result == null)
+                g_cons_marc r = v.byId(id);
+                int access = Common.getPrivileges(Request.Headers["accessToken"]);
+                if (access == 0 || access.ToString() == r.doente)
                 {
-                    Response.StatusCode = 404;
+                    string result = v.visitParser(r);
+                    if (result == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
+
+                    try
+                    {
+                        Common.validateXML(result, "~/Content/xsd/visit.xsd");
+                    }
+                    catch (Common.InvalidXmlException ie)
+                    {
+                        return Content(Common.addtoxml(result, ie.error));
+                    }
+                    return Content(result);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
                     return null;
                 }
-
-                try
-                {
-                    Common.validateXML(result, "~/Content/xsd/visit.xsd");
-                }
-                catch (Common.InvalidXmlException ie)
-                {
-                    return Content(Common.addtoxml(result, ie.error));
-                }
-                return Content(result);
             }
             else
             {
@@ -64,27 +75,45 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-            String s = v.search(Request);
-            if (s == null)
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0 || Request["doente"] == access.ToString() )
             {
-                Response.StatusCode = 404;
+                MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+                string s = v.search(Request);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-            return Content(s);
         }
 
         public ActionResult Update(String id)
         {
             MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-            String s = v.update(Request, id);
-            if (s == null)
+            g_cons_marc r = v.update(Request, id);
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0 || access.ToString() == r.doente)
             {
-                Response.StatusCode = 404;
+                string s = v.visitParser(r);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-            return Content(s);
         }
-
     }
 }

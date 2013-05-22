@@ -75,7 +75,7 @@ namespace MvcApplication1.Models
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
         }
 
-        public String byId(string id)
+        public g_cons_marc byId(string id)
         {
             Object[] key = { id };
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where n_cons=?", key);
@@ -83,8 +83,7 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
-            g_cons_marc visit = sqlresult.First();
-            return visitParser(visit);
+            return sqlresult.First();
         }
 
         public string search(HttpRequestBase v)
@@ -223,7 +222,7 @@ namespace MvcApplication1.Models
             return feed.ToString();
         }
 
-        public String update(HttpRequestBase p, String id)
+        public g_cons_marc update(HttpRequestBase p, String id)
         {
             Object[] key = { id };
             List<Object> l = new List<Object>();

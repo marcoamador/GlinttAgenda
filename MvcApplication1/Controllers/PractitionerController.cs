@@ -26,23 +26,32 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
-                MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
-                String result = p.byId(id);
-                if (result == null)
+                int access = Common.getPrivileges(Request.Headers["accessToken"]);
+                if (access == 0)
                 {
-                    Response.StatusCode = 404;
+                    MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
+                    String result = p.byId(id);
+                    if (result == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
+
+                    try
+                    {
+                        Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
+                    }
+                    catch (Common.InvalidXmlException ie)
+                    {
+                        return Content(Common.addtoxml(result, ie.error));
+                    }
+                    return Content(result);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
                     return null;
                 }
-
-                try
-                {
-                    Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
-                }
-                catch (Common.InvalidXmlException ie)
-                {
-                    return Content(Common.addtoxml(result, ie.error));
-                }
-                return Content(result);
             }
             else
             {
@@ -59,26 +68,44 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
-            String s = pr.search(Request);
-            if (s == null)
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0)
             {
-                Response.StatusCode = 404;
+                MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
+                String s = pr.search(Request);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-            return Content(s);
         }
 
         public ActionResult Update(String id)
         {
-            MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
-            String s = pr.update(Request, id);
-            if (s == null)
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0)
             {
-                Response.StatusCode = 404;
+                MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
+                String s = pr.update(Request, id);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-            return Content(s);
         }
     }
 }

@@ -19,6 +19,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index(String id)
         {
+
             if (Request.HttpMethod.Equals("GET"))
             {
                 if (id == null || id.Equals(""))
@@ -26,59 +27,96 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
-                MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
-                String result = p.byId(id);
-                if (result == null)
+                int access = Common.getPrivileges(Request.Headers["accessToken"]);
+                if (access == 0 || access.ToString() == id)
                 {
-                    Response.StatusCode = 404;
+                    MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
+                    String result = p.byId(id);
+                    if (result == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
+
+                    try
+                    {
+                        Common.validateXML(result, "~/Content/xsd/patient.xsd");
+                    }
+                    catch (Common.InvalidXmlException ie)
+                    {
+
+                        return Content(Common.addtoxml(result, ie.error));
+                    }
+                    return Content(result);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
                     return null;
                 }
-
-                try
-                {
-                    Common.validateXML(result, "~/Content/xsd/patient.xsd");
-                }
-                catch (Common.InvalidXmlException ie)
-                {
-                   
-                    return Content(Common.addtoxml(result,ie.error));
-                }
-                return Content(result);
             }
-            else {
+            else
+            {
                 Response.StatusCode = 400;
                 return null;
-            
+
             }
         }
 
         public ActionResult SearchById(String id)
         {
-            return Content(new MvcApplication1.Models.Patient().byId(id));
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0 || access.ToString() == id)
+            {
+                return Content(new MvcApplication1.Models.Patient().byId(id));
+            }
+            else
+            {
+                Response.StatusCode = 403;
+                return null;
+            }
         }
 
         public ActionResult Search()
         {
-            MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
-            String s = p.search(Request);
-            if (s == null)
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0)
             {
-                Response.StatusCode = 404;
+                MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
+                String s = p.search(Request);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-            return Content(s);
         }
 
         public ActionResult Update(String id)
         {
-            MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
-            String s = p.update(Request, id);
-            if (s == null)
+            int access = Common.getPrivileges(Request.Headers["accessToken"]);
+            if (access == 0 || access.ToString() == id)
             {
-                Response.StatusCode = 404;
+                MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
+                String s = p.update(Request, id);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-            return Content(s);
         }
     }
 }

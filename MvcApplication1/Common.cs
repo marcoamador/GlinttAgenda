@@ -62,6 +62,25 @@ namespace MvcApplication1
             return serializer.Serialize(obj);
         }
 
+        public static int getPrivileges (string clientsecret)
+        {
+            glinttLocalEntities g = new glinttLocalEntities();
+            List<object> l = new List<object>() { clientsecret };
+            OauthClients oc = g.OauthClients.SqlQuery("select * from OauthClients where clientSecret = ?", l.ToArray()).FirstOrDefault();
+            if (oc != null)
+            {
+                if (oc.isAdmin == 1)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return Convert.ToInt32( oc.userid );
+                }
+                
+            }
+            return -1;
+        }
 
         public static string addtoxml(string xml, string error)
         {
