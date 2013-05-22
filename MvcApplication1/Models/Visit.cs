@@ -8,6 +8,9 @@ namespace MvcApplication1.Models
 {
     public class Visit
     {
+        glinttEntities ge;
+        glinttLocalEntities gle;
+
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
             { "_id", new List<string>(){"n_cons"} }, 
@@ -28,13 +31,12 @@ namespace MvcApplication1.Models
         public Visit()
         {
             ge = new glinttEntities();
+            gle = new glinttLocalEntities();
         }
-
-        glinttEntities ge;
 
         //RESOURCE REFERENCES->SUBJECT, RESPONSIBLE, FULFILLS, CONTACT, INDICATION 
 
-        public string visitParser(g_cons_marc c)
+        public string visitParser(g_cons_marc c, MvcApplication1.Visit remain)
         {
 
             Hl7.Fhir.Model.Visit v = new Hl7.Fhir.Model.Visit();
@@ -146,7 +148,7 @@ namespace MvcApplication1.Models
             }
             else if (res.Count() == 1)
             {
-                return visitParser(res.First());
+                return visitParser(res.First(), localDataById(res.First().n_cons));
             }
             else
             {
@@ -214,7 +216,7 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
-                    feed.Append(visitParser(res.ElementAt(j)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.Append(visitParser(res.ElementAt(j), localDataById(res.ElementAt(j).n_cons)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
@@ -224,7 +226,7 @@ namespace MvcApplication1.Models
             return feed.ToString();
         }
 
-        public g_cons_marc update(HttpRequestBase p, String id)
+        public String update(HttpRequestBase p, String id)
         {
             Object[] key = { id };
             List<Object> l = new List<Object>();
@@ -262,7 +264,7 @@ namespace MvcApplication1.Models
 
                 ge.Database.ExecuteSqlCommand(query1, l.ToArray());
                 ge.SaveChanges();
-                return byId(id);
+                return visitParser(byId(id), localDataById(id));
 
             }
 
@@ -298,6 +300,17 @@ namespace MvcApplication1.Models
     }
         
  */
+
+        public MvcApplication1.Visit localDataById(String id)
+        {
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> sqlresult = gle.Visit.SqlQuery("Select * from Visit where id=" + id + ";");
+            if (sqlresult.Count() == 0)
+            {
+                return null;
+            }
+
+            return sqlresult.First();
+        }
     }
 
 }

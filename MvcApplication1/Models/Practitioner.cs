@@ -77,11 +77,12 @@ namespace MvcApplication1.Models
             g_pess_hosp_def practitioner = sqlresult.First();
 
             System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + id + ";");
-            if (secondResult.Count() == 0)
-            {
-                return null;
-            }
-            MvcApplication1.Practitioner remaining = secondResult.First();
+            MvcApplication1.Practitioner remaining;
+            if (secondResult.Count() != 0)
+                remaining = secondResult.First();
+            else
+                remaining = null;
+
             return practitionerParser(practitioner, remaining);
         }
 
@@ -145,11 +146,11 @@ namespace MvcApplication1.Models
             else if (res.Count() == 1)
             {
                 System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
-                if (secondResult.Count() == 0)
-                {
-                    return null;
-                }
-                MvcApplication1.Practitioner remaining = secondResult.First();
+                MvcApplication1.Practitioner remaining;
+                if (secondResult.Count() != 0)
+                    remaining = secondResult.First();
+                else
+                    remaining = null;
 
                 return practitionerParser(res.First(), remaining);
             }
@@ -223,11 +224,11 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
-                    if (secondResult.Count() == 0)
-                    {
-                        return null;
-                    }
-                    MvcApplication1.Practitioner remaining = secondResult.First();
+                    MvcApplication1.Practitioner remaining;
+                    if (secondResult.Count() != 0)
+                        remaining = secondResult.First();
+                    else
+                        remaining = null;
 
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
                     feed.Append(practitionerParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));

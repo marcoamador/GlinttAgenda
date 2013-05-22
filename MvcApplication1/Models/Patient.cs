@@ -109,11 +109,12 @@ namespace MvcApplication1.Models
             g_doente patient = sqlresult.First();
 
             System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> secondResult = glE.Patient.SqlQuery("Select * from Patient where t_doente="+ id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
-            if (secondResult.Count() == 0)
-            {
-                return null;
-            }
-            MvcApplication1.Patient remaining = secondResult.First();
+            MvcApplication1.Patient remaining;
+            if (secondResult.Count() != 0)
+                remaining = secondResult.First();
+            else
+                remaining = null;
+            
 
             return patientParser(patient, remaining);
         }
@@ -199,7 +200,12 @@ namespace MvcApplication1.Models
             else if (res.Count() == 1)
             {
                 System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + res.First().t_doente + " and doente=" + res.First().doente + ";");
-                MvcApplication1.Patient remaining = rem.First();
+                MvcApplication1.Patient remaining;
+                if (rem.Count() != 0)
+                    remaining = rem.First();
+                else
+                    remaining = null;
+
                 return patientParser(res.First(), remaining);
             }
             else
@@ -277,11 +283,12 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + res.ElementAt(j).t_doente + " and doente=" + res.ElementAt(j).doente + ";");
-                    if (rem.Count() == 0)
-                    {
-                        return null;
-                    }
-                    MvcApplication1.Patient remaining = rem.First();
+                    MvcApplication1.Patient remaining;
+                    if (rem.Count() != 0)
+                        remaining = rem.First();
+                    else
+                        remaining = null;
+
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).t_doente));
                     feed.Append(patientParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
