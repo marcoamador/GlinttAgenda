@@ -62,24 +62,40 @@ namespace MvcApplication1
             return serializer.Serialize(obj);
         }
 
-        public static int getPrivileges (string accesstoken)
+        private static bool isTokenOutOfDate(DateTime timestamp)
+        {
+            TimeSpan t = DateTime.Now - timestamp;
+            TimeSpan timelimit = new TimeSpan(15, 0, 0, 0, 0);
+            if (t >= timelimit)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static string getPrivileges (string accesstoken)
         {
             glinttLocalEntities g = new glinttLocalEntities();
             List<object> l = new List<object>() { accesstoken };
             Accesstokens oc = g.Accesstokens.SqlQuery("select * from Accesstokens where Token = ?", l.ToArray()).FirstOrDefault();
             if (oc != null)
             {
-                if (oc.isAdmin == 1)
+
+                if (!isTokenOutOfDate(oc.Timestamp))
                 {
-                    return 0;
+                    if (oc.isAdmin == 1)
+                    {
+                        return "0";
+                    }
+                    else
+                    {
+                        return oc.t_doente + "_" + oc.userid;
+                    }
                 }
-                else
-                {
-                    return Convert.ToInt32( oc.userid );
-                }
-                
+                g.Accesstokens.Remove(oc);
+                g.SaveChanges();
             }
-            return -1;
+            return "-1";
         }
 
         public static string addtoxml(string xml, string error)

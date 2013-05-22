@@ -29,8 +29,8 @@ namespace MvcApplication1.Controllers
                     Response.StatusCode = 404;
                     return null;
                 }
-                int access = Common.getPrivileges(Request.Headers["accessToken"]);
-                if (access == 0 || access.ToString() == id)
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0" || access == id)
                 {
                     MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
                     String result = p.byId(id);
@@ -67,8 +67,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult SearchById(String id)
         {
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0 || access.ToString() == id)
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0" || access == id)
             {
                 return Content(new MvcApplication1.Models.Patient().byId(id));
             }
@@ -81,8 +81,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0)
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0")
             {
                 MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
                 String s = p.search(Request);
@@ -102,8 +102,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
-            int access = Common.getPrivileges(Request.Headers["accessToken"]);
-            if (access == 0 || access.ToString() == id)
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0" || access == id)
             {
                 MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
                 String s = p.update(Request, id);
