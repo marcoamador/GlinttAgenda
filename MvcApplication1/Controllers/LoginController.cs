@@ -98,16 +98,36 @@ namespace MvcApplication1.Controllers
                                 //TODO tokens must expire
                                 string tokenstring = generateRandomSequence(32);
 
+                                List<object> lt = new List<object>(){patientquery.doente,patientquery.t_doente, c.clientID};
+                                Accesstokens t = gle.Accesstokens.SqlQuery("select * from Accesstokens where userid = ? and t_doente = ? and clientid = ?", lt.ToArray()).FirstOrDefault();
+                                if (t != null)
+                                {
+                                    if (!Common.isTokenOutOfDate(t.Timestamp))
+                                    {
+                                        tokenstring = t.Token;
+                                    }
+                                    else
+                                    {
+                                        t.Token = tokenstring;
+                                        t.Timestamp = DateTime.Now;
+                                    }
+
+                                    t.isAdmin = 0;
+                                }
+                                else
+                                {
+                                    Accesstokens ac = new Accesstokens();
+                                    ac.clientid = c.clientID;
+                                    ac.userid = patientquery.doente;
+                                    ac.t_doente = patientquery.t_doente;
+                                    ac.Timestamp = DateTime.Now;
+                                    ac.Token = tokenstring;
+                                    ac.isAdmin = 0;
+
+                                    gle.Accesstokens.Add(ac);
+                                }
                                 
-                                Accesstokens t = new Accesstokens();
-                                t.clientid = c.clientID;
-                                t.userid = patientquery.doente;
-                                t.t_doente = patientquery.t_doente;
-                                t.Timestamp = DateTime.Now;
-                                t.Token = tokenstring;
-                                t.isAdmin = 0;
                                 
-                                gle.Accesstokens.Add(t);
 
                                 gle.SaveChanges();
 
@@ -131,13 +151,35 @@ namespace MvcApplication1.Controllers
                             if (practitionerquery1.password == password) //admin login
                             {
                                 string tokenstring = generateRandomSequence(32);
-                                Accesstokens t = new Accesstokens();
-                                t.Token = tokenstring;
-                                t.Timestamp = DateTime.Now;
-                                t.isAdmin = 1;
-                                t.clientid = Convert.ToInt32(practitionerquery.n_mecan);
 
-                                gle.Accesstokens.Add(t);
+                                List<object> lt = new List<object>() { practitionerquery.n_mecan, 1, c.clientID };
+                                Accesstokens t = gle.Accesstokens.SqlQuery("select * from Accesstokens where userid = ? and isAdmin = ? and clientid = ? ", lt.ToArray()).FirstOrDefault();
+
+                                if (t != null)
+                                {
+
+                                    if (!Common.isTokenOutOfDate(t.Timestamp))
+                                    {
+                                        tokenstring = t.Token;
+                                    }
+                                    else
+                                    {
+                                        t.Token = tokenstring;
+                                        t.Timestamp = DateTime.Now;
+                                    }
+
+                                }
+                                else
+                                {
+                                    Accesstokens ac = new Accesstokens();
+
+                                    ac.Token = tokenstring;
+                                    ac.Timestamp = DateTime.Now;
+                                    ac.isAdmin = 1;
+                                    ac.clientid = Convert.ToInt32(practitionerquery.n_mecan);
+                                    gle.Accesstokens.Add(ac);
+
+                                }
                                 gle.SaveChanges();
 
                                 Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "?userid=" + practitionerquery.n_mecan);

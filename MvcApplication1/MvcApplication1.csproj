@@ -507,6 +507,9 @@
     <None Include="Content\Xsd\xmldsig-core-schema.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Web.gpatient.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -62,7 +62,7 @@ namespace MvcApplication1
             return serializer.Serialize(obj);
         }
 
-        private static bool isTokenOutOfDate(DateTime timestamp)
+        public static bool isTokenOutOfDate(DateTime timestamp)
         {
             TimeSpan t = DateTime.Now - timestamp;
             TimeSpan timelimit = new TimeSpan(15, 0, 0, 0, 0);
