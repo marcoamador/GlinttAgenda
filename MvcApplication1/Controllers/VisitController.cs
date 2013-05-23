@@ -36,10 +36,11 @@ namespace MvcApplication1.Controllers
 
                 MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
                 g_cons_marc r = v.byId(id);
+				MvcApplication1.Visit rV = v.localDataById(id);
                 string access = Common.getPrivileges(Request.QueryString["accessToken"]);
                 if (access == "0" || access == id)
                 {
-                    string result = v.visitParser(r);
+                    string result = v.visitParser(r, rV);
                     if (result == null)
                     {
                         Response.StatusCode = 404;
@@ -94,8 +95,7 @@ namespace MvcApplication1.Controllers
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
-                g_cons_marc r = v.update(Request, id);
-                string s = v.visitParser(r);
+                String s = v.update(Request, id);
                 if (s == null)
                 {
                     Response.StatusCode = 404;
