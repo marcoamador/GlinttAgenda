@@ -51,28 +51,14 @@ namespace MvcApplication1.Models
 
             //TODO faltam todos os resource references
             Hl7.Fhir.Model.ResourceReference practitioner = new Hl7.Fhir.Model.ResourceReference();
-            practitioner.InternalId.Contents = c.medico.ToString();
+            practitioner.InternalId = new Hl7.Fhir.Model.Id(c.medico.ToString());
 
             Hl7.Fhir.Model.Period periodo = new Hl7.Fhir.Model.Period();
-            periodo.Start.Contents = c.dt_cons.ToString();
-            periodo.End = c.dt_cons.ToString();
+            periodo.Start = new Hl7.Fhir.Model.FhirDateTime(c.dt_cons.ToString());
+            periodo.End = new Hl7.Fhir.Model.FhirDateTime(c.dt_cons.ToString());
 
             Hl7.Fhir.Model.Duration duracao = new Hl7.Fhir.Model.Duration();
             //DURACAO = PERIODO
-
-            if (remain != null)
-            {
-
-                Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
-                contact.InternalId.Contents = remain.contact.ToString();
-
-                Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
-                fulfills.InternalId.Contents = remain.fulfills.ToString();
-
-                Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
-                setting.Text = remain.setting;
-            }
-
 
             v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
             v.State = state;
@@ -84,6 +70,25 @@ namespace MvcApplication1.Models
             v.Length = duracao;
             v.Contact = new Hl7.Fhir.Model.ResourceReference();
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
+
+            if (remain != null)
+            {
+
+                Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
+                contact.InternalId = new Hl7.Fhir.Model.Id(remain.contact.ToString());
+                v.Contact = contact;
+
+                Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
+                fulfills.InternalId = new Hl7.Fhir.Model.Id(remain.fulfills.ToString());
+
+                v.Fulfills = fulfills;
+
+                Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
+                setting.Text = remain.setting;
+
+                v.Setting = setting;
+            }
+
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
         }

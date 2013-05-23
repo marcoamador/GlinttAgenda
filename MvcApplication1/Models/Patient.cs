@@ -106,8 +106,20 @@ namespace MvcApplication1.Models
                 Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
                 relationship.Text = remain.relationship;
 
+                p.Details.Deceased = deceased;
+                p.Link = new List<Hl7.Fhir.Model.ResourceReference>();
+                p.Link.Add(link);
+
+                p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
+                Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
+                contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>();
+                contact.Relationship.Add(relationship);
+
+                p.Contact.Add(contact);
+                
+
             }
-            //falta familiares
+            
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }

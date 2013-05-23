@@ -37,7 +37,8 @@ namespace MvcApplication1.Controllers
 				MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 				g_cons_marc r = v.byId(id);
 				MvcApplication1.Visit rV = v.localDataById(id);
-				string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+				//string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+				string access = "0";
 				if (access == "0" || access == id)
 				{
 					string result = v.visitParser(r, rV);
