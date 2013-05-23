@@ -56,6 +56,34 @@ namespace MvcApplication1.Models
             tel.Value = d.telef;
             Hl7.Fhir.Model.Contact mail = new Hl7.Fhir.Model.Contact();
             mail.Value = d.email;
+
+
+            if (remain != null)
+            {
+                Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
+                gender.Code = remain.gender;
+
+                Hl7.Fhir.Model.FhirDateTime birthdate = new Hl7.Fhir.Model.FhirDateTime();
+                birthdate = remain.birthDate;
+
+                Hl7.Fhir.Model.FhirBoolean deceased = new Hl7.Fhir.Model.FhirBoolean();
+                deceased = remain.deceased;
+
+                Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
+                address.Text = remain.address; // REVER
+
+                Hl7.Fhir.Model.CodeableConcept maritalstatus = new Hl7.Fhir.Model.CodeableConcept();
+                maritalstatus.Text = remain.maritalStatus;
+
+                Hl7.Fhir.Model.CodeableConcept code = new Hl7.Fhir.Model.CodeableConcept();
+                code.Text = remain.code;
+
+                Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
+                issuer.InternalId.Contents = remain.issuer.ToString();
+
+                Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
+                //period.InternalId.Contents = remain.period.ToString();
+            }
             
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
             p.Role = new List<Hl7.Fhir.Model.CodeableConcept>(){role};

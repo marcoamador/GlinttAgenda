@@ -48,19 +48,30 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
             state.Text = c.flag_estado; //TODO errado
 
-            Hl7.Fhir.Model.CodeableConcept set = new Hl7.Fhir.Model.CodeableConcept();
-            set.Text = null;
-
 
             //TODO faltam todos os resource references
-            Hl7.Fhir.Model.ResourceReference rr = new Hl7.Fhir.Model.ResourceReference();
+            Hl7.Fhir.Model.ResourceReference practitioner = new Hl7.Fhir.Model.ResourceReference();
+            practitioner.InternalId.Contents = c.medico.ToString();
 
             Hl7.Fhir.Model.Period periodo = new Hl7.Fhir.Model.Period();
-            //periodo.Start = c.dt_cons;
-            //periodo.End = 
+            periodo.Start.Contents = c.dt_cons.ToString();
+            periodo.End = c.dt_cons.ToString();
 
             Hl7.Fhir.Model.Duration duracao = new Hl7.Fhir.Model.Duration();
             //DURACAO = PERIODO
+
+            if (remain != null)
+            {
+
+                Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
+                contact.InternalId.Contents = remain.contact.ToString();
+
+                Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
+                fulfills.InternalId.Contents = remain.fulfills.ToString();
+
+                Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
+                setting.Text = remain.setting;
+            }
 
 
             v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
@@ -91,6 +102,29 @@ namespace MvcApplication1.Models
 
         public string search(HttpRequestBase v, string tokenaccess)
         {
+            string t_doente = "";
+            string doente = "";
+            String reqValue = v.QueryString["_id"];
+            
+            //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
+            if (tokenaccess == "-1" || !tokenaccess.Contains('_') || tokenaccess != "0")
+            {
+                return "Permission Denied";
+            }
+            else if (tokenaccess.Contains('_'))
+            {
+                t_doente = tokenaccess.Split('_').ElementAt(0);
+                doente = tokenaccess.Split('_').ElementAt(1);
+
+                if (!String.IsNullOrEmpty(reqValue))
+                {
+                    if (t_doente != reqValue.Split('_').ElementAt(0) || doente != reqValue.Split('_').ElementAt(1))
+                    {
+                        return "Permission Denied";
+                    }
+                }
+            }
+
             List<Object> l = new List<Object>();
             int i = 0;
 
@@ -140,9 +174,13 @@ namespace MvcApplication1.Models
 
             }
 
+            if (tokenaccess.Contains('_') && String.IsNullOrEmpty(reqValue))
+            {
+                query1 += " and t_doente = " + t_doente + " and doente = " + doente;
+            }
+
             query1 += ";";
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
-            //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
             if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);

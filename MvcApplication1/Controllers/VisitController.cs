@@ -9,105 +9,105 @@ using MvcApplication1.Models;
 
 namespace MvcApplication1.Controllers
 {
-    public class VisitController : Controller
-    {
-        glinttEntities gE;
-        glinttLocalEntities glE;
+	public class VisitController : Controller
+	{
+		glinttEntities gE;
+		glinttLocalEntities glE;
 
-        
+		
 
-        protected override void Initialize(RequestContext rc)
-        {
-            base.Initialize(rc);
-            gE = new glinttEntities();
-            glE = new glinttLocalEntities();
-        }
+		protected override void Initialize(RequestContext rc)
+		{
+			base.Initialize(rc);
+			gE = new glinttEntities();
+			glE = new glinttLocalEntities();
+		}
 
-        public ActionResult Index(String id)
-        {
+		public ActionResult Index(String id)
+		{
 
-            if (Request.HttpMethod.Equals("GET"))
-            {
-                if (id == null || id.Equals(""))
-                {
-                    Response.StatusCode = 404;
-                    return null;
-                }
+			if (Request.HttpMethod.Equals("GET"))
+			{
+				if (id == null || id.Equals(""))
+				{
+					Response.StatusCode = 404;
+					return null;
+				}
 
-                MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-                g_cons_marc r = v.byId(id);
+				MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+				g_cons_marc r = v.byId(id);
 				MvcApplication1.Visit rV = v.localDataById(id);
-                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-                if (access == "0" || access == id)
-                {
-                    string result = v.visitParser(r, rV);
-                    if (result == null)
-                    {
-                        Response.StatusCode = 404;
-                        return null;
-                    }
+				string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+				if (access == "0" || access == id)
+				{
+					string result = v.visitParser(r, rV);
+					if (result == null)
+					{
+						Response.StatusCode = 404;
+						return null;
+					}
 
-                    try
-                    {
-                        Common.validateXML(result, "~/Content/xsd/visit.xsd");
-                    }
-                    catch (Common.InvalidXmlException ie)
-                    {
-                        return Content(Common.addtoxml(result, ie.error));
-                    }
-                    return Content(result);
-                }
-                else
-                {
-                    Response.StatusCode = 403;
-                    return null;
-                }
-            }
-            else
-            {
-                Response.StatusCode = 400;
-                return null;
+					try
+					{
+						Common.validateXML(result, "~/Content/xsd/visit.xsd");
+					}
+					catch (Common.InvalidXmlException ie)
+					{
+						return Content(Common.addtoxml(result, ie.error));
+					}
+					return Content(result);
+				}
+				else
+				{
+					Response.StatusCode = 403;
+					return null;
+				}
+			}
+			else
+			{
+				Response.StatusCode = 400;
+				return null;
 
-            }
-        }
+			}
+		}
 
-        public ActionResult Search()
-        {
-            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-            MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+		public ActionResult Search()
+		{
+			string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+			MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 
-            string s = v.search(Request,access);
+			string s = v.search(Request,access);
 
-            if (s == null)
-            {
-                Response.StatusCode = 403;
-                return null;
-            }
-            return Content(s);
+			if (s == null)
+			{
+				Response.StatusCode = 403;
+				return null;
+			}
+			return Content(s);
 
 
-        }
+		}
 
-        public ActionResult Update(String id)
-        {
-            MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+		public ActionResult Update(String id)
+		{
+			MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 
-            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-            if (access == "0")
-            {
-                String s = v.update(Request, id);
-                if (s == null)
-                {
-                    Response.StatusCode = 404;
-                    return null;
-                }
-                return Content(s);
-            }
-            else
-            {
-                Response.StatusCode = 403;
-                return null;
-            }
-        }
-    }
+			string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+			if (access == "0")
+			{
+				String s = v.update(Request, id);
+				if (s == null)
+				{
+					Response.StatusCode = 404;
+					return null;
+				}
+				return Content(s);
+			}
+			else
+			{
+				Response.StatusCode = 403;
+				return null;
+			}
+		}
+	}
 }

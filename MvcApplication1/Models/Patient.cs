@@ -41,7 +41,7 @@ namespace MvcApplication1.Models
 
 
         //Faltam dados da base de dados local
-        public String patientParser(g_doente patient, MvcApplication1.Patient remaining)
+        public String patientParser(g_doente patient, MvcApplication1.Patient remain)
         {
             Hl7.Fhir.Model.Patient p = new Hl7.Fhir.Model.Patient();
             Hl7.Fhir.Model.Identifier i = new Hl7.Fhir.Model.Identifier();
@@ -93,6 +93,20 @@ namespace MvcApplication1.Models
 
             p.Details = dem;
 
+
+            if (remain != null)
+            {
+                Hl7.Fhir.Model.ResourceReference link = new Hl7.Fhir.Model.ResourceReference();
+                link.Url.Contents = new System.Uri(remain.link);
+
+                Hl7.Fhir.Model.FhirBoolean deceased = new Hl7.Fhir.Model.FhirBoolean();
+                deceased = remain.deceased;
+
+
+                Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
+                relationship.Text = remain.relationship;
+
+            }
             //falta familiares
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
