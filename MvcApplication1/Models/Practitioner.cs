@@ -36,19 +36,19 @@ namespace MvcApplication1.Models
 
         public String practitionerParser(g_pess_hosp_def d, MvcApplication1.Practitioner remain)
         {
+            //TODO NAO ESQUECER DE REVERTER AS PERMISSOES AO NORMAL XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
 
             //setup id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
+            idt.System = new System.Uri("http://glinttdb.inphormatic.us/Practitioners/");
             idt.Id= d.n_mecan;
-            
-            //setup role
-            Hl7.Fhir.Model.CodeableConcept role = new Hl7.Fhir.Model.CodeableConcept();
-            role.Text = d.titulo;
+
 
             //setup name
             Hl7.Fhir.Model.HumanName name = new Hl7.Fhir.Model.HumanName();
+            name.Prefix = new List<Hl7.Fhir.Model.FhirString>() { d.titulo };
             name.Text = d.nome;
 
             //setup telecom
@@ -78,15 +78,14 @@ namespace MvcApplication1.Models
                 Hl7.Fhir.Model.CodeableConcept code = new Hl7.Fhir.Model.CodeableConcept();
                 code.Text = remain.code;
 
-                Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
-                issuer.InternalId.Contents = remain.issuer.ToString();
+                //Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
+                //issuer.InternalId.Contents = remain.issuer.ToString();
 
                 Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
                 //period.InternalId.Contents = remain.period.ToString();
             }
             
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
-            p.Role = new List<Hl7.Fhir.Model.CodeableConcept>(){role};
             p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
             p.Details.Name = new List<Hl7.Fhir.Model.HumanName>(){name};
             p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };

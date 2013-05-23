@@ -44,6 +44,7 @@ namespace MvcApplication1.Models
 
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id = c.n_cons;
+            idt.System = new System.Uri("http://glinttdb.inphormatic.us/Visits/");
 
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
             state.Text = c.flag_estado; //TODO errado
