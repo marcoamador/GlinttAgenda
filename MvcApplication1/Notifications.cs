@@ -12,13 +12,14 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Patient
+    public partial class Notifications
     {
-        public string doente { get; set; }
+        public int idNotifications { get; set; }
+        public string idDoente { get; set; }
         public string t_doente { get; set; }
-        public Nullable<bool> active { get; set; }
-        public string relationship { get; set; }
-        public string password { get; set; }
-        public Nullable<System.DateTime> deceasedDate { get; set; }
+        public System.DateTime timestamp { get; set; }
+        public string text { get; set; }
+        public sbyte seen { get; set; }
+        public Nullable<System.DateTime> seentimestamp { get; set; }
     }
 }

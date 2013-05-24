@@ -12,19 +12,12 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Practitioner
+    public partial class ContactPatient
     {
+        public int idContactPatient { get; set; }
+        public string doente { get; set; }
+        public string t_doente { get; set; }
         public int id { get; set; }
-        public string gender { get; set; }
-        public string birthDate { get; set; }
-        public Nullable<bool> deceased { get; set; }
-        public string address { get; set; }
-        public Nullable<bool> photo { get; set; }
-        public string maritalStatus { get; set; }
-        public string code { get; set; }
-        public string period { get; set; }
-        public Nullable<bool> issuer { get; set; }
-        public string password { get; set; }
-        public string specialty { get; set; }
+        public string relationship { get; set; }
     }
 }

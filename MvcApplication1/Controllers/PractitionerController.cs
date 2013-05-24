@@ -21,6 +21,8 @@ namespace MvcApplication1.Controllers
         
         public ActionResult Index(String id)
         {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             if (Request.HttpMethod.Equals("GET"))
             {
                 if (id == null || id.Equals(""))
@@ -66,6 +68,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
@@ -87,6 +91,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {

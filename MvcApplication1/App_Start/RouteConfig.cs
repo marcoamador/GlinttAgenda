@@ -88,6 +88,24 @@ namespace MvcApplication1
                 defaults: new { controller = "Login", action = "isTokenValid" }
             );
 
+            routes.MapRoute(
+                name: "Get_Notifications_byUserId",
+                url: "Notifications/byUserId/{id}",
+                defaults: new { controller = "Notifications", action = "byUserId", id="" }
+            );
+
+            routes.MapRoute(
+                name: "Mark_Notification_Read",
+                url: "Notifications/markread/",
+                defaults: new { controller = "Notifications", action = "markRead" }
+            );
+
+            routes.MapRoute(
+                name: "Add_Notification",
+                url: "Notifications/add/",
+                defaults: new { controller = "Notifications", action = "add" }
+            );
+
            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

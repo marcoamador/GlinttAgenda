@@ -44,70 +44,142 @@ namespace MvcApplication1.Models
         public String patientParser(g_doente patient, MvcApplication1.Patient remain)
         {
             Hl7.Fhir.Model.Patient p = new Hl7.Fhir.Model.Patient();
+
+            //Patient Identifier
             Hl7.Fhir.Model.Identifier i = new Hl7.Fhir.Model.Identifier();
             i.Id = patient.doente;
-            i.InternalId = patient.doente;
+            //i.InternalId = patient.doente;
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
-           
+
+
+            //Patient Details
             Hl7.Fhir.Model.Demographics dem = new Hl7.Fhir.Model.Demographics();
             
+            //BI
             Hl7.Fhir.Model.Identifier i1 = new Hl7.Fhir.Model.Identifier();
             i1.Id = patient.n_bi;
-            i1.InternalId = patient.t_doente;
+            i1.InternalId = "BI";
             dem.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             dem.Identifier.Add(i1); //errado
 
+            //CES
             Hl7.Fhir.Model.Identifier i2 = new Hl7.Fhir.Model.Identifier();
             i2.Id = patient.cartao_europeu_saude;
-            i2.InternalId = patient.t_doente;
+            i2.InternalId = "CES";
             dem.Identifier.Add(i2);
-            dem.InternalId = patient.t_doente;
 
+
+            //Name
             Hl7.Fhir.Model.HumanName human = new Hl7.Fhir.Model.HumanName();
-            human.Text = patient.nome;
-            dem.Name = new List<Hl7.Fhir.Model.HumanName>();
-            dem.Name.Add(human); //falta completar
+            human.Given = new List<Hl7.Fhir.Model.FhirString>();
+
+            if (patient.nome.Contains(' '))
+            {
+                String[] names = patient.nome.Split(' ');
+                if (names.Length > 1)
+                {
+                    for (int k = 0; k < names.Length - 1; k++)
+                    {
+                        human.Given.Add(names.ElementAt(k));
+                    }
+                    human.Family = new List<Hl7.Fhir.Model.FhirString>() { names.ElementAt(names.Length - 1) };
+                }
+                else
+                {
+                    human.Given.Add(names.ElementAt(0));
+                }
+            }
+
+            //Use
+            human.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.HumanName.NameUse>(Hl7.Fhir.Model.HumanName.NameUse.Official);
+            dem.Name = new List<Hl7.Fhir.Model.HumanName>() { human };
+
             
+            //Gender
             Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
             gender.Code = patient.sexo;
+            if (patient.sexo == "M")
+                gender.Display = "Masculino";
+            else if (patient.sexo == "F")
+                gender.Display = "Feminino";
+
             dem.Gender = gender;
             
 
-      
-            Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime(patient.dt_nasc.ToString());
-            dem.BirthDate = new Hl7.Fhir.Model.FhirDateTime(patient.dt_nasc.ToString());
+            //Birthdate
+            DateTime date = DateTime.Parse(patient.dt_nasc.ToString());
+            Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime(date.Date);
+            dem.BirthDate = dt_nasc;
+
+            //isDead
             Hl7.Fhir.Model.FhirBoolean dead = new Hl7.Fhir.Model.FhirBoolean();
-            dead.Contents = patient.flag_falec == "1"; //confirmar
-            dem.Deceased = dead;
-            
+            if (patient.flag_falec != "1!")
+                dem.Deceased = false;
+            else
+                dem.Deceased = true;
+
+
+            //Address
             Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
+            address.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Address.AddressUse>(Hl7.Fhir.Model.Address.AddressUse.Home);
             address.City = patient.localidade;
             address.Country = patient.cod_pais; //confirmar
             address.Zip = patient.cod_postal;
-            address.Text = patient.morada;
-            dem.Address = new List<Hl7.Fhir.Model.Address>();
-            dem.Address.Add(address);
+            address.Line = new List<Hl7.Fhir.Model.FhirString>(){patient.morada};
+            dem.Address = new List<Hl7.Fhir.Model.Address>(){address};
+
+
+            //Marital Status
             dem.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
-            dem.MaritalStatus.Text = patient.estado_civil;
+            dem.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
+            Hl7.Fhir.Model.Coding marCoding = new Hl7.Fhir.Model.Coding();
+            marCoding.Code = patient.estado_civil;
+
+            if (patient.estado_civil == "ca")
+                marCoding.Display = "Casado";
+            else if (patient.estado_civil == "so")
+                marCoding.Display = "Solteiro";
+            else if (patient.estado_civil == "div")
+                marCoding.Display = "Divorciado";
+            else if (patient.estado_civil == "vi")
+                marCoding.Display = "Viúvo";
+            else if (patient.estado_civil == "oth")
+                marCoding.Display = "Outro";
+
+            dem.MaritalStatus.Coding.Add(marCoding);
 
             p.Details = dem;
 
 
-            if (remain != null)
-            {
-                Hl7.Fhir.Model.ResourceReference link = new Hl7.Fhir.Model.ResourceReference();
-                link.Url.Contents = new System.Uri(remain.link);
+            if (remain != null){
+            
+                /*
+                //Link
+                if (Uri.IsWellFormedUriString(remain.link, UriKind.Absolute))
+                {
+                    Hl7.Fhir.Model.ResourceReference link = new Hl7.Fhir.Model.ResourceReference();
+                    link.Url = new System.Uri(remain.link);
+                    p.Link = new List<Hl7.Fhir.Model.ResourceReference>();
+                    p.Link.Add(link);
+                }
+                */
 
-                Hl7.Fhir.Model.FhirBoolean deceased = new Hl7.Fhir.Model.FhirBoolean();
-                deceased = remain.deceased;
-
-
+                //Contactos de pessoas relacionadas
                 Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
-                relationship.Text = remain.relationship;
+                Hl7.Fhir.Model.Coding rel = new Hl7.Fhir.Model.Coding();
+                rel.Code = remain.relationship;
+                relationship.Coding = new List<Hl7.Fhir.Model.Coding>(){rel};
 
+
+                p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
+                Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
+                contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>(){relationship};
+                
+                
+                p.Contact.Add(contact);
             }
-            //falta familiares
+            
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }

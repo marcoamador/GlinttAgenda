@@ -27,9 +27,11 @@ namespace MvcApplication1
     
         public DbSet<Accesstokens> Accesstokens { get; set; }
         public DbSet<Contact> Contact { get; set; }
+        public DbSet<ContactPatient> ContactPatient { get; set; }
         public DbSet<Language> Language { get; set; }
         public DbSet<LanguagePatient> LanguagePatient { get; set; }
         public DbSet<LanguagePractitioner> LanguagePractitioner { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
         public DbSet<OauthClients> OauthClients { get; set; }
         public DbSet<Patient> Patient { get; set; }
         public DbSet<Practitioner> Practitioner { get; set; }

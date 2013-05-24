@@ -131,7 +131,7 @@ namespace MvcApplication1.Controllers
 
                                 gle.SaveChanges();
 
-                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "&userid=" + patientquery.t_doente + "_" + patientquery.doente);
+                                Response.Redirect(c.responseUri + "?accessToken=" + tokenstring + "&userid=" + patientquery.t_doente + "_" + patientquery.doente + "&usertype=1");
                                 Response.End();
                                 return Content("");
                             }
@@ -182,7 +182,7 @@ namespace MvcApplication1.Controllers
                                 }
                                 gle.SaveChanges();
 
-                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "?userid=" + practitionerquery.n_mecan);
+                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "?userid=" + practitionerquery.n_mecan +"&usertype=0");
                                 Response.End();
                                 return Content("");
                             }

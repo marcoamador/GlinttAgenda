@@ -41,10 +41,8 @@ namespace MvcApplication1.Models
 
             Hl7.Fhir.Model.Visit v = new Hl7.Fhir.Model.Visit();
 
-
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id = c.n_cons;
-            idt.System = new System.Uri("http://glinttdb.inphormatic.us/Visits/");
 
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
             state.Text = c.flag_estado; //TODO errado
@@ -52,28 +50,14 @@ namespace MvcApplication1.Models
 
             //TODO faltam todos os resource references
             Hl7.Fhir.Model.ResourceReference practitioner = new Hl7.Fhir.Model.ResourceReference();
-            practitioner.InternalId.Contents = c.medico.ToString();
+            practitioner.InternalId = new Hl7.Fhir.Model.Id(c.medico.ToString());
 
             Hl7.Fhir.Model.Period periodo = new Hl7.Fhir.Model.Period();
-            periodo.Start.Contents = c.dt_cons.ToString();
-            periodo.End = c.dt_cons.ToString();
+            periodo.Start = new Hl7.Fhir.Model.FhirDateTime(c.dt_cons.ToString());
+            periodo.End = new Hl7.Fhir.Model.FhirDateTime(c.dt_cons.ToString());
 
             Hl7.Fhir.Model.Duration duracao = new Hl7.Fhir.Model.Duration();
             //DURACAO = PERIODO
-
-            if (remain != null)
-            {
-
-                Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
-                contact.InternalId.Contents = remain.contact.ToString();
-
-                Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
-                fulfills.InternalId.Contents = remain.fulfills.ToString();
-
-                Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
-                setting.Text = remain.setting;
-            }
-
 
             v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
             v.State = state;
@@ -86,6 +70,26 @@ namespace MvcApplication1.Models
             v.Contact = new Hl7.Fhir.Model.ResourceReference();
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
 
+
+            if (remain != null)
+            {
+
+                Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
+                contact.InternalId = new Hl7.Fhir.Model.Id(remain.contact.ToString());
+                v.Contact = contact;
+
+                Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
+                fulfills.InternalId = new Hl7.Fhir.Model.Id(remain.fulfills.ToString());
+
+                v.Fulfills = fulfills;
+
+                Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
+                setting.Text = remain.setting;
+
+                v.Setting = setting;
+            }
+
+
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
         }
 
@@ -97,7 +101,7 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
-
+            
             return sqlresult.First();
         }
 
@@ -107,7 +111,6 @@ namespace MvcApplication1.Models
             string doente = "";
             String reqValue = v.QueryString["_id"];
             
-            //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
             if (tokenaccess == "-1" || !tokenaccess.Contains('_') || tokenaccess != "0")
             {
                 return "Permission Denied";
@@ -312,34 +315,6 @@ namespace MvcApplication1.Models
         }
 
 
-
-
-        /*
-     public List<VisitModel> byPatient (string id) 
-     {
-
-         List<VisitModel> result = new List<VisitModel>();
-         Object[] key = { id };
-         System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where doente=?", key);
-         if (sqlresult.Count() == 0)
-         {
-             return null;
-         }
-    
-         for(int i=0; sqlresult.Count()<i; i++)
-         {
-             g_cons_marc temp = sqlresult.ElementAt(i);
-
-
-             VisitModel final = visitParser(temp);
-             result.Add(temp);
-         }
-         return ;
-  
-
-    }
-        
- */
 
         public MvcApplication1.Visit localDataById(String id)
         {

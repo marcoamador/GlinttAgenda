@@ -78,6 +78,7 @@ namespace MvcApplication1
             glinttLocalEntities g = new glinttLocalEntities();
             List<object> l = new List<object>() { accesstoken };
             Accesstokens oc = g.Accesstokens.SqlQuery("select * from Accesstokens where Token = ?", l.ToArray()).FirstOrDefault();
+
             if (oc != null)
             {
 

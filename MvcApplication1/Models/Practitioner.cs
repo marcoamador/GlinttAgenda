@@ -36,19 +36,17 @@ namespace MvcApplication1.Models
 
         public String practitionerParser(g_pess_hosp_def d, MvcApplication1.Practitioner remain)
         {
-            //TODO NAO ESQUECER DE REVERTER AS PERMISSOES AO NORMAL XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
 
             //setup id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
-            idt.System = new System.Uri("http://glinttdb.inphormatic.us/Practitioners/");
             idt.Id= d.n_mecan;
-
 
             //setup name
             Hl7.Fhir.Model.HumanName name = new Hl7.Fhir.Model.HumanName();
             name.Prefix = new List<Hl7.Fhir.Model.FhirString>() { d.titulo };
+
             name.Text = d.nome;
 
             //setup telecom
@@ -57,6 +55,10 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Contact mail = new Hl7.Fhir.Model.Contact();
             mail.Value = d.email;
 
+            p.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+            p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+            p.Details.Name = new List<Hl7.Fhir.Model.HumanName>() { name };
+            p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };
 
             if (remain != null)
             {
@@ -78,18 +80,29 @@ namespace MvcApplication1.Models
                 Hl7.Fhir.Model.CodeableConcept code = new Hl7.Fhir.Model.CodeableConcept();
                 code.Text = remain.code;
 
-                //Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
-                //issuer.InternalId.Contents = remain.issuer.ToString();
+                Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
+                issuer.InternalId = new Hl7.Fhir.Model.Id(remain.issuer.ToString());
 
                 Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
                 //period.InternalId.Contents = remain.period.ToString();
-            }
-            
-            p.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
-            p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>(){idt};
-            p.Details.Name = new List<Hl7.Fhir.Model.HumanName>(){name};
-            p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };
 
+                p.Details.Gender = gender;
+                p.Details.BirthDate = birthdate;
+                p.Details.Deceased = deceased;
+                p.Details.Address = new List<Hl7.Fhir.Model.Address>();
+                p.Details.Address.Add(address);
+                p.Details.MaritalStatus = maritalstatus;
+                Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent qual = new Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent();
+                qual.Code = code;
+                qual.Period = period;
+                qual.Issuer = issuer;
+
+                p.Qualification = new List<Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent>();
+                p.Qualification.Add(qual);
+
+            }
+
+          
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 

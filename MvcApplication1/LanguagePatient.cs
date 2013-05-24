@@ -16,5 +16,7 @@ namespace MvcApplication1
     {
         public string doente { get; set; }
         public string language { get; set; }
+        public string idLanguagePatient { get; set; }
+        public string t_doente { get; set; }
     }
 }

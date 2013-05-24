@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="184bf2a73def46cdb7421f297af09f59" Name="Diagram1">
+      <Diagram DiagramId="0be4a23e2f624f9ab0e40945aec5d0c1" Name="Diagram1">
         <EntityTypeShape EntityType="glinttModel.g_cons_marc" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttModel.g_doente" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttModel.g_pess_hosp_def" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
