@@ -14,7 +14,7 @@ namespace MvcApplication1.Models
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
             {"_id", new List<string>(){"doente", "t_doente"}},
-            {"active",new List<string>() {"flag_falec"}},
+            {"deceased",new List<string>() {"flag_falec"}},
             {"address",new List<string>() {"morada"}},
             {"birthdate",new List<string>() {"dt_nasc"}},
             {"birthdate-before",new List<string>(){"dt_nasc"}},
@@ -49,8 +49,11 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Identifier i = new Hl7.Fhir.Model.Identifier();
             i.Id = patient.doente;
             //i.InternalId = patient.doente;
+            Hl7.Fhir.Model.Identifier id2 = new Hl7.Fhir.Model.Identifier();
+            id2.Id = patient.t_doente;
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
+            p.Identifier.Add(id2);
 
 
             //Patient Details
@@ -59,14 +62,14 @@ namespace MvcApplication1.Models
             //BI
             Hl7.Fhir.Model.Identifier i1 = new Hl7.Fhir.Model.Identifier();
             i1.Id = patient.n_bi;
-            i1.InternalId = "BI";
+            i1.Label = "BI";
             dem.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             dem.Identifier.Add(i1); //errado
 
             //CES
             Hl7.Fhir.Model.Identifier i2 = new Hl7.Fhir.Model.Identifier();
             i2.Id = patient.cartao_europeu_saude;
-            i2.InternalId = "CES";
+            i2.Label = "CES";
             dem.Identifier.Add(i2);
 
 
@@ -128,6 +131,15 @@ namespace MvcApplication1.Models
             address.Zip = patient.cod_postal;
             address.Line = new List<Hl7.Fhir.Model.FhirString>(){patient.morada};
             dem.Address = new List<Hl7.Fhir.Model.Address>(){address};
+
+            //Telecom
+            dem.Telecom = new List<Hl7.Fhir.Model.Contact>();
+            Hl7.Fhir.Model.Contact contact1 = new Hl7.Fhir.Model.Contact();
+            contact1.Value = patient.telef1;
+            Hl7.Fhir.Model.Contact contact2 = new Hl7.Fhir.Model.Contact();
+            contact2.Value = patient.telef2;
+            dem.Telecom.Add(contact1);
+            dem.Telecom.Add(contact2);
 
 
             //Marital Status
