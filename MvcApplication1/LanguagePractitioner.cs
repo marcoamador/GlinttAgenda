@@ -16,5 +16,6 @@ namespace MvcApplication1
     {
         public int id { get; set; }
         public string language { get; set; }
+        public string idLanguagePractitioner { get; set; }
     }
 }

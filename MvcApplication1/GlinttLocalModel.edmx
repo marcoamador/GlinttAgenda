@@ -11,12 +11,7 @@
           <EntitySet Name="ContactPatient" EntityType="glinttLocalModel.Store.ContactPatient" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Language" EntityType="glinttLocalModel.Store.Language" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.Store.LanguagePatient" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.Store.LanguagePractitioner" store:Type="Tables" store:Schema="glinttLocal" store:Name="LanguagePractitioner">
-            <DefiningQuery>SELECT
-      `LanguagePractitioner`.`id`, 
-      `LanguagePractitioner`.`language`
-      FROM `LanguagePractitioner` AS `LanguagePractitioner`</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.Store.LanguagePractitioner" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Notifications" EntityType="glinttLocalModel.Store.Notifications" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="OauthClients" EntityType="glinttLocalModel.Store.OauthClients" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Patient" EntityType="glinttLocalModel.Store.Patient" store:Type="Tables" Schema="glinttLocal" />
@@ -42,14 +37,11 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="telecom" Type="int" Nullable="false" />
-          <Property Name="gender" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="gender" Type="varchar" MaxLength="255" />
           <Property Name="birthDate" Type="varchar" MaxLength="255" />
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
-          <Property Name="photo" Type="varchar" MaxLength="255" />
           <Property Name="maritalStatus" Type="varchar" MaxLength="255" />
-          <Property Name="organization" Type="varchar" MaxLength="255" />
-          <Property Name="doente" Type="int" />
         </EntityType>
         <EntityType Name="ContactPatient">
           <Key>
@@ -79,16 +71,13 @@
           <Property Name="idLanguagePatient" Type="varchar" Nullable="false" MaxLength="45" />
           <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="45" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'glinttLocal.LanguagePractitioner' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="LanguagePractitioner">
           <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="language" />
+            <PropertyRef Name="idLanguagePractitioner" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="language" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="idLanguagePractitioner" Type="varchar" Nullable="false" MaxLength="45" />
         </EntityType>
         <EntityType Name="Notifications">
           <Key>
@@ -131,22 +120,23 @@
           <Property Name="birthDate" Type="varchar" MaxLength="255" />
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
-          <Property Name="photo" Type="bool" />
           <Property Name="maritalStatus" Type="char" MaxLength="1" />
-          <Property Name="code" Type="char" MaxLength="1" />
-          <Property Name="period" Type="varchar" MaxLength="255" />
-          <Property Name="issuer" Type="bool" />
+          <Property Name="periodStart" Type="datetime" />
           <Property Name="password" Type="varchar" MaxLength="255" />
           <Property Name="specialty" Type="varchar" MaxLength="45" />
+          <Property Name="periodEnd" Type="datetime" />
         </EntityType>
         <EntityType Name="Visit">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="contact" Type="int" />
-          <Property Name="fulfills" Type="bool" />
           <Property Name="setting" Type="varchar" MaxLength="255" />
+          <Property Name="periodEnd" Type="datetime" />
+          <Property Name="id_contact" Type="int" />
+          <Property Name="admitter" Type="int" />
+          <Property Name="bed" Type="varchar" MaxLength="45" />
+          <Property Name="discharger" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6013: The table/view 'glinttLocal.LanguageContact' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
@@ -192,14 +182,11 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="telecom" Type="Int32" Nullable="false" />
-          <Property Name="gender" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="gender" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceased" Type="Boolean" />
           <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="photo" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="maritalStatus" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="organization" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="doente" Type="Int32" />
         </EntityType>
         <EntityType Name="ContactPatient">
           <Key>
@@ -231,11 +218,11 @@
         </EntityType>
         <EntityType Name="LanguagePractitioner">
           <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="language" />
+            <PropertyRef Name="idLanguagePractitioner" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="language" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="idLanguagePractitioner" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="Notifications">
           <Key>
@@ -278,22 +265,23 @@
           <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceased" Type="Boolean" />
           <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="photo" Type="Boolean" />
           <Property Name="maritalStatus" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
-          <Property Name="code" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
-          <Property Name="period" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="issuer" Type="Boolean" />
+          <Property Name="periodStart" Type="DateTime" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="specialty" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
+          <Property Name="periodEnd" Type="DateTime" />
         </EntityType>
         <EntityType Name="Visit">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="contact" Type="Int32" />
-          <Property Name="fulfills" Type="Boolean" />
           <Property Name="setting" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="periodEnd" Type="DateTime" />
+          <Property Name="id_contact" Type="Int32" />
+          <Property Name="admitter" Type="Int32" />
+          <Property Name="bed" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
+          <Property Name="discharger" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -324,10 +312,7 @@
                 <ScalarProperty Name="birthDate" ColumnName="birthDate" />
                 <ScalarProperty Name="deceased" ColumnName="deceased" />
                 <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
-                <ScalarProperty Name="organization" ColumnName="organization" />
-                <ScalarProperty Name="doente" ColumnName="doente" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -367,6 +352,7 @@
               <MappingFragment StoreEntitySet="LanguagePractitioner">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="language" ColumnName="language" />
+                <ScalarProperty Name="idLanguagePractitioner" ColumnName="idLanguagePractitioner" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -412,13 +398,11 @@
                 <ScalarProperty Name="birthDate" ColumnName="birthDate" />
                 <ScalarProperty Name="deceased" ColumnName="deceased" />
                 <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="photo" ColumnName="photo" />
                 <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
-                <ScalarProperty Name="code" ColumnName="code" />
-                <ScalarProperty Name="period" ColumnName="period" />
-                <ScalarProperty Name="issuer" ColumnName="issuer" />
+                <ScalarProperty Name="periodStart" ColumnName="periodStart" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="specialty" ColumnName="specialty" />
+                <ScalarProperty Name="periodEnd" ColumnName="periodEnd" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -426,9 +410,12 @@
             <EntityTypeMapping TypeName="glinttLocalModel.Visit">
               <MappingFragment StoreEntitySet="Visit">
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="contact" ColumnName="contact" />
-                <ScalarProperty Name="fulfills" ColumnName="fulfills" />
                 <ScalarProperty Name="setting" ColumnName="setting" />
+                <ScalarProperty Name="periodEnd" ColumnName="periodEnd" />
+                <ScalarProperty Name="id_contact" ColumnName="id_contact" />
+                <ScalarProperty Name="admitter" ColumnName="admitter" />
+                <ScalarProperty Name="bed" ColumnName="bed" />
+                <ScalarProperty Name="discharger" ColumnName="discharger" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

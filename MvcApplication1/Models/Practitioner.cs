@@ -76,13 +76,13 @@ namespace MvcApplication1.Models
 
                 Hl7.Fhir.Model.CodeableConcept maritalstatus = new Hl7.Fhir.Model.CodeableConcept();
                 maritalstatus.Text = remain.maritalStatus;
-
+                /*
                 Hl7.Fhir.Model.CodeableConcept code = new Hl7.Fhir.Model.CodeableConcept();
                 code.Text = remain.code;
 
                 Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
                 issuer.InternalId = new Hl7.Fhir.Model.Id(remain.issuer.ToString());
-
+                */
                 Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
                 //period.InternalId.Contents = remain.period.ToString();
 
@@ -93,9 +93,9 @@ namespace MvcApplication1.Models
                 p.Details.Address.Add(address);
                 p.Details.MaritalStatus = maritalstatus;
                 Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent qual = new Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent();
-                qual.Code = code;
+                //qual.Code = code;
                 qual.Period = period;
-                qual.Issuer = issuer;
+                //qual.Issuer = issuer;
 
                 p.Qualification = new List<Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent>();
                 p.Qualification.Add(qual);

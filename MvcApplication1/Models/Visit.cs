@@ -41,50 +41,84 @@ namespace MvcApplication1.Models
 
             Hl7.Fhir.Model.Visit v = new Hl7.Fhir.Model.Visit();
 
+            //Id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id = c.n_cons;
+            v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
 
+
+            //Estado
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
-            state.Text = c.flag_estado; //TODO errado
+            state.Coding = new List<Hl7.Fhir.Model.Coding>();
+            Hl7.Fhir.Model.Coding st = new Hl7.Fhir.Model.Coding();
+            st.Code = c.flag_estado; //TODO errado
+            state.Coding.Add(st);
+            v.State = state;
 
-
-            //TODO faltam todos os resource references
-            Hl7.Fhir.Model.ResourceReference practitioner = new Hl7.Fhir.Model.ResourceReference();
-            practitioner.InternalId = new Hl7.Fhir.Model.Id(c.medico.ToString());
-
+            //Period
             Hl7.Fhir.Model.Period periodo = new Hl7.Fhir.Model.Period();
-            periodo.Start = new Hl7.Fhir.Model.FhirDateTime(c.dt_cons.ToString());
-            periodo.End = new Hl7.Fhir.Model.FhirDateTime(c.dt_cons.ToString());
+            periodo.Start = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
+            periodo.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
+            v.Period = periodo;
 
-            Hl7.Fhir.Model.Duration duracao = new Hl7.Fhir.Model.Duration();
+
+            //Duration
+            DateTime result;
+            if (DateTime.TryParse(c.duracao_cons.ToString(), out result))
+            {
+                Hl7.Fhir.Model.Duration duracao = new Hl7.Fhir.Model.Duration();
+                duracao.Value = new Hl7.Fhir.Model.FhirDecimal(result.Hour*60 + result.Minute);
+                v.Length = duracao;
+            }
+           
             //DURACAO = PERIODO
 
-            v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
-            v.State = state;
-            v.Setting = new Hl7.Fhir.Model.CodeableConcept();
+            //Subject
             v.Subject = new Hl7.Fhir.Model.ResourceReference();
-            v.Responsible = new Hl7.Fhir.Model.ResourceReference();
-            v.Fulfills = new Hl7.Fhir.Model.ResourceReference();
-            v.Period = periodo;
-            v.Length = duracao;
-            v.Contact = new Hl7.Fhir.Model.ResourceReference();
-            v.Indication = new Hl7.Fhir.Model.ResourceReference();
+            String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            v.Subject.Url = new Hl7.Fhir.Model.FhirUri( new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.t_doente + "_" + c.doente)));
+            v.Subject.Type = new Hl7.Fhir.Model.Code("Patient");
 
+
+            //Responsible
+            v.Responsible = new Hl7.Fhir.Model.ResourceReference();
+            String responsibleURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
+            v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.medico)));
+            v.Responsible.Type = new Hl7.Fhir.Model.Code("Practitioner");
+            
+            //Contact -- Falta ir buscar contact de um
+            v.Contact = new Hl7.Fhir.Model.ResourceReference();
+            
+            //Indication
+            v.Indication = new Hl7.Fhir.Model.ResourceReference();
+            v.Indication.Display = c.observ_cons.ToString();
 
             if (remain != null)
             {
+                v.Fulfills = new Hl7.Fhir.Model.ResourceReference();
 
+                /*
                 Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
-                contact.InternalId = new Hl7.Fhir.Model.Id(remain.contact.ToString());
+                contact.Display = remain.contact.ToString();
                 v.Contact = contact;
-
+ 
                 Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
-                fulfills.InternalId = new Hl7.Fhir.Model.Id(remain.fulfills.ToString());
+                fulfills.Display = remain.fulfills.ToString();
 
                 v.Fulfills = fulfills;
-
+                */
+                v.Setting = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
-                setting.Text = remain.setting;
+                Hl7.Fhir.Model.Coding sett = new Hl7.Fhir.Model.Coding();
+                sett.Code = remain.setting;
+                if (remain.setting == "amb")
+                    sett.Display = "Ambulatório";
+                else if (remain.setting == "cons")
+                    sett.Display = "Consulta";
+                else if (remain.setting == "home")
+                    sett.Display = "Ao Domicílio";
+                setting.Coding = new List<Hl7.Fhir.Model.Coding>(){sett};
 
                 v.Setting = setting;
             }
@@ -101,7 +135,7 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
-            
+
             return sqlresult.First();
         }
 
@@ -111,6 +145,7 @@ namespace MvcApplication1.Models
             string doente = "";
             String reqValue = v.QueryString["_id"];
             
+            //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
             if (tokenaccess == "-1" || !tokenaccess.Contains('_') || tokenaccess != "0")
             {
                 return "Permission Denied";
@@ -315,6 +350,34 @@ namespace MvcApplication1.Models
         }
 
 
+
+
+        /*
+     public List<VisitModel> byPatient (string id) 
+     {
+
+         List<VisitModel> result = new List<VisitModel>();
+         Object[] key = { id };
+         System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where doente=?", key);
+         if (sqlresult.Count() == 0)
+         {
+             return null;
+         }
+    
+         for(int i=0; sqlresult.Count()<i; i++)
+         {
+             g_cons_marc temp = sqlresult.ElementAt(i);
+
+
+             VisitModel final = visitParser(temp);
+             result.Add(temp);
+         }
+         return ;
+  
+
+    }
+        
+ */
 
         public MvcApplication1.Visit localDataById(String id)
         {

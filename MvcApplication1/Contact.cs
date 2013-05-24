@@ -21,9 +21,6 @@ namespace MvcApplication1
         public string birthDate { get; set; }
         public Nullable<bool> deceased { get; set; }
         public string address { get; set; }
-        public string photo { get; set; }
         public string maritalStatus { get; set; }
-        public string organization { get; set; }
-        public Nullable<int> doente { get; set; }
     }
 }

@@ -19,12 +19,10 @@ namespace MvcApplication1
         public string birthDate { get; set; }
         public Nullable<bool> deceased { get; set; }
         public string address { get; set; }
-        public Nullable<bool> photo { get; set; }
         public string maritalStatus { get; set; }
-        public string code { get; set; }
-        public string period { get; set; }
-        public Nullable<bool> issuer { get; set; }
+        public Nullable<System.DateTime> periodStart { get; set; }
         public string password { get; set; }
         public string specialty { get; set; }
+        public Nullable<System.DateTime> periodEnd { get; set; }
     }
 }

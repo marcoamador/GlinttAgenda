@@ -15,8 +15,11 @@ namespace MvcApplication1
     public partial class Visit
     {
         public int id { get; set; }
-        public Nullable<int> contact { get; set; }
-        public Nullable<bool> fulfills { get; set; }
         public string setting { get; set; }
+        public Nullable<System.DateTime> periodEnd { get; set; }
+        public Nullable<int> id_contact { get; set; }
+        public Nullable<int> admitter { get; set; }
+        public string bed { get; set; }
+        public Nullable<int> discharger { get; set; }
     }
 }
