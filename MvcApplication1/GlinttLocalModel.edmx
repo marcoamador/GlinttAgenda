@@ -252,7 +252,6 @@
           <Property Name="doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="false" />
           <Property Name="active" Type="Boolean" />
-          <Property Name="relationship" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceasedDate" Type="DateTime" />
         </EntityType>
@@ -384,7 +383,6 @@
                 <ScalarProperty Name="doente" ColumnName="doente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
                 <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="relationship" ColumnName="relationship" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="deceasedDate" ColumnName="deceasedDate" />
               </MappingFragment>

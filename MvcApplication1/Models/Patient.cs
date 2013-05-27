@@ -165,25 +165,25 @@ namespace MvcApplication1.Models
                 //Active
                 Hl7.Fhir.Model.FhirBoolean active = new Hl7.Fhir.Model.FhirBoolean();
                 active = remain.active;
+                p.Active = active;
 
                 //DeceasedDate
-                DateTime dDate = DateTime.Parse(remain.deceasedDate.ToString());
-                Hl7.Fhir.Model.FhirDateTime deceasedDate = new Hl7.Fhir.Model.FhirDateTime(dDate);
-                p.DeceasedDate = deceasedDate;
+                if (remain.deceasedDate != null)
+                {
+                    DateTime dDate = DateTime.Parse(remain.deceasedDate.ToString());
+                    Hl7.Fhir.Model.FhirDateTime deceasedDate = new Hl7.Fhir.Model.FhirDateTime(dDate);
+                    p.DeceasedDate = deceasedDate;
+                }
 
-                //Contactos de pessoas relacionadas
-                Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
-                Hl7.Fhir.Model.Coding rel = new Hl7.Fhir.Model.Coding();
-                rel.Code = remain.relationship;
-                relationship.Coding = new List<Hl7.Fhir.Model.Coding>(){rel};
-                
-                p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
-                Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
-                contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>(){relationship};
-                                
-                p.Contact.Add(contact);
             }
-            
+
+            List<Hl7.Fhir.Model.Patient.ContactComponent> contacts = byContact(patient.doente, patient.t_doente);
+
+            if (contacts != null)
+            {
+                p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
+                p.Contact = contacts;
+            }
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
@@ -268,6 +268,7 @@ namespace MvcApplication1.Models
                     Hl7.Fhir.Model.Coding relText = new Hl7.Fhir.Model.Coding();
                     relText.Code = sqlresult.ElementAt(i).relationship;
                     relationship.Coding.Add(relText);
+                    contact.Relationship.Add(relationship);
 
                     list.Add(contact);
                 }

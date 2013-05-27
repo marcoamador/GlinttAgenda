@@ -28,7 +28,8 @@ namespace MvcApplication1.Controllers
                 Response.StatusCode = 404;
                 return null;
             }
-            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            //string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            string access = "0";
             if (access == "0" || access == id)
             {
                 MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
