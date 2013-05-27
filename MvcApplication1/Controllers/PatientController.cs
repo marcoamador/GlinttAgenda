@@ -21,52 +21,47 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index(String id)
         {
-
-            if (Request.HttpMethod.Equals("GET"))
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            
+            if (id == null || id.Equals(""))
             {
-                if (id == null || id.Equals(""))
+                Response.StatusCode = 404;
+                return null;
+            }
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0" || access == id)
+            {
+                MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
+                String result = p.byId(id);
+                if (result == null)
                 {
                     Response.StatusCode = 404;
                     return null;
                 }
-                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-                if (access == "0" || access == id)
-                {
-                    MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
-                    String result = p.byId(id);
-                    if (result == null)
-                    {
-                        Response.StatusCode = 404;
-                        return null;
-                    }
 
-                    try
-                    {
-                        Common.validateXML(result, "~/Content/xsd/patient.xsd");
-                    }
-                    catch (Common.InvalidXmlException ie)
-                    {
-
-                        return Content(Common.addtoxml(result, ie.error));
-                    }
-                    return Content(result);
-                }
-                else
+                try
                 {
-                    Response.StatusCode = 403;
-                    return null;
+                    Common.validateXML(result, "~/Content/xsd/patient.xsd");
                 }
+                catch (Common.InvalidXmlException ie)
+                {
+
+                    return Content(Common.addtoxml(result, ie.error));
+                }
+                return Content(result);
             }
             else
             {
-                Response.StatusCode = 400;
+                Response.StatusCode = 403;
                 return null;
-
             }
+
         }
 
         public ActionResult SearchById(String id)
         {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0" || access == id)
             {
@@ -81,6 +76,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
@@ -102,6 +99,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
+            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0" || access == id)
             {

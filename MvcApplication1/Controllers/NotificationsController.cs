@@ -19,16 +19,29 @@ namespace MvcApplication1.Controllers
             if (id == access || access == "0")
             {
                 glinttLocalEntities gle = new glinttLocalEntities();
-                List<object> l = new List<object>() { id.Split('_') };
-                Notifications[] notif = gle.Notifications.SqlQuery("select * from Notifications where t_doente = ? and idDoente = ?",l.ToArray()).ToArray();
+                string[] doenteid = id.Split('_');
+                List<object> l = new List<object>() { doenteid[0], doenteid[1]  };
+                System.Data.Entity.Infrastructure.DbSqlQuery<Notifications> notif = gle.Notifications.SqlQuery("select * from Notifications where t_doente = ? and idDoente = ?", l.ToArray());
+
                 List<Notifications> res = new List<Notifications>();
-                foreach (Notifications n in notif)
+
+                if (notif != null)
                 {
-                    res.Add(n);
+                    /*
+                    int n = notif.Count();
+                    for (int i = 0; i < n; ++i)
+                    {
+                        res.Add(notif.ElementAt(i));
+                    }
+                    */
+                    foreach (Notifications n in notif)
+                    {
+                        res.Add(n);
+                    }
+                    
+                    if (res.Count() > 0)
+                        return Content(res.ToJSON());
                 }
-                if(res.Count() > 0)
-                    return Content(res.ToJSON());
-                
                 Response.StatusCode = 404;
                 return Content("");
             }
@@ -43,7 +56,16 @@ namespace MvcApplication1.Controllers
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
-
+                Notifications n = new Notifications();
+                string[] s = Request.QueryString["userid"].Split('_');
+                n.t_doente = s[0];
+                n.idDoente = s[1];
+                n.seen = 0;
+                n.timestamp = DateTime.Now;
+                n.text = Request.QueryString["text"];
+                glinttLocalEntities gle = new glinttLocalEntities();
+                gle.Notifications.Add(n);
+                gle.SaveChanges();
             }
             Response.StatusCode = 403;
             return Content("");

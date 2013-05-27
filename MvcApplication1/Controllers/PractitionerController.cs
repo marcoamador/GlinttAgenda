@@ -23,47 +23,40 @@ namespace MvcApplication1.Controllers
         {
             Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
-            if (Request.HttpMethod.Equals("GET"))
+
+            if (id == null || id.Equals(""))
             {
-                if (id == null || id.Equals(""))
+                Response.StatusCode = 404;
+                return null;
+            }
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0")
+            {
+                MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
+                String result = p.byId(id);
+                if (result == null)
                 {
                     Response.StatusCode = 404;
                     return null;
                 }
-                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-                if (access == "0")
-                {
-                    MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
-                    String result = p.byId(id);
-                    if (result == null)
-                    {
-                        Response.StatusCode = 404;
-                        return null;
-                    }
 
-                    try
-                    {
-                        Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
-                    }
-                    catch (Common.InvalidXmlException ie)
-                    {
-                        return Content(Common.addtoxml(result, ie.error));
-                    }
-                    return Content(result);
-                
-                }
-                else
+                try
                 {
-                    Response.StatusCode = 403;
-                    return null;
+                    Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
                 }
+                catch (Common.InvalidXmlException ie)
+                {
+                    return Content(Common.addtoxml(result, ie.error));
+                }
+                return Content(result);
+                
             }
             else
             {
-                Response.StatusCode = 400;
+                Response.StatusCode = 403;
                 return null;
-
             }
+
         }
 
         public ActionResult Search()

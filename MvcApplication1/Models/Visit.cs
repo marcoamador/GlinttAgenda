@@ -92,7 +92,7 @@ namespace MvcApplication1.Models
             
             //Indication
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
-            v.Indication.Display = c.observ_cons.ToString();
+            v.Indication.Display = new Hl7.Fhir.Model.FhirString(c.observ_cons);
 
             if (remain != null)
             {
@@ -146,9 +146,10 @@ namespace MvcApplication1.Models
             String reqValue = v.QueryString["_id"];
             
             //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-            if (tokenaccess == "-1" || !tokenaccess.Contains('_') || tokenaccess != "0")
+            if (tokenaccess == "-1" || tokenaccess != "0")
             {
-                return "Permission Denied";
+                if(!tokenaccess.Contains('_'))
+                    return "Permission Denied";
             }
             else if (tokenaccess.Contains('_'))
             {
@@ -202,7 +203,12 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
-                            query1 += conver + "=" + "?";
+                            if (querykeys == "period-before")
+                                query1 += conver + "<" + "?";
+                            else if (querykeys == "period-after")
+                                query1 += conver + ">" + "?";
+                            else
+                                query1 += conver + "=" + "?";
 
                             l.Add(v.QueryString[querykeys]);
                             j++;
