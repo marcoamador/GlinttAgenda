@@ -93,6 +93,8 @@ namespace MvcApplication1.Models
                     human.Given.Add(names.ElementAt(0));
                 }
             }
+            else
+                human.Given.Add(patient.nome);
 
             //Use
             human.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.HumanName.NameUse>(Hl7.Fhir.Model.HumanName.NameUse.Official);
