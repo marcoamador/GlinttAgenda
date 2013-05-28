@@ -35,21 +35,25 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
 
-            //setup id
+            //Practioner identifier
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id= d.n_mecan;
 
-            //setup name
+            //Practitioner name
             Hl7.Fhir.Model.HumanName name = new Hl7.Fhir.Model.HumanName();
             name.Prefix = new List<Hl7.Fhir.Model.FhirString>() { d.titulo };
+            //NOME9
+            name.Given = new List<Hl7.Fhir.Model.FhirString>(){d.nome};
 
-            name.Text = d.nome;
-
-            //setup telecom
+            //Practitioner telecom
             Hl7.Fhir.Model.Contact tel = new Hl7.Fhir.Model.Contact();
+            tel.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
             tel.Value = d.telef;
             Hl7.Fhir.Model.Contact mail = new Hl7.Fhir.Model.Contact();
+            mail.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Email);
             mail.Value = d.email;
+
+  
 
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
             p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
@@ -58,29 +62,39 @@ namespace MvcApplication1.Models
 
             if (remain != null)
             {
+                //Practitioner Gender
                 Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
                 gender.Code = remain.gender;
+                if (remain.gender == "M")
+                    gender.Display = "Masculino";
+                else if (remain.gender == "F")
+                    gender.Display = "Feminino";
 
+                //Practitioner BirthDate
                 Hl7.Fhir.Model.FhirDateTime birthdate = new Hl7.Fhir.Model.FhirDateTime();
                 birthdate = remain.birthDate;
 
+                //Practitioner Deceased
                 Hl7.Fhir.Model.FhirBoolean deceased = new Hl7.Fhir.Model.FhirBoolean();
                 deceased = remain.deceased;
 
+                //Practitioner Address
                 Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
-                address.Text = remain.address; // REVER
+                address.Text = remain.address;
 
+                //Practitioner MaritalStatus
                 Hl7.Fhir.Model.CodeableConcept maritalstatus = new Hl7.Fhir.Model.CodeableConcept();
                 maritalstatus.Text = remain.maritalStatus;
-                /*
-                Hl7.Fhir.Model.CodeableConcept code = new Hl7.Fhir.Model.CodeableConcept();
-                code.Text = remain.code;
 
-                Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
-                issuer.InternalId = new Hl7.Fhir.Model.Id(remain.issuer.ToString());
-                */
+                //Practitioner Period
                 Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
-                //period.InternalId.Contents = remain.period.ToString();
+                period.Start = remain.periodStart.ToString();
+                period.End = remain.periodEnd.ToString();
+
+                //Practitioner Speciality
+                Hl7.Fhir.Model.CodeableConcept speciality = new Hl7.Fhir.Model.CodeableConcept();
+                speciality.Text = remain.specialty;
+                
 
                 p.Details.Gender = gender;
                 p.Details.BirthDate = birthdate;
@@ -88,13 +102,8 @@ namespace MvcApplication1.Models
                 p.Details.Address = new List<Hl7.Fhir.Model.Address>();
                 p.Details.Address.Add(address);
                 p.Details.MaritalStatus = maritalstatus;
-                Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent qual = new Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent();
-                //qual.Code = code;
-                qual.Period = period;
-                //qual.Issuer = issuer;
-
-                p.Qualification = new List<Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent>();
-                p.Qualification.Add(qual);
+                p.Period = period;
+               
 
             }
 
