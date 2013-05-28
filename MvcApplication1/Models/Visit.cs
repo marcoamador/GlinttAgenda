@@ -163,29 +163,6 @@ namespace MvcApplication1.Models
 
         public string search(HttpRequestBase v, string tokenaccess)
         {
-            string t_doente = "";
-            string doente = "";
-            String reqValue = v.QueryString["_id"];
-            
-            //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-            if (tokenaccess == "-1" || !tokenaccess.Contains('_') || tokenaccess != "0")
-            {
-                return "Permission Denied";
-            }
-            else if (tokenaccess.Contains('_'))
-            {
-                t_doente = tokenaccess.Split('_').ElementAt(0);
-                doente = tokenaccess.Split('_').ElementAt(1);
-
-                if (!String.IsNullOrEmpty(reqValue))
-                {
-                    if (t_doente != reqValue.Split('_').ElementAt(0) || doente != reqValue.Split('_').ElementAt(1))
-                    {
-                        return "Permission Denied";
-                    }
-                }
-            }
-
             List<Object> l = new List<Object>();
             int i = 0;
 
@@ -233,11 +210,6 @@ namespace MvcApplication1.Models
                     i++;
                 }
 
-            }
-
-            if (tokenaccess.Contains('_') && String.IsNullOrEmpty(reqValue))
-            {
-                query1 += " and t_doente = " + t_doente + " and doente = " + doente;
             }
 
             query1 += ";";

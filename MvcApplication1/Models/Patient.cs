@@ -21,10 +21,14 @@ namespace MvcApplication1.Models
             {"birthdate-after",new List<string>(){"dt_nasc"}},
             {"gender",new List<string>(){"sexo"}},
             {"name",new List<string>(){"nome"}},
-            {"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
+            {"identifier",new List<string>(){"n_bi", "n_contrib", "cartao_europeu_saude"}},
             {"language",null},
-            {"name",new List<string>(){"nome"}},
             {"telecom",new List<string>(){"telef1","telef2"}}
+        };
+
+        private static Dictionary<string, List<string>> LocalDic = new Dictionary<string, List<string>>() {
+            {"deceased_date", new List<string>(){"deceasedDate"}},
+            {"active", new List<string>(){"active"}}
         };
 
         glinttEntities gE;
@@ -44,9 +48,11 @@ namespace MvcApplication1.Models
 
             //Patient Identifier
             Hl7.Fhir.Model.Identifier i = new Hl7.Fhir.Model.Identifier();
+            i.Label = new Hl7.Fhir.Model.FhirString("doente");
             i.Id = patient.doente;
             //i.InternalId = patient.doente;
             Hl7.Fhir.Model.Identifier id2 = new Hl7.Fhir.Model.Identifier();
+            id2.Label = new Hl7.Fhir.Model.FhirString("t_doente");
             id2.Id = patient.t_doente;
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
@@ -61,6 +67,12 @@ namespace MvcApplication1.Models
             i1.Label = "BI";
             dem.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             dem.Identifier.Add(i1); //errado
+
+            //N_Contrib
+            Hl7.Fhir.Model.Identifier cc = new Hl7.Fhir.Model.Identifier();
+            cc.Id = patient.n_contrib;
+            cc.Label = "NIF";
+            dem.Identifier.Add(cc);
 
             //CES
             Hl7.Fhir.Model.Identifier i2 = new Hl7.Fhir.Model.Identifier();
@@ -130,10 +142,17 @@ namespace MvcApplication1.Models
             dem.Telecom = new List<Hl7.Fhir.Model.Contact>();
             Hl7.Fhir.Model.Contact contact1 = new Hl7.Fhir.Model.Contact();
             contact1.Value = patient.telef1;
+            contact1.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
             Hl7.Fhir.Model.Contact contact2 = new Hl7.Fhir.Model.Contact();
             contact2.Value = patient.telef2;
+            contact2.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
+
+            Hl7.Fhir.Model.Contact contact3 = new Hl7.Fhir.Model.Contact();
+            contact3.Value = patient.e_mail;
+            contact3.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Email);
             dem.Telecom.Add(contact1);
             dem.Telecom.Add(contact2);
+            dem.Telecom.Add(contact3);
             
             //Marital Status
             dem.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
@@ -256,6 +275,7 @@ namespace MvcApplication1.Models
                     contact.Details.Telecom = new List<Hl7.Fhir.Model.Contact>();
                     Hl7.Fhir.Model.Contact telecom = new Hl7.Fhir.Model.Contact();
                     telecom.Value = secondResult.ElementAt(j).telecom.ToString();
+                    telecom.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
                     contact.Details.Telecom.Add(telecom);
 
                     //Relationship
@@ -323,11 +343,11 @@ namespace MvcApplication1.Models
                     {
                         query1 += " and ";
                     }
+
                     int j = 0;
-                
                     foreach (string conver in Patient.ParamToDic[querykeys])
                     {
-
+                        
                         if (conver != null)
                         {
                             if (j != 0 && querykeys != "_id")
@@ -347,13 +367,21 @@ namespace MvcApplication1.Models
                                 query1 += conver + "=" + "?";
 
 
-                            if (j == 0 && querykeys == "_id")
+                            if (j == 0 && (querykeys == "_id" || querykeys == "telecom"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(0));
                             }
-                            else if (j != 0 && querykeys == "_id")
+                            else if (j != 0 && ( querykeys == "_id" || querykeys == "telecom"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
+                            }
+                            else if (j == 1 && querykeys == "identifier")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
+                            }
+                            else if (j == 2 && querykeys == "identifier")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('_').ElementAt(2));
                             }
                             else
                                 l.Add(p.QueryString[querykeys]);
@@ -367,7 +395,7 @@ namespace MvcApplication1.Models
             }
 
             query1 += ";";
-            Console.WriteLine(query1);
+            
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res = gE.g_doente.SqlQuery(query1, l.ToArray());
 
             if (res.Count() > 1)
