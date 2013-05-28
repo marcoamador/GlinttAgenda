@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Text;
 using System.Web.Routing;
 using MvcApplication1.Models;
+using System.Xml;
+using System.IO;
 
 namespace MvcApplication1.Controllers
 {
@@ -27,50 +29,52 @@ namespace MvcApplication1.Controllers
 		{
 			Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
-			if (Request.HttpMethod.Equals("GET"))
-			{
-				if (id == null || id.Equals(""))
-				{
-					Response.StatusCode = 404;
-					return null;
-				}
+            if (Request.HttpMethod.Equals("GET"))
+            {
+                if (id == null || id.Equals(""))
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
 
-				MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
-				g_cons_marc r = v.byId(id);
-				MvcApplication1.Visit rV = v.localDataById(id);
-				string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-				if (access == "0" || access == id)
-				{
-					string result = v.visitParser(r, rV);
-					if (result == null)
-					{
-						Response.StatusCode = 404;
-						return null;
-					}
+                MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+                g_cons_marc r = v.byId(id);
+                MvcApplication1.Visit rV = v.localDataById(id);
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
 
-					try
-					{
-						Common.validateXML(result, "~/Content/xsd/visit.xsd");
-					}
-					catch (Common.InvalidXmlException ie)
-					{
-						return Content(Common.addtoxml(result, ie.error));
-					}
-					return Content(result);
-				}
-				else
-				{
-					Response.StatusCode = 403;
-					return null;
-				}
-			}
-			else
-			{
-				Response.StatusCode = 400;
-				return null;
+                if (access == "-1")
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
 
-			}
+                string result = v.visitParser(r, rV, access);
+                if (result == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+
+
+                try
+                {
+                    Common.validateXML(result, "~/Content/xsd/visit.xsd");
+                }
+                catch (Common.InvalidXmlException ie)
+                {
+                    return Content(Common.addtoxml(result, ie.error));
+                }
+
+                return Content(result);
+            }
+            else
+            {
+                Response.StatusCode = 404;
+                return null;
+            }
+
 		}
+
 
 		public ActionResult Search()
 		{
@@ -100,7 +104,7 @@ namespace MvcApplication1.Controllers
 			string access = Common.getPrivileges(Request.QueryString["accessToken"]);
 			if (access == "0")
 			{
-				String s = v.update(Request, id);
+				String s = v.update(Request, id,access);
 				if (s == null)
 				{
 					Response.StatusCode = 404;

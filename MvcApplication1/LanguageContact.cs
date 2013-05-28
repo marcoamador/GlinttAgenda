@@ -12,12 +12,9 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Patient
+    public partial class LanguageContact
     {
-        public string doente { get; set; }
-        public string t_doente { get; set; }
-        public Nullable<bool> active { get; set; }
-        public string password { get; set; }
-        public Nullable<System.DateTime> deceasedDate { get; set; }
+        public int id { get; set; }
+        public string language { get; set; }
     }
 }

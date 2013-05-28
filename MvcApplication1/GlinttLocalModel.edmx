@@ -10,6 +10,7 @@
           <EntitySet Name="Contact" EntityType="glinttLocalModel.Store.Contact" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="ContactPatient" EntityType="glinttLocalModel.Store.ContactPatient" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Language" EntityType="glinttLocalModel.Store.Language" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="LanguageContact" EntityType="glinttLocalModel.Store.LanguageContact" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.Store.LanguagePatient" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.Store.LanguagePractitioner" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Notifications" EntityType="glinttLocalModel.Store.Notifications" store:Type="Tables" Schema="glinttLocal" />
@@ -62,6 +63,13 @@
           <Property Name="proficiencyLevel" Type="varchar" MaxLength="255" />
           <Property Name="preference" Type="bool" />
         </EntityType>
+        <EntityType Name="LanguageContact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="language" Type="varchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="LanguagePatient">
           <Key>
             <PropertyRef Name="idLanguagePatient" />
@@ -107,15 +115,14 @@
           <Property Name="doente" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="12" />
           <Property Name="active" Type="bool" />
-          <Property Name="relationship" Type="varchar" MaxLength="255" />
           <Property Name="password" Type="varchar" MaxLength="255" />
           <Property Name="deceasedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Practitioner">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="n_mecan" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="n_mecan" Type="int" Nullable="false" />
           <Property Name="gender" Type="char" MaxLength="1" />
           <Property Name="birthDate" Type="varchar" MaxLength="255" />
           <Property Name="deceased" Type="bool" />
@@ -138,13 +145,6 @@
           <Property Name="bed" Type="varchar" MaxLength="45" />
           <Property Name="discharger" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6013: The table/view 'glinttLocal.LanguageContact' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-      
-      <EntityType Name="LanguageContact">
-        <Property Name="id" Type="int" />
-        <Property Name="language" Type="varchar" MaxLength="255" />
-      </EntityType>-->
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
@@ -155,6 +155,7 @@
           <EntitySet Name="Contact" EntityType="glinttLocalModel.Contact" />
           <EntitySet Name="ContactPatient" EntityType="glinttLocalModel.ContactPatient" />
           <EntitySet Name="Language" EntityType="glinttLocalModel.Language" />
+          <EntitySet Name="LanguageContact" EntityType="glinttLocalModel.LanguageContact" />
           <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.LanguagePatient" />
           <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.LanguagePractitioner" />
           <EntitySet Name="Notifications" EntityType="glinttLocalModel.Notifications" />
@@ -207,6 +208,13 @@
           <Property Name="proficiencyLevel" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="preference" Type="Boolean" />
         </EntityType>
+        <EntityType Name="LanguageContact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="language" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+        </EntityType>
         <EntityType Name="LanguagePatient">
           <Key>
             <PropertyRef Name="idLanguagePatient" />
@@ -252,15 +260,14 @@
           <Property Name="doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="false" />
           <Property Name="active" Type="Boolean" />
-          <Property Name="relationship" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceasedDate" Type="DateTime" />
         </EntityType>
         <EntityType Name="Practitioner">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="n_mecan" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="n_mecan" Type="Int32" Nullable="false" />
           <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
           <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceased" Type="Boolean" />
@@ -337,6 +344,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LanguageContact">
+            <EntityTypeMapping TypeName="glinttLocalModel.LanguageContact">
+              <MappingFragment StoreEntitySet="LanguageContact">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="language" ColumnName="language" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="LanguagePatient">
             <EntityTypeMapping TypeName="glinttLocalModel.LanguagePatient">
               <MappingFragment StoreEntitySet="LanguagePatient">
@@ -384,7 +399,6 @@
                 <ScalarProperty Name="doente" ColumnName="doente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
                 <ScalarProperty Name="active" ColumnName="active" />
-                <ScalarProperty Name="relationship" ColumnName="relationship" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="deceasedDate" ColumnName="deceasedDate" />
               </MappingFragment>
@@ -393,7 +407,7 @@
           <EntitySetMapping Name="Practitioner">
             <EntityTypeMapping TypeName="glinttLocalModel.Practitioner">
               <MappingFragment StoreEntitySet="Practitioner">
-                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="birthDate" ColumnName="birthDate" />
                 <ScalarProperty Name="deceased" ColumnName="deceased" />

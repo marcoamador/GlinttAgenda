@@ -36,8 +36,20 @@ namespace MvcApplication1.Models
 
         //RESOURCE REFERENCES->SUBJECT, RESPONSIBLE, FULFILLS, CONTACT, INDICATION 
 
-        public string visitParser(g_cons_marc c, MvcApplication1.Visit remain)
+        public string visitParser(g_cons_marc c, MvcApplication1.Visit remain, string access)
         {
+
+            if (access != "0")
+            {
+                string [] s = access.Split('_');
+                string tdoente = s[0];
+                string iddoente = s[1];
+
+                if (c.t_doente != tdoente || c.doente != iddoente)
+                {
+                    return null;
+                }
+            }
 
             Hl7.Fhir.Model.Visit v = new Hl7.Fhir.Model.Visit();
 
@@ -228,11 +240,11 @@ namespace MvcApplication1.Models
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
             if (res.Count() > 1)
             {
-                return generateFeed(res, res.Count(), pageNum, itemNum);
+                return generateFeed(res, res.Count(), pageNum, itemNum,tokenaccess);
             }
             else if (res.Count() == 1)
             {
-                return visitParser(res.First(), localDataById(res.First().n_cons));
+                return visitParser(res.First(), localDataById(res.First().n_cons),tokenaccess);
             }
             else
             {
@@ -240,7 +252,7 @@ namespace MvcApplication1.Models
             }
         }
 
-        public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res, int count, int pageNum, int itemNum)
+        public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res, int count, int pageNum, int itemNum, string access)
         {
             StringBuilder feed = new StringBuilder();
             feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
@@ -300,7 +312,7 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
-                    feed.Append(visitParser(res.ElementAt(j), localDataById(res.ElementAt(j).n_cons)).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.Append(visitParser(res.ElementAt(j), localDataById(res.ElementAt(j).n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
@@ -310,7 +322,7 @@ namespace MvcApplication1.Models
             return feed.ToString();
         }
 
-        public String update(HttpRequestBase p, String id)
+        public String update(HttpRequestBase p, String id,string access)
         {
             Object[] key = { id };
             List<Object> l = new List<Object>();
@@ -348,7 +360,7 @@ namespace MvcApplication1.Models
 
                 ge.Database.ExecuteSqlCommand(query1, l.ToArray());
                 ge.SaveChanges();
-                return visitParser(byId(id), localDataById(id));
+                return visitParser(byId(id), localDataById(id),access);
 
             }
 

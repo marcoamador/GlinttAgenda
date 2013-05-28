@@ -179,19 +179,21 @@ namespace MvcApplication1.Models
                 }
                 */
 
+
                 //Contactos de pessoas relacionadas
+                /*
                 Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.Coding rel = new Hl7.Fhir.Model.Coding();
                 rel.Code = remain.relationship;
                 relationship.Coding = new List<Hl7.Fhir.Model.Coding>(){rel};
-
+                
 
                 p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
                 Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
                 contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>(){relationship};
                 
                 
-                p.Contact.Add(contact);
+                p.Contact.Add(contact);*/
             }
             
 

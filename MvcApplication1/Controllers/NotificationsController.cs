@@ -27,13 +27,7 @@ namespace MvcApplication1.Controllers
 
                 if (notif != null)
                 {
-                    /*
-                    int n = notif.Count();
-                    for (int i = 0; i < n; ++i)
-                    {
-                        res.Add(notif.ElementAt(i));
-                    }
-                    */
+
                     foreach (Notifications n in notif)
                     {
                         res.Add(n);

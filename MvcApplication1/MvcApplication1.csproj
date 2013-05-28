@@ -203,6 +203,9 @@
     <Compile Include="Language.cs">
       <DependentUpon>glinttLocalModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LanguageContact.cs">
+      <DependentUpon>glinttLocalModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="LanguagePatient.cs">
       <DependentUpon>glinttLocalModel.tt</DependentUpon>
     </Compile>
