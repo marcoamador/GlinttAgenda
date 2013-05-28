@@ -45,9 +45,8 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id = c.n_cons;
             v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
-
-
-            //Estado
+            
+            //State
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
             state.Coding = new List<Hl7.Fhir.Model.Coding>();
             Hl7.Fhir.Model.Coding st = new Hl7.Fhir.Model.Coding();
@@ -55,12 +54,40 @@ namespace MvcApplication1.Models
             state.Coding.Add(st);
             v.State = state;
 
+            //Setting - NOVO
+            v.Setting = new Hl7.Fhir.Model.CodeableConcept();
+            
+            //Subject
+            v.Subject = new Hl7.Fhir.Model.ResourceReference();
+            String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            v.Subject.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.t_doente + "_" + c.doente)));
+            v.Subject.Type = new Hl7.Fhir.Model.Code("Patient");
+
+            //Responsible
+            v.Responsible = new Hl7.Fhir.Model.ResourceReference();
+            String responsibleURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
+            v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.medico)));
+            v.Responsible.Type = new Hl7.Fhir.Model.Code("Practitioner");
+
+            //FulFills - NOVO
+            v.Fulfills = new Hl7.Fhir.Model.ResourceReference();
+
             //Period
             Hl7.Fhir.Model.Period periodo = new Hl7.Fhir.Model.Period();
             periodo.Start = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
             periodo.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
             v.Period = periodo;
 
+            //Length - NOVO
+            Hl7.Fhir.Model.Duration length = new Hl7.Fhir.Model.Duration();
+            
+            //Contact -- Falta ir buscar contact de um
+            v.Contact = new Hl7.Fhir.Model.ResourceReference();
+
+            //Indication
+            v.Indication = new Hl7.Fhir.Model.ResourceReference();
+            v.Indication.Display = c.observ_cons.ToString();
 
             //Duration
             DateTime result;
@@ -72,27 +99,6 @@ namespace MvcApplication1.Models
             }
            
             //DURACAO = PERIODO
-
-            //Subject
-            v.Subject = new Hl7.Fhir.Model.ResourceReference();
-            String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
-            v.Subject.Url = new Hl7.Fhir.Model.FhirUri( new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.t_doente + "_" + c.doente)));
-            v.Subject.Type = new Hl7.Fhir.Model.Code("Patient");
-
-
-            //Responsible
-            v.Responsible = new Hl7.Fhir.Model.ResourceReference();
-            String responsibleURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
-            v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.medico)));
-            v.Responsible.Type = new Hl7.Fhir.Model.Code("Practitioner");
-            
-            //Contact -- Falta ir buscar contact de um
-            v.Contact = new Hl7.Fhir.Model.ResourceReference();
-            
-            //Indication
-            v.Indication = new Hl7.Fhir.Model.ResourceReference();
-            v.Indication.Display = new Hl7.Fhir.Model.FhirString(c.observ_cons);
 
             if (remain != null)
             {
@@ -146,10 +152,9 @@ namespace MvcApplication1.Models
             String reqValue = v.QueryString["_id"];
             
             //TODO CORTAR RESULTADOS MEDIANTE O tokenaccess ("0" - admin, -1 = não tem permissoes, "x_y" - x: t_doente, y:doente) XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx
-            if (tokenaccess == "-1" || tokenaccess != "0")
+            if (tokenaccess == "-1" || !tokenaccess.Contains('_') || tokenaccess != "0")
             {
-                if(!tokenaccess.Contains('_'))
-                    return "Permission Denied";
+                return "Permission Denied";
             }
             else if (tokenaccess.Contains('_'))
             {
@@ -203,12 +208,7 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
-                            if (querykeys == "period-before")
-                                query1 += conver + "<" + "?";
-                            else if (querykeys == "period-after")
-                                query1 += conver + ">" + "?";
-                            else
-                                query1 += conver + "=" + "?";
+                            query1 += conver + "=" + "?";
 
                             l.Add(v.QueryString[querykeys]);
                             j++;
