@@ -174,7 +174,7 @@ namespace MvcApplication1.Models
 
             }
 
-            List<Hl7.Fhir.Model.Patient.ContactComponent> contacts = byContact(patient.doente, patient.t_doente);
+            List<Hl7.Fhir.Model.Patient.ContactComponent> contacts = getContacts(patient.doente, patient.t_doente);
 
             if (contacts != null)
             {
@@ -185,7 +185,7 @@ namespace MvcApplication1.Models
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
-        public List<Hl7.Fhir.Model.Patient.ContactComponent> byContact(string doente, string t_doente)
+        public List<Hl7.Fhir.Model.Patient.ContactComponent> getContacts(string doente, string t_doente)
         {
             List<Hl7.Fhir.Model.Patient.ContactComponent> list = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
             System.Data.Entity.Infrastructure.DbSqlQuery<ContactPatient> sqlresult = glE.ContactPatient.SqlQuery("Select * from ContactPatient where t_doente=" + t_doente + " and doente= " + t_doente + ";");

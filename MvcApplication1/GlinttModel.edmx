@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="glinttModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="glinttModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="glinttModelStoreContainer">
           <EntitySet Name="g_cons_marc" EntityType="glinttModel.Store.g_cons_marc" store:Type="Tables" Schema="glintt" />
           <EntitySet Name="g_doente" EntityType="glinttModel.Store.g_doente" store:Type="Tables" Schema="glintt" />
@@ -25,8 +25,8 @@
           <Property Name="medico" Type="char" MaxLength="10" />
           <Property Name="cod_gab" Type="char" MaxLength="10" />
           <Property Name="cod_serv_req" Type="char" MaxLength="10" />
-          <Property Name="dt_cons" Type="date" />
-          <Property Name="duracao_cons" Type="date" />
+          <Property Name="dt_cons" Type="datetime" />
+          <Property Name="duracao_cons" Type="datetime" />
           <Property Name="flag_estado" Type="char" Nullable="false" MaxLength="2" />
           <Property Name="observ_cons" Type="text" />
         </EntityType>
@@ -89,10 +89,9 @@
           <Property Name="cod_serv" Type="char" Nullable="false" MaxLength="10" />
           <Property Name="cod_act_med" Type="char" Nullable="false" MaxLength="4" />
           <Property Name="descr" Type="char" MaxLength="40" />
-          <Property Name="dur" Type="date" />
+          <Property Name="dur" Type="datetime" />
         </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="glinttModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">

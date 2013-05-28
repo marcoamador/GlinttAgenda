@@ -53,9 +53,6 @@ namespace MvcApplication1.Models
             st.Code = c.flag_estado; //TODO errado
             state.Coding.Add(st);
             v.State = state;
-
-            //Setting - NOVO
-            v.Setting = new Hl7.Fhir.Model.CodeableConcept();
             
             //Subject
             v.Subject = new Hl7.Fhir.Model.ResourceReference();
@@ -67,29 +64,20 @@ namespace MvcApplication1.Models
             //Responsible
             v.Responsible = new Hl7.Fhir.Model.ResourceReference();
             String responsibleURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
-            v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.medico)));
+            v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + c.medico)));
             v.Responsible.Type = new Hl7.Fhir.Model.Code("Practitioner");
-
-            //FulFills - NOVO
-            v.Fulfills = new Hl7.Fhir.Model.ResourceReference();
 
             //Period
             Hl7.Fhir.Model.Period periodo = new Hl7.Fhir.Model.Period();
             periodo.Start = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
-            periodo.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
-            v.Period = periodo;
-
-            //Length - NOVO
-            Hl7.Fhir.Model.Duration length = new Hl7.Fhir.Model.Duration();
+        
             
-            //Contact -- Falta ir buscar contact de um
-            v.Contact = new Hl7.Fhir.Model.ResourceReference();
-
+ 
             //Indication
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
-            v.Indication.Display = c.observ_cons.ToString();
+            v.Indication.Display = new Hl7.Fhir.Model.FhirString(c.observ_cons.ToString());
 
-            //Duration
+            //Length
             DateTime result;
             if (DateTime.TryParse(c.duracao_cons.ToString(), out result))
             {
@@ -98,22 +86,8 @@ namespace MvcApplication1.Models
                 v.Length = duracao;
             }
            
-            //DURACAO = PERIODO
-
             if (remain != null)
             {
-                v.Fulfills = new Hl7.Fhir.Model.ResourceReference();
-
-                /*
-                Hl7.Fhir.Model.ResourceReference contact = new Hl7.Fhir.Model.ResourceReference();
-                contact.Display = remain.contact.ToString();
-                v.Contact = contact;
- 
-                Hl7.Fhir.Model.ResourceReference fulfills = new Hl7.Fhir.Model.ResourceReference();
-                fulfills.Display = remain.fulfills.ToString();
-
-                v.Fulfills = fulfills;
-                */
                 v.Setting = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.Coding sett = new Hl7.Fhir.Model.Coding();
@@ -127,7 +101,37 @@ namespace MvcApplication1.Models
                 setting.Coding = new List<Hl7.Fhir.Model.Coding>(){sett};
 
                 v.Setting = setting;
+
+                if(remain.periodEnd != null)
+                    periodo.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.periodEnd.ToString()));
+
+                v.Admission = new Hl7.Fhir.Model.Visit.VisitAdmissionComponent();
+                v.Admission.Admitter = new Hl7.Fhir.Model.ResourceReference();
+                v.Admission.Admitter.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.admitter)));
+                v.Admission.Admitter.Type = new Hl7.Fhir.Model.Code("Practitioner");
+
+                //REVER 
+                v.Location = new List<Hl7.Fhir.Model.Visit.VisitLocationComponent>();
+                Hl7.Fhir.Model.Visit.VisitLocationComponent location = new Hl7.Fhir.Model.Visit.VisitLocationComponent();
+                location.Location = new Hl7.Fhir.Model.ResourceReference();
+                location.Location.Display = new Hl7.Fhir.Model.FhirString(c.cod_gab + " " + remain.bed);
+                location.Period = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
+                
+                v.Location.Add(location);
+
+                v.Discharge = new Hl7.Fhir.Model.Visit.VisitDischargeComponent();
+                v.Discharge.Discharger = new Hl7.Fhir.Model.ResourceReference();
+                v.Discharge.Discharger.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.discharger)));
+                v.Discharge.Discharger.Type = new Hl7.Fhir.Model.Code("Practitioner");
+                
             }
+
+            v.Period = periodo;
+
+            String contactURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "contact";
+            v.Contact = new Hl7.Fhir.Model.ResourceReference();
+            v.Contact.Display = "Related Person";
+            v.Contact.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(contactURL + "/" + remain.id_contact)));
 
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
