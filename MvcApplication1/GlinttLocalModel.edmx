@@ -119,7 +119,7 @@
           <Property Name="birthDate" Type="varchar" MaxLength="255" />
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
-          <Property Name="maritalStatus" Type="char" MaxLength="1" />
+          <Property Name="maritalStatus" Type="varchar" MaxLength="10" />
           <Property Name="periodStart" Type="datetime" />
           <Property Name="password" Type="varchar" MaxLength="255" />
           <Property Name="specialty" Type="varchar" MaxLength="45" />
