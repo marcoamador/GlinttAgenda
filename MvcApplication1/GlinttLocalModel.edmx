@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="glinttLocalModelStoreContainer">
           <EntitySet Name="Accesstokens" EntityType="glinttLocalModel.Store.Accesstokens" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Contact" EntityType="glinttLocalModel.Store.Contact" store:Type="Tables" Schema="glinttLocal" />
@@ -107,15 +107,14 @@
           <Property Name="doente" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="12" />
           <Property Name="active" Type="bool" />
-          <Property Name="relationship" Type="varchar" MaxLength="255" />
           <Property Name="password" Type="varchar" MaxLength="255" />
           <Property Name="deceasedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="Practitioner">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="n_mecan" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="n_mecan" Type="int" Nullable="false" />
           <Property Name="gender" Type="char" MaxLength="1" />
           <Property Name="birthDate" Type="varchar" MaxLength="255" />
           <Property Name="deceased" Type="bool" />
@@ -138,15 +137,7 @@
           <Property Name="bed" Type="varchar" MaxLength="45" />
           <Property Name="discharger" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6013: The table/view 'glinttLocal.LanguageContact' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-      
-      <EntityType Name="LanguageContact">
-        <Property Name="id" Type="int" />
-        <Property Name="language" Type="varchar" MaxLength="255" />
-      </EntityType>-->
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="glinttLocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -257,9 +248,8 @@
         </EntityType>
         <EntityType Name="Practitioner">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="n_mecan" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
           <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceased" Type="Boolean" />
@@ -269,6 +259,7 @@
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="specialty" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="periodEnd" Type="DateTime" />
+          <Property Type="Int32" Name="n_mecan" Nullable="false" />
         </EntityType>
         <EntityType Name="Visit">
           <Key>
@@ -391,7 +382,7 @@
           <EntitySetMapping Name="Practitioner">
             <EntityTypeMapping TypeName="glinttLocalModel.Practitioner">
               <MappingFragment StoreEntitySet="Practitioner">
-                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="birthDate" ColumnName="birthDate" />
                 <ScalarProperty Name="deceased" ColumnName="deceased" />

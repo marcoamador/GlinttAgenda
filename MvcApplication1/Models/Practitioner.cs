@@ -12,15 +12,11 @@ namespace MvcApplication1.Models
         {
             {"_id", new List<string>() {"n_mecan"}}, 
             {"address", new List<string>() {"morada"}}, 
-            {"family", null},
             {"gender", null},
-            {"given", new List<string>() {"nome"}},
-            {"identifier", new List<string>() {"n_mecan"}},
             {"language", null},
             {"name", new List<string>() {"nome"}},
             {"organization", null},
-            {"phonetic", null},
-            {"telecom", new List<string>() {"telef"}}
+            {"telecom", new List<string>() {"telef", "email"}}
         };
 
         glinttEntities gE;
@@ -116,7 +112,7 @@ namespace MvcApplication1.Models
             }
             g_pess_hosp_def practitioner = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + id + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + id + ";");
             MvcApplication1.Practitioner remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
@@ -185,7 +181,7 @@ namespace MvcApplication1.Models
             }
             else if (res.Count() == 1)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
                 MvcApplication1.Practitioner remaining;
                 if (secondResult.Count() != 0)
                     remaining = secondResult.First();
@@ -263,7 +259,7 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
                     MvcApplication1.Practitioner remaining;
                     if (secondResult.Count() != 0)
                         remaining = secondResult.First();

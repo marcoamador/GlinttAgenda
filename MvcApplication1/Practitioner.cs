@@ -14,7 +14,6 @@ namespace MvcApplication1
     
     public partial class Practitioner
     {
-        public int id { get; set; }
         public string gender { get; set; }
         public string birthDate { get; set; }
         public Nullable<bool> deceased { get; set; }
@@ -24,5 +23,6 @@ namespace MvcApplication1
         public string password { get; set; }
         public string specialty { get; set; }
         public Nullable<System.DateTime> periodEnd { get; set; }
+        public int n_mecan { get; set; }
     }
 }
