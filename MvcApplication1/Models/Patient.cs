@@ -142,9 +142,11 @@ namespace MvcApplication1.Models
             dem.Telecom = new List<Hl7.Fhir.Model.Contact>();
             Hl7.Fhir.Model.Contact contact1 = new Hl7.Fhir.Model.Contact();
             contact1.Value = patient.telef1;
+            contact1.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactUse>(Hl7.Fhir.Model.Contact.ContactUse.Mobile);
             contact1.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
             Hl7.Fhir.Model.Contact contact2 = new Hl7.Fhir.Model.Contact();
             contact2.Value = patient.telef2;
+            contact2.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactUse>(Hl7.Fhir.Model.Contact.ContactUse.Home);
             contact2.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
 
             Hl7.Fhir.Model.Contact contact3 = new Hl7.Fhir.Model.Contact();
@@ -507,42 +509,85 @@ namespace MvcApplication1.Models
 
         public String update(HttpRequestBase p, String id)
         {
-            Object[] key = { id };
             List<Object> l = new List<Object>();
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=?", key);
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
             if (sqlresult.Count() != 0)
             {
-                
+                int countKeysGlintt = 0;
+                int countKeysLocal = 0;
                 String query1 = "update g_doente set ";
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (Patient.ParamToDic.ContainsKey(querykeys) || !querykeys.Equals("_id"))
+                    if (Patient.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("birthdate-before") && !querykeys.Equals("birthdate-after")))
                     {
-
-                        int j = 0;
-
-                        foreach (string conver in Patient.ParamToDic[querykeys])
+                        if (!Patient.LocalDic.ContainsKey(querykeys))
                         {
-
-                            if (conver != null)
+                            int j = 0;
+                            countKeysGlintt++;
+                            foreach (string conver in Patient.ParamToDic[querykeys])
                             {
-                                if (j != 0)
+
+                                if (conver != null)
                                 {
-                                    query1 += " , ";
+                                    if (j != 0)
+                                    {
+                                        query1 += " , ";
+                                    }
+                                    query1 += conver + "=" + "?";
+                                    l.Add(p.QueryString[querykeys]);
+                                    j++;
                                 }
-                                query1 += conver + "=" + "?";
-                                l.Add(p.QueryString[querykeys]);
-                                j++;
                             }
                         }
                     }
 
                 }
 
-                query1 += " where t_doente = " + id + " ;";
+                if (countKeysGlintt > 0)
+                {
+                    query1 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
+                    gE.Database.ExecuteSqlCommand(query1, l.ToArray());
+                    gE.SaveChanges();
+                }
+                
+                List<Object> newList = new List<Object>();
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> secondResult = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
+                if (secondResult.Count() != 0)
+                {
+                    String query2 = "update Patient set ";
+                    foreach (string querykeys in p.QueryString.Keys)
+                    {
+                        if (Patient.LocalDic.ContainsKey(querykeys))
+                        {
 
-                gE.Database.ExecuteSqlCommand(query1, l.ToArray());
-                gE.SaveChanges();
+                            int j = 0;
+                            countKeysLocal++;
+                            foreach (string conver in Patient.LocalDic[querykeys])
+                            {
+
+                                if (conver != null)
+                                {
+                                    if (j != 0)
+                                    {
+                                        query2 += " , ";
+                                    }
+                                    query2 += conver + "=" + "?";
+                                    newList.Add(p.QueryString[querykeys]);
+                                    j++;
+                                }
+                            }
+                        }
+
+                    }
+                    if (countKeysLocal > 0)
+                    {
+                        query2 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
+                        glE.Database.ExecuteSqlCommand(query2, newList.ToArray());
+                        glE.SaveChanges();
+                    }
+                    
+                }
+
                 return byId(id);
 
             }
