@@ -106,6 +106,12 @@ namespace MvcApplication1
                 defaults: new { controller = "Notifications", action = "add" }
             );
 
+            routes.MapRoute(
+               name: "Contact",
+               url: "Contact/{id}",
+               defaults: new { controller = "Contact", action = "Index", id = "" }
+           );
+
            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

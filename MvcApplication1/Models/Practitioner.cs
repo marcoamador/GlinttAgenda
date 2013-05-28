@@ -12,15 +12,11 @@ namespace MvcApplication1.Models
         {
             {"_id", new List<string>() {"n_mecan"}}, 
             {"address", new List<string>() {"morada"}}, 
-            {"family", null},
             {"gender", null},
-            {"given", new List<string>() {"nome"}},
-            {"identifier", new List<string>() {"n_mecan"}},
             {"language", null},
             {"name", new List<string>() {"nome"}},
             {"organization", null},
-            {"phonetic", null},
-            {"telecom", new List<string>() {"telef"}}
+            {"telecom", new List<string>() {"telef", "email"}}
         };
 
         glinttEntities gE;
@@ -39,66 +35,144 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
 
-            //setup id
-            Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
-            idt.Id= d.n_mecan;
 
-            //setup name
+            //Practioner identifier
+            Hl7.Fhir.Model.Identifier pID = new Hl7.Fhir.Model.Identifier();
+            pID.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Identifier.IdentifierUse>(Hl7.Fhir.Model.Identifier.IdentifierUse.Official);
+            pID.Id = d.n_mecan;
+
+
+            //Practitioner name
             Hl7.Fhir.Model.HumanName name = new Hl7.Fhir.Model.HumanName();
             name.Prefix = new List<Hl7.Fhir.Model.FhirString>() { d.titulo };
+            name.Given = new List<Hl7.Fhir.Model.FhirString>();
 
-            name.Text = d.nome;
+            if (d.nome.Contains(' '))
+            {
+                String[] names = d.nome.Split(' ');
+                if (names.Length > 1)
+                {
+                    for (int k = 0; k < names.Length - 1; k++)
+                    {
+                        name.Given.Add(names.ElementAt(k));
+                    }
+                    name.Family = new List<Hl7.Fhir.Model.FhirString>() { names.ElementAt(names.Length - 1) };
+                }
+                else
+                {
+                    name.Given.Add(names.ElementAt(0));
+                }
+            }
+            else
+                name.Given.Add(d.nome);
 
-            //setup telecom
+            //Practitioner telecom
             Hl7.Fhir.Model.Contact tel = new Hl7.Fhir.Model.Contact();
+            tel.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
             tel.Value = d.telef;
             Hl7.Fhir.Model.Contact mail = new Hl7.Fhir.Model.Contact();
+            mail.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Email);
             mail.Value = d.email;
 
-            p.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
-            p.Details.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+
+            p.Identifier = new List<Hl7.Fhir.Model.Identifier>() { pID };
             p.Details.Name = new List<Hl7.Fhir.Model.HumanName>() { name };
             p.Details.Telecom = new List<Hl7.Fhir.Model.Contact>() { tel, mail };
 
+            //Role
+            p.Role = new List<Hl7.Fhir.Model.CodeableConcept>();
+            Hl7.Fhir.Model.CodeableConcept pRole = new Hl7.Fhir.Model.CodeableConcept();
+            pRole.Coding = new List<Hl7.Fhir.Model.Coding>();
+            Hl7.Fhir.Model.Coding roleValue = new Hl7.Fhir.Model.Coding();
+            if (d.titulo == "Dr.")
+                roleValue.Display = "Médico";
+            else if (d.titulo == "Enf.º")
+                roleValue.Display = "Enfermeiro";
+            else if (d.titulo == "Dra.")
+                roleValue.Display = "Médica";
+            else if (d.titulo == "Enf.ª")
+                roleValue.Display = "Enfermeira";
+
+            pRole.Coding.Add(roleValue);
+            p.Role.Add(pRole);
+            
             if (remain != null)
             {
+                //Practitioner Gender
                 Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
                 gender.Code = remain.gender;
-
-                Hl7.Fhir.Model.FhirDateTime birthdate = new Hl7.Fhir.Model.FhirDateTime();
-                birthdate = remain.birthDate;
-
-                Hl7.Fhir.Model.FhirBoolean deceased = new Hl7.Fhir.Model.FhirBoolean();
-                deceased = remain.deceased;
-
-                Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
-                address.Text = remain.address; // REVER
-
-                Hl7.Fhir.Model.CodeableConcept maritalstatus = new Hl7.Fhir.Model.CodeableConcept();
-                maritalstatus.Text = remain.maritalStatus;
-                /*
-                Hl7.Fhir.Model.CodeableConcept code = new Hl7.Fhir.Model.CodeableConcept();
-                code.Text = remain.code;
-
-                Hl7.Fhir.Model.ResourceReference issuer = new Hl7.Fhir.Model.ResourceReference();
-                issuer.InternalId = new Hl7.Fhir.Model.Id(remain.issuer.ToString());
-                */
-                Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
-                //period.InternalId.Contents = remain.period.ToString();
-
+                if (remain.gender == "M")
+                    gender.Display = "Masculino";
+                else if (remain.gender == "F")
+                    gender.Display = "Feminino";
                 p.Details.Gender = gender;
+
+                //Practitioner BirthDate
+                Hl7.Fhir.Model.FhirDateTime birthdate = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.birthDate));
                 p.Details.BirthDate = birthdate;
-                p.Details.Deceased = deceased;
+
+                //Practitioner Deceased
+                if (remain.deceased != null)
+                {
+                    Hl7.Fhir.Model.FhirBoolean deceased = new Hl7.Fhir.Model.FhirBoolean();
+                    deceased = remain.deceased;
+                    p.Details.Deceased = deceased;
+                }
+                
+
+                //Practitioner Address
+                Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
+                address.Line = new List<Hl7.Fhir.Model.FhirString>(){remain.address};
                 p.Details.Address = new List<Hl7.Fhir.Model.Address>();
                 p.Details.Address.Add(address);
-                p.Details.MaritalStatus = maritalstatus;
-                Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent qual = new Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent();
-                //qual.Code = code;
-                qual.Period = period;
-                //qual.Issuer = issuer;
 
-                p.Qualification = new List<Hl7.Fhir.Model.Practitioner.PractitionerQualificationComponent>();
-                p.Qualification.Add(qual);
+
+                //Practitioner MaritalStatus
+
+                if (remain.maritalStatus != null)
+                {
+                    p.Details.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
+                    p.Details.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
+                    Hl7.Fhir.Model.Coding pMarStatus = new Hl7.Fhir.Model.Coding();
+                    pMarStatus.Code = remain.maritalStatus;
+
+                    if (remain.maritalStatus == "ca")
+                        pMarStatus.Display = "Casado";
+                    else if (remain.maritalStatus == "so")
+                        pMarStatus.Display = "Solteiro";
+                    else if (remain.maritalStatus == "div")
+                        pMarStatus.Display = "Divorciado";
+                    else if (remain.maritalStatus == "vi")
+                        pMarStatus.Display = "Viúvo";
+                    else if (remain.maritalStatus == "oth")
+                        pMarStatus.Display = "Outro";
+
+                    p.Details.MaritalStatus.Coding.Add(pMarStatus);
+                }
+
+                //Practitioner Period
+                if (remain.periodStart != null && remain.periodEnd != null)
+                {
+                    Hl7.Fhir.Model.Period period = new Hl7.Fhir.Model.Period();
+                    if (remain.periodStart != null)
+                        period.Start = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.periodStart.ToString()));
+                    if (remain.periodEnd != null)
+                        period.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.periodEnd.ToString()));
+                    p.Period = period;
+                }
+                
+                //Practitioner Speciality
+                if (remain.specialty != null)
+                {
+                    Hl7.Fhir.Model.CodeableConcept speciality = new Hl7.Fhir.Model.CodeableConcept();
+                    speciality.Coding = new List<Hl7.Fhir.Model.Coding>();
+                    Hl7.Fhir.Model.Coding spec = new Hl7.Fhir.Model.Coding();
+                    spec.Display = remain.specialty;
+                    speciality.Coding.Add(spec);
+                    p.Specialty = new List<Hl7.Fhir.Model.CodeableConcept>() { speciality };
+                }
+                
+           
 
             }
 
@@ -108,16 +182,15 @@ namespace MvcApplication1.Models
 
         public String byId(string id)
         {
-
-
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan= ?", new List<object>() { id }.ToArray());
+ 
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan='" + id + "';");
             if (sqlresult.Count() == 0)
             {
                 return null;
             }
             g_pess_hosp_def practitioner = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan= ?", new List<object>() { id }.ToArray());
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + id + ";");
             MvcApplication1.Practitioner remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
@@ -186,7 +259,7 @@ namespace MvcApplication1.Models
             }
             else if (res.Count() == 1)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
                 MvcApplication1.Practitioner remaining;
                 if (secondResult.Count() != 0)
                     remaining = secondResult.First();
@@ -264,7 +337,7 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where id=" + res.First().n_mecan + ";");
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
                     MvcApplication1.Practitioner remaining;
                     if (secondResult.Count() != 0)
                         remaining = secondResult.First();

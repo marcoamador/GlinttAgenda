@@ -19,14 +19,11 @@ namespace MvcApplication1.Models
             {"birthdate",new List<string>() {"dt_nasc"}},
             {"birthdate-before",new List<string>(){"dt_nasc"}},
             {"birthdate-after",new List<string>(){"dt_nasc"}},
-            {"family",new List<string>(){"last_name"}},
-
             {"gender",new List<string>(){"sexo"}},
-            {"given",new List<string>(){"nome"}},
+            {"name",new List<string>(){"nome"}},
             {"identifier",new List<string>(){"n_bi","cartao_europeu_saude"}},
             {"language",null},
             {"name",new List<string>(){"nome"}},
-            {"phonetic",null},
             {"telecom",new List<string>(){"telef1","telef2"}}
         };
 
@@ -54,8 +51,7 @@ namespace MvcApplication1.Models
             p.Identifier = new List<Hl7.Fhir.Model.Identifier>();
             p.Identifier.Add(i); //errado
             p.Identifier.Add(id2);
-
-
+            
             //Patient Details
             Hl7.Fhir.Model.Demographics dem = new Hl7.Fhir.Model.Demographics();
             
@@ -71,8 +67,7 @@ namespace MvcApplication1.Models
             i2.Id = patient.cartao_europeu_saude;
             i2.Label = "CES";
             dem.Identifier.Add(i2);
-
-
+            
             //Name
             Hl7.Fhir.Model.HumanName human = new Hl7.Fhir.Model.HumanName();
             human.Given = new List<Hl7.Fhir.Model.FhirString>();
@@ -99,8 +94,7 @@ namespace MvcApplication1.Models
             //Use
             human.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.HumanName.NameUse>(Hl7.Fhir.Model.HumanName.NameUse.Official);
             dem.Name = new List<Hl7.Fhir.Model.HumanName>() { human };
-
-            
+                        
             //Gender
             Hl7.Fhir.Model.Coding gender = new Hl7.Fhir.Model.Coding();
             gender.Code = patient.sexo;
@@ -111,7 +105,6 @@ namespace MvcApplication1.Models
 
             dem.Gender = gender;
             
-
             //Birthdate
             DateTime date = DateTime.Parse(patient.dt_nasc.ToString());
             Hl7.Fhir.Model.FhirDateTime dt_nasc = new Hl7.Fhir.Model.FhirDateTime(date.Date);
@@ -123,8 +116,7 @@ namespace MvcApplication1.Models
                 dem.Deceased = false;
             else
                 dem.Deceased = true;
-
-
+            
             //Address
             Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
             address.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Address.AddressUse>(Hl7.Fhir.Model.Address.AddressUse.Home);
@@ -142,8 +134,7 @@ namespace MvcApplication1.Models
             contact2.Value = patient.telef2;
             dem.Telecom.Add(contact1);
             dem.Telecom.Add(contact2);
-
-
+            
             //Marital Status
             dem.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
             dem.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
@@ -167,37 +158,121 @@ namespace MvcApplication1.Models
 
 
             if (remain != null){
-            
-                /*
-                //Link
-                if (Uri.IsWellFormedUriString(remain.link, UriKind.Absolute))
+                
+                //Active
+                Hl7.Fhir.Model.FhirBoolean active = new Hl7.Fhir.Model.FhirBoolean();
+                active = remain.active;
+                p.Active = active;
+
+                //DeceasedDate
+                if (remain.deceasedDate != null)
                 {
-                    Hl7.Fhir.Model.ResourceReference link = new Hl7.Fhir.Model.ResourceReference();
-                    link.Url = new System.Uri(remain.link);
-                    p.Link = new List<Hl7.Fhir.Model.ResourceReference>();
-                    p.Link.Add(link);
+                    DateTime dDate = DateTime.Parse(remain.deceasedDate.ToString());
+                    Hl7.Fhir.Model.FhirDateTime deceasedDate = new Hl7.Fhir.Model.FhirDateTime(dDate);
+                    p.DeceasedDate = deceasedDate;
                 }
-                */
 
-
-                //Contactos de pessoas relacionadas
-                /*
-                Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
-                Hl7.Fhir.Model.Coding rel = new Hl7.Fhir.Model.Coding();
-                rel.Code = remain.relationship;
-                relationship.Coding = new List<Hl7.Fhir.Model.Coding>(){rel};
-                
-
-                p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
-                Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
-                contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>(){relationship};
-                
-                
-                p.Contact.Add(contact);*/
             }
-            
+
+            List<Hl7.Fhir.Model.Patient.ContactComponent> contacts = getContacts(patient.doente, patient.t_doente);
+
+            if (contacts != null)
+            {
+                p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
+                p.Contact = contacts;
+            }
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
+        }
+
+        public List<Hl7.Fhir.Model.Patient.ContactComponent> getContacts(string doente, string t_doente)
+        {
+            List<Hl7.Fhir.Model.Patient.ContactComponent> list = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
+            System.Data.Entity.Infrastructure.DbSqlQuery<ContactPatient> sqlresult = glE.ContactPatient.SqlQuery("Select * from ContactPatient where t_doente=" + t_doente + " and doente= " + t_doente + ";");
+            if (sqlresult.Count() == 0)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < sqlresult.Count(); i++)
+            {
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Contact> secondResult = glE.Contact.SqlQuery("Select * from Contact where id=" + sqlresult.ElementAt(i).id + ";");
+                if (secondResult.Count() == 0)
+                {
+                    return null;
+                }
+                for (int j = 0; j < secondResult.Count(); j++)
+                {
+                    Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
+                    contact.Details = new Hl7.Fhir.Model.Demographics();
+                    
+                    //Address
+                    contact.Details.Address = new List<Hl7.Fhir.Model.Address>();
+                    Hl7.Fhir.Model.Address addr = new Hl7.Fhir.Model.Address();
+                    addr.Line = new List<Hl7.Fhir.Model.FhirString>() { secondResult.ElementAt(j).address };
+                    
+                    //BirthDate
+                    DateTime cBirth = DateTime.Parse(secondResult.ElementAt(j).birthDate);
+                    contact.Details.BirthDate = new Hl7.Fhir.Model.FhirDateTime(cBirth);
+                    
+                    //Deceased
+                    contact.Details.Deceased = new Hl7.Fhir.Model.FhirBoolean(secondResult.ElementAt(j).deceased.Value);
+                    
+                    //Gender
+                    contact.Details.Gender = new Hl7.Fhir.Model.Coding();
+                    contact.Details.Gender.Code = secondResult.ElementAt(j).gender;
+
+                    if (secondResult.ElementAt(j).gender == "M")
+                        contact.Details.Gender.Display = "Masculino";
+                    else if (secondResult.ElementAt(j).gender == "F")
+                        contact.Details.Gender.Display = "Feminino";
+
+                    //Name
+                    contact.Details.Name = new List<Hl7.Fhir.Model.HumanName>();
+                    Hl7.Fhir.Model.HumanName cName = new Hl7.Fhir.Model.HumanName();
+                    cName.Given = new List<Hl7.Fhir.Model.FhirString>() { secondResult.ElementAt(j).name };
+                    contact.Details.Name.Add(cName);
+
+                    //MaritalStatus
+                    contact.Details.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
+                    contact.Details.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
+                    Hl7.Fhir.Model.Coding marStatus = new Hl7.Fhir.Model.Coding();
+                    marStatus.Code = secondResult.ElementAt(j).maritalStatus;
+
+                    if (secondResult.ElementAt(j).maritalStatus == "ca")
+                        marStatus.Display = "Casado";
+                    else if (secondResult.ElementAt(j).maritalStatus == "so")
+                        marStatus.Display = "Solteiro";
+                    else if (secondResult.ElementAt(j).maritalStatus == "div")
+                        marStatus.Display = "Divorciado";
+                    else if (secondResult.ElementAt(j).maritalStatus == "vi")
+                        marStatus.Display = "Viúvo";
+                    else if (secondResult.ElementAt(j).maritalStatus == "oth")
+                        marStatus.Display = "Outro";
+
+                    contact.Details.MaritalStatus.Coding.Add(marStatus);
+
+                    //Telecom
+                    contact.Details.Telecom = new List<Hl7.Fhir.Model.Contact>();
+                    Hl7.Fhir.Model.Contact telecom = new Hl7.Fhir.Model.Contact();
+                    telecom.Value = secondResult.ElementAt(j).telecom.ToString();
+                    contact.Details.Telecom.Add(telecom);
+
+                    //Relationship
+                    contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>();
+                    Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
+                    relationship.Coding = new List<Hl7.Fhir.Model.Coding>();
+                    Hl7.Fhir.Model.Coding relText = new Hl7.Fhir.Model.Coding();
+                    relText.Code = sqlresult.ElementAt(i).relationship;
+                    relationship.Coding.Add(relText);
+                    contact.Relationship.Add(relationship);
+
+                    list.Add(contact);
+                }
+
+                
+            }
+            return list;
         }
 
         public String byId(string id)
