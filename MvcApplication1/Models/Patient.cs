@@ -509,6 +509,8 @@ namespace MvcApplication1.Models
 
         public String update(HttpRequestBase p, String id)
         {
+            int idIndex = 0;
+            int telecomIndex = 0;
             List<Object> l = new List<Object>();
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
             if (sqlresult.Count() != 0)
@@ -533,9 +535,26 @@ namespace MvcApplication1.Models
                                     {
                                         query1 += " , ";
                                     }
+
                                     query1 += conver + "=" + "?";
-                                    l.Add(p.QueryString[querykeys]);
+                                    
+                                    if (querykeys.Equals("identifier"))
+                                    {
+                                        l.Add(p.QueryString[querykeys].Split('_').ElementAt(idIndex));
+                                        idIndex+=1;
+                                    }
+                                    else if (querykeys.Equals("telecom"))
+                                    {
+                                        l.Add(p.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                        telecomIndex+=1;
+                                    }else
+                                        l.Add(p.QueryString[querykeys]);
+              
                                     j++;
+
+                                    
+
+
                                 }
                             }
                         }
@@ -543,9 +562,10 @@ namespace MvcApplication1.Models
 
                 }
 
+                query1 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
                 if (countKeysGlintt > 0)
                 {
-                    query1 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
+                    
                     gE.Database.ExecuteSqlCommand(query1, l.ToArray());
                     gE.SaveChanges();
                 }
@@ -579,13 +599,13 @@ namespace MvcApplication1.Models
                         }
 
                     }
+                    query2 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
                     if (countKeysLocal > 0)
                     {
-                        query2 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
+                        
                         glE.Database.ExecuteSqlCommand(query2, newList.ToArray());
                         glE.SaveChanges();
                     }
-                    
                 }
 
                 return byId(id);
