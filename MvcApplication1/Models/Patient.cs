@@ -202,122 +202,108 @@ namespace MvcApplication1.Models
             }
 
             List<Hl7.Fhir.Model.Patient.ContactComponent> contacts = getContacts(patient.doente, patient.t_doente);
-
             if (contacts != null)
             {
                 p.Contact = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
                 p.Contact = contacts;
             }
-
+            
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
 
         public string getCountry(string cod_pais) {
 
-            string country = null;
-
             System.Data.Entity.Infrastructure.DbSqlQuery<Country> sqlresult = glE.Country.SqlQuery("Select * from Country where cod_pais=" + cod_pais + ";");
-            
             if (sqlresult.Count() == 0)
             {
                 return null;
             }
-
-            else
-                country = sqlresult.First().ToString();
-
-            return country;
-
+            return sqlresult.First().ToString();
         }
 
         public List<Hl7.Fhir.Model.Patient.ContactComponent> getContacts(string doente, string t_doente)
         {
             List<Hl7.Fhir.Model.Patient.ContactComponent> list = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
-            System.Data.Entity.Infrastructure.DbSqlQuery<ContactPatient> sqlresult = glE.ContactPatient.SqlQuery("Select * from ContactPatient where t_doente=" + t_doente + " and doente= " + t_doente + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<Contact> sqlresult = glE.Contact.SqlQuery("Select Contact.* from ContactPatient, Contact where ContactPatient.t_doente=" + t_doente + " and ContactPatient.doente= " + doente + " and ContactPatient.id = Contact.id ;");
             if (sqlresult.Count() == 0)
             {
                 return null;
             }
 
-            for (int i = 0; i < sqlresult.Count(); i++)
+           int n = sqlresult.Count();
+
+            for (int i = 0; i < n; i++)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Contact> secondResult = glE.Contact.SqlQuery("Select * from Contact where id=" + sqlresult.ElementAt(i).id + ";");
-                if (secondResult.Count() == 0)
-                {
-                    return null;
-                }
-                for (int j = 0; j < secondResult.Count(); j++)
-                {
-                    Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
-                    contact.Details = new Hl7.Fhir.Model.Demographics();
+                MvcApplication1.Contact element = sqlresult.ElementAt(i);
+                Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
+                contact.Details = new Hl7.Fhir.Model.Demographics();
                     
-                    //Address
-                    contact.Details.Address = new List<Hl7.Fhir.Model.Address>();
-                    Hl7.Fhir.Model.Address addr = new Hl7.Fhir.Model.Address();
-                    addr.Line = new List<Hl7.Fhir.Model.FhirString>() { secondResult.ElementAt(j).address };
+                //Address
+                contact.Details.Address = new List<Hl7.Fhir.Model.Address>();
+                Hl7.Fhir.Model.Address addr = new Hl7.Fhir.Model.Address();
+                addr.Line = new List<Hl7.Fhir.Model.FhirString>() { element.address };
                     
-                    //BirthDate
-                    DateTime cBirth = DateTime.Parse(secondResult.ElementAt(j).birthDate);
-                    contact.Details.BirthDate = new Hl7.Fhir.Model.FhirDateTime(cBirth);
+                //BirthDate
+                DateTime cBirth = DateTime.Parse(element.birthDate);
+                contact.Details.BirthDate = new Hl7.Fhir.Model.FhirDateTime(cBirth);
                     
-                    //Deceased
-                    contact.Details.Deceased = new Hl7.Fhir.Model.FhirBoolean(secondResult.ElementAt(j).deceased.Value);
+                //Deceased
+                contact.Details.Deceased = new Hl7.Fhir.Model.FhirBoolean(element.deceased.Value);
                     
-                    //Gender
-                    contact.Details.Gender = new Hl7.Fhir.Model.Coding();
-                    contact.Details.Gender.Code = secondResult.ElementAt(j).gender;
+                //Gender
+                contact.Details.Gender = new Hl7.Fhir.Model.Coding();
+                contact.Details.Gender.Code = element.gender;
 
-                    if (secondResult.ElementAt(j).gender == "M")
-                        contact.Details.Gender.Display = "Masculino";
-                    else if (secondResult.ElementAt(j).gender == "F")
-                        contact.Details.Gender.Display = "Feminino";
+                if (element.gender == "M")
+                    contact.Details.Gender.Display = "Masculino";
+                else if (element.gender == "F")
+                    contact.Details.Gender.Display = "Feminino";
 
-                    //Name
-                    contact.Details.Name = new List<Hl7.Fhir.Model.HumanName>();
-                    Hl7.Fhir.Model.HumanName cName = new Hl7.Fhir.Model.HumanName();
-                    cName.Given = new List<Hl7.Fhir.Model.FhirString>() { secondResult.ElementAt(j).name };
-                    contact.Details.Name.Add(cName);
+                //Name
+                contact.Details.Name = new List<Hl7.Fhir.Model.HumanName>();
+                Hl7.Fhir.Model.HumanName cName = new Hl7.Fhir.Model.HumanName();
+                cName.Given = new List<Hl7.Fhir.Model.FhirString>() { element.name };
+                contact.Details.Name.Add(cName);
 
-                    //MaritalStatus
-                    contact.Details.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
-                    contact.Details.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
-                    Hl7.Fhir.Model.Coding marStatus = new Hl7.Fhir.Model.Coding();
-                    marStatus.Code = secondResult.ElementAt(j).maritalStatus;
+                //MaritalStatus
+                contact.Details.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
+                contact.Details.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
+                Hl7.Fhir.Model.Coding marStatus = new Hl7.Fhir.Model.Coding();
+                marStatus.Code = element.maritalStatus;
 
-                    if (secondResult.ElementAt(j).maritalStatus == "ca")
-                        marStatus.Display = "Casado";
-                    else if (secondResult.ElementAt(j).maritalStatus == "so")
-                        marStatus.Display = "Solteiro";
-                    else if (secondResult.ElementAt(j).maritalStatus == "div")
-                        marStatus.Display = "Divorciado";
-                    else if (secondResult.ElementAt(j).maritalStatus == "vi")
-                        marStatus.Display = "Viúvo";
-                    else if (secondResult.ElementAt(j).maritalStatus == "oth")
-                        marStatus.Display = "Outro";
+                if (element.maritalStatus == "ca")
+                    marStatus.Display = "Casado";
+                else if (element.maritalStatus == "so")
+                    marStatus.Display = "Solteiro";
+                else if (element.maritalStatus == "div")
+                    marStatus.Display = "Divorciado";
+                else if (element.maritalStatus == "vi")
+                    marStatus.Display = "Viúvo";
+                else if (element.maritalStatus == "oth")
+                    marStatus.Display = "Outro";
 
-                    contact.Details.MaritalStatus.Coding.Add(marStatus);
+                contact.Details.MaritalStatus.Coding.Add(marStatus);
 
-                    //Telecom
-                    contact.Details.Telecom = new List<Hl7.Fhir.Model.Contact>();
-                    Hl7.Fhir.Model.Contact telecom = new Hl7.Fhir.Model.Contact();
-                    telecom.Value = secondResult.ElementAt(j).telecom.ToString();
-                    telecom.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
-                    contact.Details.Telecom.Add(telecom);
+                //Telecom
+                contact.Details.Telecom = new List<Hl7.Fhir.Model.Contact>();
+                Hl7.Fhir.Model.Contact telecom = new Hl7.Fhir.Model.Contact();
+                telecom.Value = element.telecom.ToString();
+                telecom.System = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Contact.ContactSystem>(Hl7.Fhir.Model.Contact.ContactSystem.Phone);
+                contact.Details.Telecom.Add(telecom);
 
-                    //Relationship
-                    contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>();
-                    Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
-                    relationship.Coding = new List<Hl7.Fhir.Model.Coding>();
-                    Hl7.Fhir.Model.Coding relText = new Hl7.Fhir.Model.Coding();
-                    relText.Code = sqlresult.ElementAt(i).relationship;
-                    relationship.Coding.Add(relText);
-                    contact.Relationship.Add(relationship);
+                //Relationship
+                /*contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>();
+                Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
+                relationship.Coding = new List<Hl7.Fhir.Model.Coding>();
+                Hl7.Fhir.Model.Coding relText = new Hl7.Fhir.Model.Coding();
+                relText.Code = sqlresult.ElementAt(i).relationship;
+                relationship.Coding.Add(relText);
+                contact.Relationship.Add(relationship);*/
 
-                    list.Add(contact);
-                }
-
-                
+                list.Add(contact);
+                   
             }
+
             return list;
         }
 
@@ -425,21 +411,23 @@ namespace MvcApplication1.Models
             query1 += ";";
             
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res = gE.g_doente.SqlQuery(query1, l.ToArray());
+            int n = res.Count();
 
-            if (res.Count() > 1)
+            if (n > 1)
             {
-                return generateFeed(res, res.Count(), pageNum, itemNum);
+                return generateFeed(res, n, pageNum, itemNum);
             }
-            else if (res.Count() == 1)
+            else if (n == 1)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + res.First().t_doente + " and doente=" + res.First().doente + ";");
+                g_doente elem = res.First();
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + elem.t_doente + " and doente=" + elem.doente + ";");
                 MvcApplication1.Patient remaining;
                 if (rem.Count() != 0)
                     remaining = rem.First();
                 else
                     remaining = null;
 
-                return patientParser(res.First(), remaining);
+                return patientParser(elem, remaining);
             }
             else
             {
@@ -506,24 +494,25 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"<content type=""text/xml"">");
 
 
-            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (res.Count() > (itemNum * pageNum))
+                if (count > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = res.Count();
+                    min = count;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + res.ElementAt(j).t_doente + " and doente=" + res.ElementAt(j).doente + ";");
+                    g_doente elem = res.ElementAt(j);
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + elem.t_doente + " and doente=" + elem.doente + ";");
                     MvcApplication1.Patient remaining;
                     if (rem.Count() != 0)
                         remaining = rem.First();
                     else
                         remaining = null;
 
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).t_doente));
-                    feed.Append(patientParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.t_doente));
+                    feed.Append(patientParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
