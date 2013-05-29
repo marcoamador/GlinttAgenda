@@ -16,6 +16,7 @@ namespace MvcApplication1.Models
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
             { "_id", new List<string>(){"n_cons"} }, 
             { "identifier", new List<string>(){"n_cons"} },
+            { "indentifier_service", new List<string>(){"cod_serv"} },
             { "state", new List<string>() {"flag_estado"} },
             { "subject", new List<string>() {"doente"} },
             { "responsible", new List<string>() {"medico"} },
@@ -57,7 +58,22 @@ namespace MvcApplication1.Models
             //Id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id = c.n_cons;
-            v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+            idt.Label = "id";
+            
+
+            //tipo de consulta
+            Hl7.Fhir.Model.Identifier idt2 = null;
+            g_serv asd = gle.Database.SqlQuery<g_serv>("Select * from g_serv where cod_serv = ?",new List<object>(){c.cod_serv}.ToArray()).FirstOrDefault();
+            if(asd != null)
+            {
+                idt2 = new Hl7.Fhir.Model.Identifier();
+                idt2.Id = asd.descr_serv;
+                idt2.Label = "service";
+            }
+            if(idt2 == null)
+                v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+            else
+                v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt, idt2 };
             
             //State
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
