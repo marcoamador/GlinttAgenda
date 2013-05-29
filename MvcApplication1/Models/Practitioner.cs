@@ -522,6 +522,7 @@ namespace MvcApplication1.Models
         {
 
             Object[] key = { id };
+            int telecomIndex = 0;
             List<Object> l = new List<Object>();
             System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=?", key);
             if (sqlresult.Count() != 0)
@@ -531,10 +532,8 @@ namespace MvcApplication1.Models
                 int j = 0;
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (Practitioner.ParamToDic.ContainsKey(querykeys))
-                    {
-
-                        
+                    if (Practitioner.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("identifier")))
+                    {                      
 
                         foreach (string conver in Practitioner.ParamToDic[querykeys])
                         {
@@ -546,7 +545,14 @@ namespace MvcApplication1.Models
                                     query1 += " , ";
                                 }
                                 query1 += conver + "= ?";
-                                l.Add(p.QueryString[querykeys]);
+
+                                if (querykeys.Equals("telecom"))
+                                {
+                                    l.Add(p.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                    telecomIndex += 1;
+                                }
+                                else
+                                    l.Add(p.QueryString[querykeys]);
                                 j++;
                             }
                         }
