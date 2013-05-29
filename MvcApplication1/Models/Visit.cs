@@ -300,6 +300,28 @@ namespace MvcApplication1.Models
 
         public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res, int count, int pageNum, int itemNum, string access)
         {
+            int newCount = count;
+            List<g_cons_marc> validResources = new List<g_cons_marc>();
+            List<MvcApplication1.visit> validRemaining = new List<visit>();
+            for (int ind = 0; ind < count; ind++)
+            {
+                g_cons_marc elem = res.ElementAt(ind);
+                MvcApplication1.visit rem = localDataById(elem.n_cons);
+                String visit = visitParser(elem, rem, access);
+                if(visit == null){
+                    newCount--;
+                    continue;
+                }
+                validResources.Add(elem);
+                validRemaining.Add(rem);
+            }
+
+            if (newCount == 0)
+                return null;
+            else if (newCount == 1)
+                return visitParser(validResources.First(), validRemaining.First(), access);
+
+
             StringBuilder feed = new StringBuilder();
             feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
             feed.AppendFormat(@"<title>g-patient search page {0}</title>", pageNum.ToString());
@@ -310,17 +332,17 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(newCount - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
 
-            if (Math.Ceiling((decimal)count / itemNum) <= 1)
+            if (Math.Ceiling((decimal)newCount / itemNum) <= 1)
                 last = 1;
             else
-                last = (int)Math.Ceiling((decimal)count / itemNum);
+                last = (int)Math.Ceiling((decimal)newCount / itemNum);
 
-            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
+            if (Math.Ceiling((decimal)newCount - (pageNum * itemNum) / itemNum) >= pageNum)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
@@ -348,18 +370,19 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Visit"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (count > 0 && count > itemNum * (pageNum - 1))
+            if (newCount > 0 && newCount > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (count > (itemNum * pageNum))
+                if (newCount > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = count;
+                    min = newCount;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    g_cons_marc elem = res.ElementAt(j);
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_cons));
-                    feed.Append(visitParser(elem, localDataById(elem.n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    g_cons_marc elemV = validResources.ElementAt(j);
+                    MvcApplication1.visit remV = validRemaining.ElementAt(j);
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elemV.n_cons));
+                    feed.Append(visitParser(elemV, remV, access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
@@ -372,6 +395,28 @@ namespace MvcApplication1.Models
 
         public string generateFeed(IEnumerable<g_cons_marc> res, int count, int pageNum, int itemNum, string access)
         {
+            int newCount = count;
+            List<g_cons_marc> validResources = new List<g_cons_marc>();
+            List<MvcApplication1.visit> validRemaining = new List<visit>();
+            for (int ind = 0; ind < count; ind++)
+            {
+                g_cons_marc elem = res.ElementAt(ind);
+                MvcApplication1.visit rem = localDataById(elem.n_cons);
+                String visit = visitParser(elem, rem, access);
+                if (visit == null)
+                {
+                    newCount--;
+                    continue;
+                }
+                validResources.Add(elem);
+                validRemaining.Add(rem);
+            }
+
+            if (newCount == 0)
+                return null;
+            else if (newCount == 1)
+                return visitParser(validResources.First(), validRemaining.First(), access);
+
             StringBuilder feed = new StringBuilder();
             feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
             feed.AppendFormat(@"<title>g-patient search page {0}</title>", pageNum.ToString());
@@ -382,17 +427,17 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(newCount - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
 
-            if (Math.Ceiling((decimal)count / itemNum) <= 1)
+            if (Math.Ceiling((decimal)newCount / itemNum) <= 1)
                 last = 1;
             else
-                last = (int)Math.Ceiling((decimal)count / itemNum);
+                last = (int)Math.Ceiling((decimal)newCount / itemNum);
 
-            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
+            if (Math.Ceiling((decimal)newCount - (pageNum * itemNum) / itemNum) >= pageNum)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
@@ -420,18 +465,19 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Visit"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (count > 0 && count > itemNum * (pageNum - 1))
+            if (newCount > 0 && newCount > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (count > (itemNum * pageNum))
+                if (newCount > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = count;
+                    min = newCount;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    g_cons_marc elem = res.ElementAt(j);
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_cons));
-                    feed.Append(visitParser(elem, localDataById(elem.n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    g_cons_marc elemV = validResources.ElementAt(j);
+                    MvcApplication1.visit remV = validRemaining.ElementAt(j);
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elemV.n_cons));
+                    feed.Append(visitParser(elemV, remV, access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
