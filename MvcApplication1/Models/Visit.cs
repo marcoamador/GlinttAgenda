@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Text;
+using System.Reflection;
 
 namespace MvcApplication1.Models
 {
@@ -87,7 +88,7 @@ namespace MvcApplication1.Models
  
             //Indication
             v.Indication = new Hl7.Fhir.Model.ResourceReference();
-            v.Indication.Display = new Hl7.Fhir.Model.FhirString(c.observ_cons.ToString());
+            v.Indication.Display = new Hl7.Fhir.Model.FhirString(c.observ_cons);
 
             //Length
             DateTime result;
@@ -182,9 +183,11 @@ namespace MvcApplication1.Models
                 itemNum = int.Parse(v.QueryString["_count"]);
 
             int glinttkeys = 0;
+            
             string query1 = "Select * from g_cons_marc where ";
             foreach (string querykeys in v.QueryString.Keys)
             {
+                int j = 0;
                 if (Visit.ParamToDic.ContainsKey(querykeys))
                 {
                     glinttkeys++;
@@ -192,7 +195,7 @@ namespace MvcApplication1.Models
                     {
                         query1 += " and ";
                     }
-                    int j = 0;
+                   
                     foreach (string conver in Visit.ParamToDic[querykeys])
                     {
 
@@ -203,7 +206,12 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
-                            query1 += conver + "=" + "?";
+                            if (querykeys == "period-before")
+                                query1 += conver + "<" + "?";
+                            else if (querykeys == "period-after")
+                                query1 += conver + ">" + "?";
+                            else
+                                query1 += conver + "=" + "?";
 
                             l.Add(v.QueryString[querykeys]);
                             j++;
@@ -213,7 +221,6 @@ namespace MvcApplication1.Models
                 }
 
             }
-
             query1 += ";";
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = null;
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res2 = null;
@@ -443,12 +450,11 @@ namespace MvcApplication1.Models
             {
 
                 String query1 = "update g_cons_marc set ";
+                int j = 0;
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (Visit.ParamToDic.ContainsKey(querykeys) || !querykeys.Equals("_id"))
-                    {
-
-                        int j = 0;
+                    if (Visit.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("identifier") && !querykeys.Equals("period-before") && !querykeys.Equals("period-after")))
+                    {                    
 
                         foreach (string conver in Visit.ParamToDic[querykeys])
                         {
@@ -468,11 +474,48 @@ namespace MvcApplication1.Models
 
                 }
 
-                query1 += " where n_cons = " + id + " ;";
+                if (j != 0)
+                {
+                    query1 += " where n_cons = " + id + " ;";
+                    ge.Database.ExecuteSqlCommand(query1, l.ToArray());
+                    ge.SaveChanges();
+                }
 
-                ge.Database.ExecuteSqlCommand(query1, l.ToArray());
-                ge.SaveChanges();
-                return visitParser(byId(id), localDataById(id),access);
+                MvcApplication1.Visit visit = new MvcApplication1.Visit();
+                PropertyInfo[] proptinfo = visit.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                List<string> collumns = new List<string>();
+
+                foreach (PropertyInfo pi in proptinfo)
+                {
+                    collumns.Add(pi.Name);
+                }
+
+                string query2 = "update Visit set ";
+                List<object> l2 = new List<object>();
+                bool bbb = false;
+
+                foreach (string querykeys in p.QueryString.Keys)
+                {
+                    if (collumns.Contains(querykeys))
+                    {
+                        if (bbb)
+                            query2 += ",";
+                        query2 += querykeys + " = ? ";
+                        l2.Add(p.QueryString[querykeys]);
+                        bbb = true;
+                    }
+
+                }
+
+                if (bbb)
+                {
+                    query2 += " where id = ?";
+                    l2.Add(id);
+                    gle.Database.ExecuteSqlCommand(query2, l2.ToArray());
+                    gle.SaveChanges();
+                }
+
+                return "ok";
 
             }
 
