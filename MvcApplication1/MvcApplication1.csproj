@@ -153,6 +153,9 @@
     <Compile Include="Controllers\VisitController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Country.cs">
+      <DependentUpon>glinttLocalModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="glinttLocalModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -215,7 +215,8 @@ namespace MvcApplication1.Models
             }
 
             query1 += ";";
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res;
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = null;
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res2 = null;
 
             if (glinttkeys > 0)
                 res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
@@ -248,30 +249,30 @@ namespace MvcApplication1.Models
                {
                    MvcApplication1.Visit vis = secondResult.ElementAt(j);
                    if (j > 0)
-                       query3 += "or n_cons = ?";
+                       query3 += " or n_cons = ?";
                    l3.Add(vis.id);
                }
                query3 += ";";
-               System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res2 = ge.g_cons_marc.SqlQuery(query3, l3.ToArray());
+               res2 = ge.g_cons_marc.SqlQuery(query3, l3.ToArray());
                n = res2.Count();
-
-               res = (System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc>) res.Concat(res2);
            }
 
-           if (res.Count() > 1)
+           IEnumerable<g_cons_marc> res3 = res.Concat(res2).Distinct();
+
+           if (res3.Count() > 1)
            {
-               return generateFeed(res, res.Count(), pageNum, itemNum, tokenaccess);
+               return generateFeed(res3, res3.Count(), pageNum, itemNum, tokenaccess);
            }
-           else if (res.Count() == 1)
+           else if (res3.Count() == 1)
            {
-               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> toParse = gle.Visit.SqlQuery("Select * from Visit where id=" + res.First().n_cons + ";");
+               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> toParse = gle.Visit.SqlQuery("Select * from Visit where id=" + res3.First().n_cons + ";");
                MvcApplication1.Visit remaining;
                if (toParse.Count() != 0)
                    remaining = toParse.First();
                else
                    remaining = null;
 
-               return visitParser(res.First(), remaining, tokenaccess);
+               return visitParser(res3.First(), remaining, tokenaccess);
            }
            else
            {
@@ -350,6 +351,81 @@ namespace MvcApplication1.Models
             feed.Append(@"</feed>");
             return feed.ToString();
         }
+
+
+        public string generateFeed(IEnumerable<g_cons_marc> res, int count, int pageNum, int itemNum, string access)
+        {
+            StringBuilder feed = new StringBuilder();
+            feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"" xmlns:gd=""http://schemas.google.com/g/2005"">");
+            feed.AppendFormat(@"<title>g-patient search page {0}</title>", pageNum.ToString());
+            DateTime now = DateTime.Now;
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(now)).ToString());
+            Guid feedId;
+            feedId = Guid.NewGuid();
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
+            int next = 0, prev = 0, last = 0;
+
+            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+                next = pageNum;
+            else
+                next = pageNum + 1;
+
+            if (Math.Ceiling((decimal)count / itemNum) <= 1)
+                last = 1;
+            else
+                last = (int)Math.Ceiling((decimal)count / itemNum);
+
+            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
+                prev = pageNum;
+            else
+                prev = pageNum - 1;
+
+            String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "visit";
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
+            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
+            if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + prev.ToString()));
+            if (!(url.Remove(url.Length - 1) + next.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + next.ToString()));
+            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + last.ToString()));
+
+            feed.AppendLine(@"<entry>");
+            feed.AppendLine(@"<title>Search Results</title>");
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
+            Guid entryId = Guid.NewGuid();
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
+            DateTime entryTime = DateTime.Now;
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
+            feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
+            feed.AppendLine(@"<author>");
+            feed.AppendLine(@"<name>g-patient</name>");
+            feed.AppendLine(@"</author>");
+            feed.AppendLine(@"<category term=""Visit"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+            feed.AppendLine(@"<content type=""text/xml"">");
+            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            {
+                int min = 0;
+                if (res.Count() > (itemNum * pageNum))
+                    min = (itemNum * pageNum);
+                else
+                    min = res.Count();
+                for (int j = (itemNum * (pageNum - 1)); j < min; j++)
+                {
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
+                    feed.Append(visitParser(res.ElementAt(j), localDataById(res.ElementAt(j).n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                }
+            }
+            feed.AppendLine(@"</content>");
+            feed.AppendLine(@"</entry>");
+
+            feed.Append(@"</feed>");
+            return feed.ToString();
+        }
+
+
+
+
 
         public String update(HttpRequestBase p, String id,string access)
         {
