@@ -18,17 +18,17 @@ namespace MvcApplication1.Controllers
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (id == access || access == "0")
             {
-                glinttLocalEntities gle = new glinttLocalEntities();
+                glinttlocalEntities gle = new glinttlocalEntities();
                 string[] doenteid = id.Split('_');
                 List<object> l = new List<object>() { doenteid[0], doenteid[1]  };
-                System.Data.Entity.Infrastructure.DbSqlQuery<Notifications> notif = gle.Notifications.SqlQuery("select * from Notifications where t_doente = ? and idDoente = ?", l.ToArray());
+                System.Data.Entity.Infrastructure.DbSqlQuery<notifications> notif = gle.notifications.SqlQuery("select * from Notifications where t_doente = ? and idDoente = ?", l.ToArray());
 
-                List<Notifications> res = new List<Notifications>();
+                List<notifications> res = new List<notifications>();
 
                 if (notif != null)
                 {
 
-                    foreach (Notifications n in notif)
+                    foreach (notifications n in notif)
                     {
                         res.Add(n);
                     }
@@ -50,15 +50,15 @@ namespace MvcApplication1.Controllers
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
-                Notifications n = new Notifications();
+                notifications n = new notifications();
                 string[] s = Request.QueryString["userid"].Split('_');
                 n.t_doente = s[0];
                 n.idDoente = s[1];
                 n.seen = 0;
                 n.timestamp = DateTime.Now;
                 n.text = Request.QueryString["text"];
-                glinttLocalEntities gle = new glinttLocalEntities();
-                gle.Notifications.Add(n);
+                glinttlocalEntities gle = new glinttlocalEntities();
+                gle.notifications.Add(n);
                 gle.SaveChanges();
             }
             Response.StatusCode = 403;
@@ -70,8 +70,8 @@ namespace MvcApplication1.Controllers
             Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-            glinttLocalEntities gle = new glinttLocalEntities();
-            Notifications n = gle.Notifications.Find(Request.QueryString["notificationid"]);
+            glinttlocalEntities gle = new glinttlocalEntities();
+            notifications n = gle.notifications.Find(Request.QueryString["notificationid"]);
             if (n != null)
             {
                 if (n.t_doente + "_" + n.idDoente == access || access == "0")

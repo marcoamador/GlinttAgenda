@@ -12,12 +12,12 @@ namespace MvcApplication1.Controllers
     public class PatientController : Controller
     {
         glinttEntities gE;
-        glinttLocalEntities glE;
+        glinttlocalEntities glE;
         protected override void Initialize(RequestContext rc)
         {
             base.Initialize(rc); 
             gE = new glinttEntities();
-            glE = new glinttLocalEntities();
+            glE = new glinttlocalEntities();
         }
 
         public ActionResult Index(String id)

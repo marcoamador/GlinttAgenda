@@ -37,12 +37,12 @@ namespace MvcApplication1.Controllers
 
             glinttEntities e = new glinttEntities();
 
-            glinttLocalEntities gle = new glinttLocalEntities();
-            OauthClients oc = new OauthClients();
-            oc.clientID = (gle.OauthClients.Count() + 1);
+            glinttlocalEntities gle = new glinttlocalEntities();
+            oauthclients oc = new oauthclients();
+            oc.clientID = (gle.oauthclients.Count() + 1);
             oc.clientSecret = generateRandomSequence(16);
             oc.responseUri = response_uri;
-            gle.OauthClients.Add(oc);
+            gle.oauthclients.Add(oc);
             gle.SaveChanges();
             
 
@@ -73,10 +73,10 @@ namespace MvcApplication1.Controllers
             string email = Request.QueryString["email"];
             string password = Request.QueryString["password"];
             
-            glinttLocalEntities gle = new glinttLocalEntities();
+            glinttlocalEntities gle = new glinttlocalEntities();
             glinttEntities ge = new glinttEntities();
 
-            OauthClients c =  gle.OauthClients.Find(Convert.ToInt32(clientid));
+            oauthclients c =  gle.oauthclients.Find(Convert.ToInt32(clientid));
             if (c != null)
             {
                 if (c.clientSecret == clientsecret)
@@ -89,7 +89,7 @@ namespace MvcApplication1.Controllers
                     if (doentequery != null)
                     {
                         List<Object> l1 = new List<object>() { doentequery.doente, doentequery.t_doente };
-                        Patient patientquery = gle.Patient.SqlQuery("select * from Patient where doente = ? and t_doente = ?", l1.ToArray()).FirstOrDefault();
+                        patient patientquery = gle.patient.SqlQuery("select * from Patient where doente = ? and t_doente = ?", l1.ToArray()).FirstOrDefault();
                         if (patientquery != null)
                         {
                             if (patientquery.password == password) //normal user login
@@ -99,7 +99,7 @@ namespace MvcApplication1.Controllers
                                 string tokenstring = generateRandomSequence(32);
 
                                 List<object> lt = new List<object>(){patientquery.doente,patientquery.t_doente, c.clientID};
-                                Accesstokens t = gle.Accesstokens.SqlQuery("select * from Accesstokens where userid = ? and t_doente = ? and clientid = ?", lt.ToArray()).FirstOrDefault();
+                                accesstokens t = gle.accesstokens.SqlQuery("select * from Accesstokens where userid = ? and t_doente = ? and clientid = ?", lt.ToArray()).FirstOrDefault();
                                 if (t != null)
                                 {
                                     if (!Common.isTokenOutOfDate(t.Timestamp))
@@ -116,7 +116,7 @@ namespace MvcApplication1.Controllers
                                 }
                                 else
                                 {
-                                    Accesstokens ac = new Accesstokens();
+                                    accesstokens ac = new accesstokens();
                                     ac.clientid = c.clientID;
                                     ac.userid = patientquery.doente;
                                     ac.t_doente = patientquery.t_doente;
@@ -124,7 +124,7 @@ namespace MvcApplication1.Controllers
                                     ac.Token = tokenstring;
                                     ac.isAdmin = 0;
 
-                                    gle.Accesstokens.Add(ac);
+                                    gle.accesstokens.Add(ac);
                                 }
                                 
                                 
@@ -146,14 +146,14 @@ namespace MvcApplication1.Controllers
                         if (practitionerquery != null)
                         {
                             List<Object> l3 = new List<object>() { practitionerquery.n_mecan };
-                            Practitioner practitionerquery1 = gle.Practitioner.SqlQuery("select * from Practitioner where if = ?").FirstOrDefault();
+                            practitioner practitionerquery1 = gle.practitioner.SqlQuery("select * from Practitioner where if = ?").FirstOrDefault();
 
                             if (practitionerquery1.password == password) //admin login
                             {
                                 string tokenstring = generateRandomSequence(32);
 
                                 List<object> lt = new List<object>() { practitionerquery.n_mecan, 1, c.clientID };
-                                Accesstokens t = gle.Accesstokens.SqlQuery("select * from Accesstokens where userid = ? and isAdmin = ? and clientid = ? ", lt.ToArray()).FirstOrDefault();
+                                accesstokens t = gle.accesstokens.SqlQuery("select * from Accesstokens where userid = ? and isAdmin = ? and clientid = ? ", lt.ToArray()).FirstOrDefault();
 
                                 if (t != null)
                                 {
@@ -171,13 +171,13 @@ namespace MvcApplication1.Controllers
                                 }
                                 else
                                 {
-                                    Accesstokens ac = new Accesstokens();
+                                    accesstokens ac = new accesstokens();
 
                                     ac.Token = tokenstring;
                                     ac.Timestamp = DateTime.Now;
                                     ac.isAdmin = 1;
                                     ac.clientid = Convert.ToInt32(practitionerquery.n_mecan);
-                                    gle.Accesstokens.Add(ac);
+                                    gle.accesstokens.Add(ac);
 
                                 }
                                 gle.SaveChanges();

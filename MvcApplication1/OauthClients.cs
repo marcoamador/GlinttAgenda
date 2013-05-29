@@ -12,7 +12,7 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class OauthClients
+    public partial class oauthclients
     {
         public int clientID { get; set; }
         public string clientSecret { get; set; }

@@ -12,7 +12,7 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Accesstokens
+    public partial class accesstokens
     {
         public int idAccesstokens { get; set; }
         public string Token { get; set; }

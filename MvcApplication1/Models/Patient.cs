@@ -36,17 +36,17 @@ namespace MvcApplication1.Models
         };
 
         glinttEntities gE;
-        glinttLocalEntities glE;
+        glinttlocalEntities glE;
 
         public Patient()
         {
             gE = new glinttEntities();
-            glE = new glinttLocalEntities();
+            glE = new glinttlocalEntities();
         }
 
 
         //Faltam dados da base de dados local
-        public String patientParser(g_doente patient, MvcApplication1.Patient remain)
+        public String patientParser(g_doente patient, MvcApplication1.patient remain)
         {
             Hl7.Fhir.Model.Patient p = new Hl7.Fhir.Model.Patient();
 
@@ -213,7 +213,8 @@ namespace MvcApplication1.Models
 
         public string getCountry(string cod_pais) {
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<Country> sqlresult = glE.Country.SqlQuery("Select * from Country where cod_pais=" + cod_pais + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<country> sqlresult = glE.country.SqlQuery("Select * from Country where cod_pais=" + cod_pais + ";");
+            
             if (sqlresult.Count() == 0)
             {
                 return null;
@@ -224,7 +225,8 @@ namespace MvcApplication1.Models
         public List<Hl7.Fhir.Model.Patient.ContactComponent> getContacts(string doente, string t_doente)
         {
             List<Hl7.Fhir.Model.Patient.ContactComponent> list = new List<Hl7.Fhir.Model.Patient.ContactComponent>();
-            System.Data.Entity.Infrastructure.DbSqlQuery<Contact> sqlresult = glE.Contact.SqlQuery("Select Contact.* from ContactPatient, Contact where ContactPatient.t_doente=" + t_doente + " and ContactPatient.doente= " + doente + " and ContactPatient.id = Contact.id ;");
+            System.Data.Entity.Infrastructure.DbSqlQuery<contact> sqlresult = glE.contact.SqlQuery("Select Contact.* from ContactPatient, Contact where ContactPatient.t_doente=" + t_doente + " and ContactPatient.doente= " + doente + " and ContactPatient.id = Contact.id ;");
+
             if (sqlresult.Count() == 0)
             {
                 return null;
@@ -234,9 +236,9 @@ namespace MvcApplication1.Models
 
             for (int i = 0; i < n; i++)
             {
-                MvcApplication1.Contact element = sqlresult.ElementAt(i);
+                MvcApplication1.contact element = sqlresult.ElementAt(i);
                 Hl7.Fhir.Model.Patient.ContactComponent contact = new Hl7.Fhir.Model.Patient.ContactComponent();
-                contact.Details = new Hl7.Fhir.Model.Demographics();
+                contact.Details = new Hl7.Fhir.Model.Demographics();              
                     
                 //Address
                 contact.Details.Address = new List<Hl7.Fhir.Model.Address>();
@@ -317,8 +319,8 @@ namespace MvcApplication1.Models
             }
             g_doente patient = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> secondResult = glE.Patient.SqlQuery("Select * from Patient where t_doente="+ id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
-            MvcApplication1.Patient remaining;
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente="+ id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
+            MvcApplication1.patient remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
             else
@@ -419,9 +421,11 @@ namespace MvcApplication1.Models
             }
             else if (n == 1)
             {
+
                 g_doente elem = res.First();
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + elem.t_doente + " and doente=" + elem.doente + ";");
-                MvcApplication1.Patient remaining;
+                
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> rem = glE.patient.SqlQuery("Select * from Patient where t_doente=" + res.First().t_doente + " and doente=" + res.First().doente + ";");
+                MvcApplication1.patient remaining;
                 if (rem.Count() != 0)
                     remaining = rem.First();
                 else
@@ -504,8 +508,9 @@ namespace MvcApplication1.Models
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
                     g_doente elem = res.ElementAt(j);
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> rem = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + elem.t_doente + " and doente=" + elem.doente + ";");
-                    MvcApplication1.Patient remaining;
+                    
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> rem = glE.patient.SqlQuery("Select * from Patient where t_doente=" + res.ElementAt(j).t_doente + " and doente=" + res.ElementAt(j).doente + ";");
+                    MvcApplication1.patient remaining;
                     if (rem.Count() != 0)
                         remaining = rem.First();
                     else
@@ -586,7 +591,7 @@ namespace MvcApplication1.Models
                 }
                 
                 List<Object> newList = new List<Object>();
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Patient> secondResult = glE.Patient.SqlQuery("Select * from Patient where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
                 if (secondResult.Count() != 0)
                 {
                     String query2 = "update Patient set ";

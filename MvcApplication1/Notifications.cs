@@ -12,7 +12,7 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Notifications
+    public partial class notifications
     {
         public int idNotifications { get; set; }
         public string idDoente { get; set; }

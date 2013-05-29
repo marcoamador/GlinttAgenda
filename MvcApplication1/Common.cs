@@ -75,9 +75,9 @@ namespace MvcApplication1
 
         public static string getPrivileges (string accesstoken)
         {
-            glinttLocalEntities g = new glinttLocalEntities();
+            glinttlocalEntities g = new glinttlocalEntities();
             List<object> l = new List<object>() { accesstoken };
-            Accesstokens oc = g.Accesstokens.SqlQuery("select * from Accesstokens where Token = ?", l.ToArray()).FirstOrDefault();
+            accesstokens oc = g.accesstokens.SqlQuery("select * from Accesstokens where Token = ?", l.ToArray()).FirstOrDefault();
 
             if (oc != null)
             {
@@ -93,7 +93,7 @@ namespace MvcApplication1
                         return oc.t_doente + "_" + oc.userid;
                     }
                 }
-                g.Accesstokens.Remove(oc);
+                g.accesstokens.Remove(oc);
                 g.SaveChanges();
             }
             return "-1";

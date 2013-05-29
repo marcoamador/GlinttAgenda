@@ -12,7 +12,7 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Practitioner
+    public partial class practitioner
     {
         public int n_mecan { get; set; }
         public string gender { get; set; }

@@ -4,23 +4,23 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="glinttLocalModelStoreContainer">
-          <EntitySet Name="Accesstokens" EntityType="glinttLocalModel.Store.Accesstokens" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Contact" EntityType="glinttLocalModel.Store.Contact" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="ContactPatient" EntityType="glinttLocalModel.Store.ContactPatient" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Country" EntityType="glinttLocalModel.Store.Country" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Language" EntityType="glinttLocalModel.Store.Language" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="LanguageContact" EntityType="glinttLocalModel.Store.LanguageContact" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.Store.LanguagePatient" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.Store.LanguagePractitioner" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Notifications" EntityType="glinttLocalModel.Store.Notifications" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="OauthClients" EntityType="glinttLocalModel.Store.OauthClients" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Patient" EntityType="glinttLocalModel.Store.Patient" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Store.Practitioner" store:Type="Tables" Schema="glinttLocal" />
-          <EntitySet Name="Visit" EntityType="glinttLocalModel.Store.Visit" store:Type="Tables" Schema="glinttLocal" />
+    <Schema Namespace="glinttlocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="glinttlocalModelStoreContainer">
+          <EntitySet Name="accesstokens" EntityType="glinttlocalModel.Store.accesstokens" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="contact" EntityType="glinttlocalModel.Store.contact" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="contactpatient" EntityType="glinttlocalModel.Store.contactpatient" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="country" EntityType="glinttlocalModel.Store.country" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="language" EntityType="glinttlocalModel.Store.language" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="languagecontact" EntityType="glinttlocalModel.Store.languagecontact" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="languagepatient" EntityType="glinttlocalModel.Store.languagepatient" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="languagepractitioner" EntityType="glinttlocalModel.Store.languagepractitioner" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="notifications" EntityType="glinttlocalModel.Store.notifications" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="oauthclients" EntityType="glinttlocalModel.Store.oauthclients" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="patient" EntityType="glinttlocalModel.Store.patient" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="practitioner" EntityType="glinttlocalModel.Store.practitioner" store:Type="Tables" Schema="glinttlocal" />
+          <EntitySet Name="visit" EntityType="glinttlocalModel.Store.visit" store:Type="Tables" Schema="glinttlocal" />
         </EntityContainer>
-        <EntityType Name="Accesstokens">
+        <EntityType Name="accesstokens">
           <Key>
             <PropertyRef Name="idAccesstokens" />
           </Key>
@@ -32,7 +32,7 @@
           <Property Name="userid" Type="varchar" Nullable="false" MaxLength="45" />
           <Property Name="t_doente" Type="varchar" MaxLength="45" />
         </EntityType>
-        <EntityType Name="Contact">
+        <EntityType Name="contact">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -45,7 +45,7 @@
           <Property Name="address" Type="varchar" MaxLength="255" />
           <Property Name="maritalStatus" Type="varchar" MaxLength="255" />
         </EntityType>
-        <EntityType Name="ContactPatient">
+        <EntityType Name="contactpatient">
           <Key>
             <PropertyRef Name="idContactPatient" />
           </Key>
@@ -55,14 +55,14 @@
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="relationship" Type="varchar" MaxLength="45" />
         </EntityType>
-        <EntityType Name="Country">
+        <EntityType Name="country">
           <Key>
             <PropertyRef Name="cod_pais" />
           </Key>
           <Property Name="cod_pais" Type="int" Nullable="false" />
           <Property Name="pais" Type="varchar" MaxLength="45" />
         </EntityType>
-        <EntityType Name="Language">
+        <EntityType Name="language">
           <Key>
             <PropertyRef Name="language" />
           </Key>
@@ -71,14 +71,14 @@
           <Property Name="proficiencyLevel" Type="varchar" MaxLength="255" />
           <Property Name="preference" Type="bool" />
         </EntityType>
-        <EntityType Name="LanguageContact">
+        <EntityType Name="languagecontact">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="language" Type="varchar" MaxLength="255" />
         </EntityType>
-        <EntityType Name="LanguagePatient">
+        <EntityType Name="languagepatient">
           <Key>
             <PropertyRef Name="idLanguagePatient" />
           </Key>
@@ -87,7 +87,7 @@
           <Property Name="idLanguagePatient" Type="varchar" Nullable="false" MaxLength="45" />
           <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="45" />
         </EntityType>
-        <EntityType Name="LanguagePractitioner">
+        <EntityType Name="languagepractitioner">
           <Key>
             <PropertyRef Name="idLanguagePractitioner" />
           </Key>
@@ -95,7 +95,7 @@
           <Property Name="language" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="idLanguagePractitioner" Type="varchar" Nullable="false" MaxLength="45" />
         </EntityType>
-        <EntityType Name="Notifications">
+        <EntityType Name="notifications">
           <Key>
             <PropertyRef Name="idNotifications" />
           </Key>
@@ -107,7 +107,7 @@
           <Property Name="seen" Type="tinyint" Nullable="false" />
           <Property Name="seentimestamp" Type="datetime" />
         </EntityType>
-        <EntityType Name="OauthClients">
+        <EntityType Name="oauthclients">
           <Key>
             <PropertyRef Name="clientID" />
           </Key>
@@ -115,7 +115,7 @@
           <Property Name="clientSecret" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="responseUri" Type="varchar" Nullable="false" MaxLength="255" />
         </EntityType>
-        <EntityType Name="Patient">
+        <EntityType Name="patient">
           <Key>
             <PropertyRef Name="doente" />
             <PropertyRef Name="t_doente" />
@@ -126,7 +126,7 @@
           <Property Name="password" Type="varchar" MaxLength="255" />
           <Property Name="deceasedDate" Type="datetime" />
         </EntityType>
-        <EntityType Name="Practitioner">
+        <EntityType Name="practitioner">
           <Key>
             <PropertyRef Name="n_mecan" />
           </Key>
@@ -141,7 +141,7 @@
           <Property Name="specialty" Type="varchar" MaxLength="45" />
           <Property Name="periodEnd" Type="datetime" />
         </EntityType>
-        <EntityType Name="Visit">
+        <EntityType Name="visit">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -156,35 +156,35 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="glinttLocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="glinttLocalEntities" p1:LazyLoadingEnabled="true">
-          <EntitySet Name="Accesstokens" EntityType="glinttLocalModel.Accesstokens" />
-          <EntitySet Name="Contact" EntityType="glinttLocalModel.Contact" />
-          <EntitySet Name="ContactPatient" EntityType="glinttLocalModel.ContactPatient" />
-          <EntitySet Name="Language" EntityType="glinttLocalModel.Language" />
-          <EntitySet Name="LanguageContact" EntityType="glinttLocalModel.LanguageContact" />
-          <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.LanguagePatient" />
-          <EntitySet Name="LanguagePractitioner" EntityType="glinttLocalModel.LanguagePractitioner" />
-          <EntitySet Name="Notifications" EntityType="glinttLocalModel.Notifications" />
-          <EntitySet Name="OauthClients" EntityType="glinttLocalModel.OauthClients" />
-          <EntitySet Name="Patient" EntityType="glinttLocalModel.Patient" />
-          <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Practitioner" />
-          <EntitySet Name="Visit" EntityType="glinttLocalModel.Visit" />
-          <EntitySet Name="Country" EntityType="glinttLocalModel.Country" />
+      <Schema Namespace="glinttlocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="glinttlocalEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="accesstokens" EntityType="glinttlocalModel.accesstokens" />
+          <EntitySet Name="contact" EntityType="glinttlocalModel.contact" />
+          <EntitySet Name="contactpatient" EntityType="glinttlocalModel.contactpatient" />
+          <EntitySet Name="country" EntityType="glinttlocalModel.country" />
+          <EntitySet Name="language" EntityType="glinttlocalModel.language" />
+          <EntitySet Name="languagecontact" EntityType="glinttlocalModel.languagecontact" />
+          <EntitySet Name="languagepatient" EntityType="glinttlocalModel.languagepatient" />
+          <EntitySet Name="languagepractitioner" EntityType="glinttlocalModel.languagepractitioner" />
+          <EntitySet Name="notifications" EntityType="glinttlocalModel.notifications" />
+          <EntitySet Name="oauthclients" EntityType="glinttlocalModel.oauthclients" />
+          <EntitySet Name="patient" EntityType="glinttlocalModel.patient" />
+          <EntitySet Name="practitioner" EntityType="glinttlocalModel.practitioner" />
+          <EntitySet Name="visit" EntityType="glinttlocalModel.visit" />
         </EntityContainer>
-        <EntityType Name="Accesstokens">
+        <EntityType Name="accesstokens">
           <Key>
             <PropertyRef Name="idAccesstokens" />
           </Key>
           <Property Name="idAccesstokens" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="Token" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
           <Property Name="clientid" Type="Int32" Nullable="false" />
           <Property Name="isAdmin" Type="SByte" Nullable="false" />
           <Property Name="userid" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="Contact">
+        <EntityType Name="contact">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -197,7 +197,7 @@
           <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="maritalStatus" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="ContactPatient">
+        <EntityType Name="contactpatient">
           <Key>
             <PropertyRef Name="idContactPatient" />
           </Key>
@@ -207,7 +207,14 @@
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="relationship" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="Language">
+        <EntityType Name="country">
+          <Key>
+            <PropertyRef Name="cod_pais" />
+          </Key>
+          <Property Name="cod_pais" Type="Int32" Nullable="false" />
+          <Property Name="pais" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="language">
           <Key>
             <PropertyRef Name="language1" />
           </Key>
@@ -216,14 +223,14 @@
           <Property Name="proficiencyLevel" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="preference" Type="Boolean" />
         </EntityType>
-        <EntityType Name="LanguageContact">
+        <EntityType Name="languagecontact">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="language" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="LanguagePatient">
+        <EntityType Name="languagepatient">
           <Key>
             <PropertyRef Name="idLanguagePatient" />
           </Key>
@@ -232,7 +239,7 @@
           <Property Name="idLanguagePatient" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="LanguagePractitioner">
+        <EntityType Name="languagepractitioner">
           <Key>
             <PropertyRef Name="idLanguagePractitioner" />
           </Key>
@@ -240,19 +247,19 @@
           <Property Name="language" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="idLanguagePractitioner" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="Notifications">
+        <EntityType Name="notifications">
           <Key>
             <PropertyRef Name="idNotifications" />
           </Key>
           <Property Name="idNotifications" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="idDoente" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
-          <Property Name="timestamp" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="timestamp" Type="DateTime" Nullable="false" />
           <Property Name="text" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="seen" Type="SByte" Nullable="false" />
-          <Property Name="seentimestamp" Type="DateTime" Precision="0" />
+          <Property Name="seentimestamp" Type="DateTime" />
         </EntityType>
-        <EntityType Name="OauthClients">
+        <EntityType Name="oauthclients">
           <Key>
             <PropertyRef Name="clientID" />
           </Key>
@@ -260,7 +267,7 @@
           <Property Name="clientSecret" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="responseUri" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
         </EntityType>
-        <EntityType Name="Patient">
+        <EntityType Name="patient">
           <Key>
             <PropertyRef Name="doente" />
             <PropertyRef Name="t_doente" />
@@ -269,51 +276,44 @@
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="false" />
           <Property Name="active" Type="Boolean" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="deceasedDate" Type="DateTime" Precision="0" />
+          <Property Name="deceasedDate" Type="DateTime" />
         </EntityType>
-        <EntityType Name="Practitioner">
+        <EntityType Name="practitioner">
           <Key>
             <PropertyRef Name="n_mecan" />
           </Key>
           <Property Name="n_mecan" Type="Int32" Nullable="false" />
-          <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
+          <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
           <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceased" Type="Boolean" />
           <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="maritalStatus" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="periodStart" Type="DateTime" Precision="0" />
+          <Property Name="periodStart" Type="DateTime" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="specialty" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
-          <Property Name="periodEnd" Type="DateTime" Precision="0" />
+          <Property Name="periodEnd" Type="DateTime" />
         </EntityType>
-        <EntityType Name="Visit">
+        <EntityType Name="visit">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="setting" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="periodEnd" Type="DateTime" Precision="0" />
+          <Property Name="periodEnd" Type="DateTime" />
           <Property Name="id_contact" Type="Int32" />
           <Property Name="admitter" Type="Int32" />
           <Property Name="bed" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="discharger" Type="Int32" />
-        </EntityType>
-        <EntityType Name="Country">
-          <Key>
-            <PropertyRef Name="cod_pais" />
-          </Key>
-          <Property Type="Int32" Name="cod_pais" Nullable="false" />
-          <Property Type="String" Name="pais" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="glinttLocalModelStoreContainer" CdmEntityContainer="glinttLocalEntities">
-          <EntitySetMapping Name="Accesstokens">
-            <EntityTypeMapping TypeName="glinttLocalModel.Accesstokens">
-              <MappingFragment StoreEntitySet="Accesstokens">
+        <EntityContainerMapping StorageEntityContainer="glinttlocalModelStoreContainer" CdmEntityContainer="glinttlocalEntities">
+          <EntitySetMapping Name="accesstokens">
+            <EntityTypeMapping TypeName="glinttlocalModel.accesstokens">
+              <MappingFragment StoreEntitySet="accesstokens">
                 <ScalarProperty Name="idAccesstokens" ColumnName="idAccesstokens" />
                 <ScalarProperty Name="Token" ColumnName="Token" />
                 <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
@@ -324,9 +324,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Contact">
-            <EntityTypeMapping TypeName="glinttLocalModel.Contact">
-              <MappingFragment StoreEntitySet="Contact">
+          <EntitySetMapping Name="contact">
+            <EntityTypeMapping TypeName="glinttlocalModel.contact">
+              <MappingFragment StoreEntitySet="contact">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="telecom" ColumnName="telecom" />
@@ -338,9 +338,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ContactPatient">
-            <EntityTypeMapping TypeName="glinttLocalModel.ContactPatient">
-              <MappingFragment StoreEntitySet="ContactPatient">
+          <EntitySetMapping Name="contactpatient">
+            <EntityTypeMapping TypeName="glinttlocalModel.contactpatient">
+              <MappingFragment StoreEntitySet="contactpatient">
                 <ScalarProperty Name="idContactPatient" ColumnName="idContactPatient" />
                 <ScalarProperty Name="doente" ColumnName="doente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
@@ -349,9 +349,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Language">
-            <EntityTypeMapping TypeName="glinttLocalModel.Language">
-              <MappingFragment StoreEntitySet="Language">
+          <EntitySetMapping Name="country">
+            <EntityTypeMapping TypeName="glinttlocalModel.country">
+              <MappingFragment StoreEntitySet="country">
+                <ScalarProperty Name="cod_pais" ColumnName="cod_pais" />
+                <ScalarProperty Name="pais" ColumnName="pais" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="language">
+            <EntityTypeMapping TypeName="glinttlocalModel.language">
+              <MappingFragment StoreEntitySet="language">
                 <ScalarProperty Name="language1" ColumnName="language" />
                 <ScalarProperty Name="mode" ColumnName="mode" />
                 <ScalarProperty Name="proficiencyLevel" ColumnName="proficiencyLevel" />
@@ -359,17 +367,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LanguageContact">
-            <EntityTypeMapping TypeName="glinttLocalModel.LanguageContact">
-              <MappingFragment StoreEntitySet="LanguageContact">
+          <EntitySetMapping Name="languagecontact">
+            <EntityTypeMapping TypeName="glinttlocalModel.languagecontact">
+              <MappingFragment StoreEntitySet="languagecontact">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="language" ColumnName="language" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LanguagePatient">
-            <EntityTypeMapping TypeName="glinttLocalModel.LanguagePatient">
-              <MappingFragment StoreEntitySet="LanguagePatient">
+          <EntitySetMapping Name="languagepatient">
+            <EntityTypeMapping TypeName="glinttlocalModel.languagepatient">
+              <MappingFragment StoreEntitySet="languagepatient">
                 <ScalarProperty Name="doente" ColumnName="doente" />
                 <ScalarProperty Name="language" ColumnName="language" />
                 <ScalarProperty Name="idLanguagePatient" ColumnName="idLanguagePatient" />
@@ -377,18 +385,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LanguagePractitioner">
-            <EntityTypeMapping TypeName="glinttLocalModel.LanguagePractitioner">
-              <MappingFragment StoreEntitySet="LanguagePractitioner">
+          <EntitySetMapping Name="languagepractitioner">
+            <EntityTypeMapping TypeName="glinttlocalModel.languagepractitioner">
+              <MappingFragment StoreEntitySet="languagepractitioner">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="language" ColumnName="language" />
                 <ScalarProperty Name="idLanguagePractitioner" ColumnName="idLanguagePractitioner" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Notifications">
-            <EntityTypeMapping TypeName="glinttLocalModel.Notifications">
-              <MappingFragment StoreEntitySet="Notifications">
+          <EntitySetMapping Name="notifications">
+            <EntityTypeMapping TypeName="glinttlocalModel.notifications">
+              <MappingFragment StoreEntitySet="notifications">
                 <ScalarProperty Name="idNotifications" ColumnName="idNotifications" />
                 <ScalarProperty Name="idDoente" ColumnName="idDoente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
@@ -399,18 +407,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OauthClients">
-            <EntityTypeMapping TypeName="glinttLocalModel.OauthClients">
-              <MappingFragment StoreEntitySet="OauthClients">
+          <EntitySetMapping Name="oauthclients">
+            <EntityTypeMapping TypeName="glinttlocalModel.oauthclients">
+              <MappingFragment StoreEntitySet="oauthclients">
                 <ScalarProperty Name="clientID" ColumnName="clientID" />
                 <ScalarProperty Name="clientSecret" ColumnName="clientSecret" />
                 <ScalarProperty Name="responseUri" ColumnName="responseUri" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Patient">
-            <EntityTypeMapping TypeName="glinttLocalModel.Patient">
-              <MappingFragment StoreEntitySet="Patient">
+          <EntitySetMapping Name="patient">
+            <EntityTypeMapping TypeName="glinttlocalModel.patient">
+              <MappingFragment StoreEntitySet="patient">
                 <ScalarProperty Name="doente" ColumnName="doente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
                 <ScalarProperty Name="active" ColumnName="active" />
@@ -419,9 +427,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Practitioner">
-            <EntityTypeMapping TypeName="glinttLocalModel.Practitioner">
-              <MappingFragment StoreEntitySet="Practitioner">
+          <EntitySetMapping Name="practitioner">
+            <EntityTypeMapping TypeName="glinttlocalModel.practitioner">
+              <MappingFragment StoreEntitySet="practitioner">
                 <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="birthDate" ColumnName="birthDate" />
@@ -435,9 +443,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Visit">
-            <EntityTypeMapping TypeName="glinttLocalModel.Visit">
-              <MappingFragment StoreEntitySet="Visit">
+          <EntitySetMapping Name="visit">
+            <EntityTypeMapping TypeName="glinttlocalModel.visit">
+              <MappingFragment StoreEntitySet="visit">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="setting" ColumnName="setting" />
                 <ScalarProperty Name="periodEnd" ColumnName="periodEnd" />
@@ -445,14 +453,6 @@
                 <ScalarProperty Name="admitter" ColumnName="admitter" />
                 <ScalarProperty Name="bed" ColumnName="bed" />
                 <ScalarProperty Name="discharger" ColumnName="discharger" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Country">
-            <EntityTypeMapping TypeName="glinttLocalModel.Country">
-              <MappingFragment StoreEntitySet="Country">
-                <ScalarProperty Name="pais" ColumnName="pais" />
-                <ScalarProperty Name="cod_pais" ColumnName="cod_pais" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

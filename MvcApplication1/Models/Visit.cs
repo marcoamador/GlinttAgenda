@@ -10,7 +10,7 @@ namespace MvcApplication1.Models
     public class Visit
     {
         glinttEntities ge;
-        glinttLocalEntities gle;
+        glinttlocalEntities gle;
 
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
@@ -32,12 +32,12 @@ namespace MvcApplication1.Models
         public Visit()
         {
             ge = new glinttEntities();
-            gle = new glinttLocalEntities();
+            gle = new glinttlocalEntities();
         }
 
         //RESOURCE REFERENCES->SUBJECT, RESPONSIBLE, FULFILLS, CONTACT, INDICATION 
 
-        public string visitParser(g_cons_marc c, MvcApplication1.Visit remain, string access)
+        public string visitParser(g_cons_marc c, MvcApplication1.visit remain, string access)
         {
 
             if (access != "0")
@@ -248,13 +248,13 @@ namespace MvcApplication1.Models
             query2 += ";";
 
            if (hitit){
-               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> secondResult = gle.Visit.SqlQuery(query2, l2.ToArray());
+               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> secondResult = gle.visit.SqlQuery(query2, l2.ToArray());
                int n = secondResult.Count();
                string query3 = "Select * from g_cons_marc where n_cons = ?";
                List<object> l3 = new List<object>();
                for(int j = 0; j< n ; ++j)
                {
-                   MvcApplication1.Visit vis = secondResult.ElementAt(j);
+                   MvcApplication1.visit vis = secondResult.ElementAt(j);
                    if (j > 0)
                        query3 += " or n_cons = ?";
                    l3.Add(vis.id);
@@ -279,8 +279,8 @@ namespace MvcApplication1.Models
            }
            else if (res3.Count() == 1)
            {
-               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> toParse = gle.Visit.SqlQuery("Select * from Visit where id=" + res3.First().n_cons + ";");
-               MvcApplication1.Visit remaining;
+               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> toParse = gle.visit.SqlQuery("Select * from Visit where id=" + res3.First().n_cons + ";");
+               MvcApplication1.visit remaining;
                if (toParse.Count() != 0)
                    remaining = toParse.First();
                else
@@ -481,7 +481,7 @@ namespace MvcApplication1.Models
                     ge.SaveChanges();
                 }
 
-                MvcApplication1.Visit visit = new MvcApplication1.Visit();
+                MvcApplication1.visit visit = new MvcApplication1.visit();
                 PropertyInfo[] proptinfo = visit.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
                 List<string> collumns = new List<string>();
 
@@ -552,9 +552,9 @@ namespace MvcApplication1.Models
         
  */
 
-        public MvcApplication1.Visit localDataById(String id)
+        public MvcApplication1.visit localDataById(String id)
         {
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> sqlresult = gle.Visit.SqlQuery("Select * from Visit where id=" + id + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> sqlresult = gle.visit.SqlQuery("Select * from Visit where id=" + id + ";");
             if (sqlresult.Count() == 0)
             {
                 return null;

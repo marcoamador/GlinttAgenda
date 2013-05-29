@@ -13,8 +13,8 @@ namespace MvcApplication1.Controllers
 {
 	public class VisitController : Controller
 	{
-		glinttEntities gE;
-		glinttLocalEntities glE;
+		glinttEntities gE;  
+		glinttlocalEntities glE;
 
 		
 
@@ -22,7 +22,7 @@ namespace MvcApplication1.Controllers
 		{
 			base.Initialize(rc);
 			gE = new glinttEntities();
-			glE = new glinttLocalEntities();
+			glE = new glinttlocalEntities();
 		}
 
 		public ActionResult Index(String id)
@@ -39,7 +39,7 @@ namespace MvcApplication1.Controllers
 
 				MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 				g_cons_marc r = v.byId(id);
-				MvcApplication1.Visit rV = v.localDataById(id);
+				MvcApplication1.visit rV = v.localDataById(id);
 				string access = Common.getPrivileges(Request.QueryString["accessToken"]);
 
 				if (access == "-1")
