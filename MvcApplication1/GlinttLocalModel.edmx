@@ -4,11 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="glinttLocalModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="glinttLocalModelStoreContainer">
           <EntitySet Name="Accesstokens" EntityType="glinttLocalModel.Store.Accesstokens" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Contact" EntityType="glinttLocalModel.Store.Contact" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="ContactPatient" EntityType="glinttLocalModel.Store.ContactPatient" store:Type="Tables" Schema="glinttLocal" />
+          <EntitySet Name="Country" EntityType="glinttLocalModel.Store.Country" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="Language" EntityType="glinttLocalModel.Store.Language" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="LanguageContact" EntityType="glinttLocalModel.Store.LanguageContact" store:Type="Tables" Schema="glinttLocal" />
           <EntitySet Name="LanguagePatient" EntityType="glinttLocalModel.Store.LanguagePatient" store:Type="Tables" Schema="glinttLocal" />
@@ -53,6 +54,13 @@
           <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="relationship" Type="varchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="cod_pais" />
+          </Key>
+          <Property Name="cod_pais" Type="int" Nullable="false" />
+          <Property Name="pais" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="Language">
           <Key>
@@ -127,7 +135,7 @@
           <Property Name="birthDate" Type="varchar" MaxLength="255" />
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
-          <Property Name="maritalStatus" Type="char" MaxLength="1" />
+          <Property Name="maritalStatus" Type="varchar" MaxLength="10" />
           <Property Name="periodStart" Type="datetime" />
           <Property Name="password" Type="varchar" MaxLength="255" />
           <Property Name="specialty" Type="varchar" MaxLength="45" />
@@ -145,8 +153,7 @@
           <Property Name="bed" Type="varchar" MaxLength="45" />
           <Property Name="discharger" Type="int" />
         </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="glinttLocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -163,6 +170,7 @@
           <EntitySet Name="Patient" EntityType="glinttLocalModel.Patient" />
           <EntitySet Name="Practitioner" EntityType="glinttLocalModel.Practitioner" />
           <EntitySet Name="Visit" EntityType="glinttLocalModel.Visit" />
+          <EntitySet Name="Country" EntityType="glinttLocalModel.Country" />
         </EntityContainer>
         <EntityType Name="Accesstokens">
           <Key>
@@ -170,7 +178,7 @@
           </Key>
           <Property Name="idAccesstokens" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="Token" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="Timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="Timestamp" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="clientid" Type="Int32" Nullable="false" />
           <Property Name="isAdmin" Type="SByte" Nullable="false" />
           <Property Name="userid" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
@@ -239,10 +247,10 @@
           <Property Name="idNotifications" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="idDoente" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
-          <Property Name="timestamp" Type="DateTime" Nullable="false" />
+          <Property Name="timestamp" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="text" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="seen" Type="SByte" Nullable="false" />
-          <Property Name="seentimestamp" Type="DateTime" />
+          <Property Name="seentimestamp" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="OauthClients">
           <Key>
@@ -261,22 +269,22 @@
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="12" Unicode="false" FixedLength="false" />
           <Property Name="active" Type="Boolean" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="deceasedDate" Type="DateTime" />
+          <Property Name="deceasedDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="Practitioner">
           <Key>
             <PropertyRef Name="n_mecan" />
           </Key>
           <Property Name="n_mecan" Type="Int32" Nullable="false" />
-          <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
+          <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="true" />
           <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceased" Type="Boolean" />
           <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="maritalStatus" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
-          <Property Name="periodStart" Type="DateTime" />
+          <Property Name="maritalStatus" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="periodStart" Type="DateTime" Precision="0" />
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="specialty" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
-          <Property Name="periodEnd" Type="DateTime" />
+          <Property Name="periodEnd" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="Visit">
           <Key>
@@ -284,11 +292,18 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="setting" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="periodEnd" Type="DateTime" />
+          <Property Name="periodEnd" Type="DateTime" Precision="0" />
           <Property Name="id_contact" Type="Int32" />
           <Property Name="admitter" Type="Int32" />
           <Property Name="bed" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="discharger" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="cod_pais" />
+          </Key>
+          <Property Type="Int32" Name="cod_pais" Nullable="false" />
+          <Property Type="String" Name="pais" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -430,6 +445,14 @@
                 <ScalarProperty Name="admitter" ColumnName="admitter" />
                 <ScalarProperty Name="bed" ColumnName="bed" />
                 <ScalarProperty Name="discharger" ColumnName="discharger" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="glinttLocalModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="pais" ColumnName="pais" />
+                <ScalarProperty Name="cod_pais" ColumnName="cod_pais" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

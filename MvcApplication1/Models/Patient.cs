@@ -133,7 +133,7 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Address address = new Hl7.Fhir.Model.Address();
             address.Use = new Hl7.Fhir.Model.Code<Hl7.Fhir.Model.Address.AddressUse>(Hl7.Fhir.Model.Address.AddressUse.Home);
             address.City = patient.localidade;
-            address.Country = patient.cod_pais; //confirmar
+            address.Country = getCountry(patient.cod_pais); 
             address.Zip = patient.cod_postal;
             address.Line = new List<Hl7.Fhir.Model.FhirString>(){patient.morada};
             dem.Address = new List<Hl7.Fhir.Model.Address>(){address};
@@ -156,6 +156,7 @@ namespace MvcApplication1.Models
             dem.Telecom.Add(contact2);
             dem.Telecom.Add(contact3);
             
+
             //Marital Status
             dem.MaritalStatus = new Hl7.Fhir.Model.CodeableConcept();
             dem.MaritalStatus.Coding = new List<Hl7.Fhir.Model.Coding>();
@@ -176,6 +177,7 @@ namespace MvcApplication1.Models
             dem.MaritalStatus.Coding.Add(marCoding);
 
             p.Details = dem;
+
 
 
             if (remain != null){
@@ -204,6 +206,24 @@ namespace MvcApplication1.Models
             }
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
+        }
+
+        public string getCountry(string cod_pais) {
+
+            string country = null;
+
+            System.Data.Entity.Infrastructure.DbSqlQuery<Country> sqlresult = glE.Country.SqlQuery("Select * from Country where cod_pais=" + cod_pais + ";");
+            
+            if (sqlresult.Count() == 0)
+            {
+                return null;
+            }
+
+            else
+                country = sqlresult.First().ToString();
+
+            return country;
+
         }
 
         public List<Hl7.Fhir.Model.Patient.ContactComponent> getContacts(string doente, string t_doente)
