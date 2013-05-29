@@ -12,7 +12,7 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Contact
+    public partial class contact
     {
         public int id { get; set; }
         public string name { get; set; }

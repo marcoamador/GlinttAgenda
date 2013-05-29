@@ -12,10 +12,9 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class oauthclients
+    public partial class country
     {
-        public int clientID { get; set; }
-        public string clientSecret { get; set; }
-        public string responseUri { get; set; }
+        public int cod_pais { get; set; }
+        public string pais { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace MvcApplication1.Models
     public class Visit
     {
         glinttEntities ge;
-        glinttLocalEntities gle;
+        glinttlocalEntities gle;
 
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
@@ -31,12 +31,12 @@ namespace MvcApplication1.Models
         public Visit()
         {
             ge = new glinttEntities();
-            gle = new glinttLocalEntities();
+            gle = new glinttlocalEntities();
         }
 
         //RESOURCE REFERENCES->SUBJECT, RESPONSIBLE, FULFILLS, CONTACT, INDICATION 
 
-        public string visitParser(g_cons_marc c, MvcApplication1.Visit remain, string access)
+        public string visitParser(g_cons_marc c, MvcApplication1.visit remain, string access)
         {
 
             if (access != "0")
@@ -373,9 +373,9 @@ namespace MvcApplication1.Models
         
  */
 
-        public MvcApplication1.Visit localDataById(String id)
+        public MvcApplication1.visit localDataById(String id)
         {
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> sqlresult = gle.Visit.SqlQuery("Select * from Visit where id=" + id + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> sqlresult = gle.visit.SqlQuery("Select * from Visit where id=" + id + ";");
             if (sqlresult.Count() == 0)
             {
                 return null;

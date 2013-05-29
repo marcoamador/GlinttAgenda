@@ -12,7 +12,7 @@ namespace MvcApplication1
     using System;
     using System.Collections.Generic;
     
-    public partial class Visit
+    public partial class visit
     {
         public int id { get; set; }
         public string setting { get; set; }

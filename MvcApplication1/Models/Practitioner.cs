@@ -21,17 +21,17 @@ namespace MvcApplication1.Models
         };
 
         glinttEntities gE;
-        glinttLocalEntities glE;
+        glinttlocalEntities glE;
 
         public Practitioner()
         {
             gE = new glinttEntities();
-            glE = new glinttLocalEntities();
+            glE = new glinttlocalEntities();
 
         }   
 
 
-        public String practitionerParser(g_pess_hosp_def d, MvcApplication1.Practitioner remain)
+        public String practitionerParser(g_pess_hosp_def d, MvcApplication1.practitioner remain)
         {
             Hl7.Fhir.Model.Practitioner p = new Hl7.Fhir.Model.Practitioner();
             p.Details = new Hl7.Fhir.Model.Demographics();
@@ -191,8 +191,8 @@ namespace MvcApplication1.Models
             }
             g_pess_hosp_def practitioner = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + id + ";");
-            MvcApplication1.Practitioner remaining;
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + id + ";");
+            MvcApplication1.practitioner remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
             else
@@ -290,13 +290,13 @@ namespace MvcApplication1.Models
 
             if (hitit)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery(query2,l.ToArray());
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery(query2,l.ToArray());
                 int n  = secondResult.Count();
                 string query3 = "Select * from g_pess_hosp_def where n_mecan = ?";
                 List<object> l3 = new List<object>();
                 for(int j = 0; j< n ; ++j)
                 {
-                    MvcApplication1.Practitioner p = secondResult.ElementAt(j);
+                    MvcApplication1.practitioner p = secondResult.ElementAt(j);
                     if (j > 0)
                         query3 += "or n_mecan = ?";
                     l3.Add(p.n_mecan);
@@ -316,8 +316,8 @@ namespace MvcApplication1.Models
             }
             else if (res.Count() == 1)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
-                MvcApplication1.Practitioner remaining;
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                MvcApplication1.practitioner remaining;
                 if (secondResult.Count() != 0)
                     remaining = secondResult.First();
                 else
@@ -395,8 +395,8 @@ namespace MvcApplication1.Models
                     min = res.Count();
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
-                    MvcApplication1.Practitioner remaining;
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                    MvcApplication1.practitioner remaining;
                     if (secondResult.Count() != 0)
                         remaining = secondResult.First();
                     else
@@ -459,7 +459,7 @@ namespace MvcApplication1.Models
 
                 //"Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
                 
-                MvcApplication1.Practitioner prac = new MvcApplication1.Practitioner();
+                MvcApplication1.practitioner prac = new MvcApplication1.practitioner();
                 PropertyInfo[] proptinfo = prac.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
                 List<string> collumns = new List<string>();
                 foreach (PropertyInfo pi in proptinfo)

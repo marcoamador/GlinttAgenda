@@ -13,10 +13,10 @@ namespace MvcApplication1
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class glinttLocalEntities : DbContext
+    public partial class glinttlocalEntities : DbContext
     {
-        public glinttLocalEntities()
-            : base("name=glinttLocalEntities")
+        public glinttlocalEntities()
+            : base("name=glinttlocalEntities")
         {
         }
     
@@ -25,18 +25,18 @@ namespace MvcApplication1
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Accesstokens> Accesstokens { get; set; }
-        public DbSet<Contact> Contact { get; set; }
-        public DbSet<ContactPatient> ContactPatient { get; set; }
-        public DbSet<Language> Language { get; set; }
-        public DbSet<LanguageContact> LanguageContact { get; set; }
-        public DbSet<LanguagePatient> LanguagePatient { get; set; }
-        public DbSet<LanguagePractitioner> LanguagePractitioner { get; set; }
-        public DbSet<Notifications> Notifications { get; set; }
-        public DbSet<OauthClients> OauthClients { get; set; }
-        public DbSet<Patient> Patient { get; set; }
-        public DbSet<Practitioner> Practitioner { get; set; }
-        public DbSet<Visit> Visit { get; set; }
-        public DbSet<Country> Country { get; set; }
+        public DbSet<accesstokens> accesstokens { get; set; }
+        public DbSet<contact> contact { get; set; }
+        public DbSet<contactpatient> contactpatient { get; set; }
+        public DbSet<country> country { get; set; }
+        public DbSet<language> language { get; set; }
+        public DbSet<languagecontact> languagecontact { get; set; }
+        public DbSet<languagepatient> languagepatient { get; set; }
+        public DbSet<languagepractitioner> languagepractitioner { get; set; }
+        public DbSet<notifications> notifications { get; set; }
+        public DbSet<oauthclients> oauthclients { get; set; }
+        public DbSet<patient> patient { get; set; }
+        public DbSet<practitioner> practitioner { get; set; }
+        public DbSet<visit> visit { get; set; }
     }
 }
