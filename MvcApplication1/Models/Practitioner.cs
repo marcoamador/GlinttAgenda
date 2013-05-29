@@ -175,10 +175,7 @@ namespace MvcApplication1.Models
                     p.Specialty = new List<Hl7.Fhir.Model.CodeableConcept>() { speciality };
                 }
                 
-           
-
             }
-
           
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(p);
         }
@@ -318,7 +315,6 @@ namespace MvcApplication1.Models
 
                 query3 += ";";
                 res2 = gE.g_pess_hosp_def.SqlQuery(query3, l3.ToArray());
-                n = res2.Count();
                 
             }
 
@@ -330,20 +326,23 @@ namespace MvcApplication1.Models
             else
                 res3 = res.Concat(res2).Distinct();
 
-            if (res3.Count() > 1)
+            int c = res3.Count();
+
+            if (c > 1)
             {
-                return generateFeed(res3, res3.Count(), pageNum, itemNum);
+                return generateFeed(res3, c, pageNum, itemNum);
             }
-            else if (res3.Count() == 1)
+            else if (c == 1)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> thirdResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res3.First().n_mecan + ";");
+                g_pess_hosp_def elem = res3.First();
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> thirdResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + elem.n_mecan + ";");
                 MvcApplication1.practitioner remaining;
                 if (thirdResult.Count() != 0)
                     remaining = thirdResult.First();
                 else
                     remaining = null;
 
-                return practitionerParser(res3.First(), remaining);
+                return practitionerParser(elem, remaining);
             }
             else
             {
@@ -406,24 +405,25 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (res.Count() > (itemNum * pageNum))
+                if (count > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = res.Count();
+                    min = count;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                    g_pess_hosp_def elem = res.ElementAt(j);
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + elem.n_mecan + ";");
                     MvcApplication1.practitioner remaining;
                     if (secondResult.Count() != 0)
                         remaining = secondResult.First();
                     else
                         remaining = null;
 
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
-                    feed.Append(practitionerParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_mecan));
+                    feed.Append(practitionerParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
@@ -487,24 +487,25 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (res.Count() > (itemNum * pageNum))
+                if (count > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = res.Count();
+                    min = count;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                    g_pess_hosp_def elem = res.ElementAt(j);
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + elem.n_mecan + ";");
                     MvcApplication1.practitioner remaining;
                     if (secondResult.Count() != 0)
                         remaining = secondResult.First();
                     else
                         remaining = null;
 
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
-                    feed.Append(practitionerParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_mecan));
+                    feed.Append(practitionerParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
@@ -601,17 +602,12 @@ namespace MvcApplication1.Models
                     glE.SaveChanges();
                 }
 
-
-
-
                 return "ok";
 
             }
 
             return null;
         }
-
-
 
     }
 }

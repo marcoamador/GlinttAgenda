@@ -149,7 +149,6 @@ namespace MvcApplication1.Models
             }
             v.Period = periodo;
 
-
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
         }
 
@@ -272,21 +271,24 @@ namespace MvcApplication1.Models
                res3 = res;
            else
                res3 = res.Concat(res2).Distinct();
+
+           int c = res3.Count();
             
-           if (res3.Count() > 1)
+           if (c > 1)
            {
-               return generateFeed(res3, res3.Count(), pageNum, itemNum, tokenaccess);
+               return generateFeed(res3, c, pageNum, itemNum, tokenaccess);
            }
-           else if (res3.Count() == 1)
+           else if (c == 1)
            {
-               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> toParse = gle.visit.SqlQuery("Select * from Visit where id=" + res3.First().n_cons + ";");
+               g_cons_marc elem = res3.First();
+               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> toParse = gle.visit.SqlQuery("Select * from Visit where id=" + elem.n_cons + ";");
                MvcApplication1.visit remaining;
                if (toParse.Count() != 0)
                    remaining = toParse.First();
                else
                    remaining = null;
 
-               return visitParser(res3.First(), remaining, tokenaccess);
+               return visitParser(elem, remaining, tokenaccess);
            }
            else
            {
@@ -346,17 +348,18 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Visit"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (res.Count() > (itemNum * pageNum))
+                if (count > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = res.Count();
+                    min = count;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
-                    feed.Append(visitParser(res.ElementAt(j), localDataById(res.ElementAt(j).n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    g_cons_marc elem = res.ElementAt(j);
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_cons));
+                    feed.Append(visitParser(elem, localDataById(elem.n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");
@@ -417,17 +420,18 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"</author>");
             feed.AppendLine(@"<category term=""Visit"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
             feed.AppendLine(@"<content type=""text/xml"">");
-            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
-                if (res.Count() > (itemNum * pageNum))
+                if (count > (itemNum * pageNum))
                     min = (itemNum * pageNum);
                 else
-                    min = res.Count();
+                    min = count;
                 for (int j = (itemNum * (pageNum - 1)); j < min; j++)
                 {
-                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_cons));
-                    feed.Append(visitParser(res.ElementAt(j), localDataById(res.ElementAt(j).n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    g_cons_marc elem = res.ElementAt(j);
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_cons));
+                    feed.Append(visitParser(elem, localDataById(elem.n_cons), access).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
                 }
             }
             feed.AppendLine(@"</content>");

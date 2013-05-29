@@ -509,7 +509,7 @@ namespace MvcApplication1.Models
                 {
                     g_doente elem = res.ElementAt(j);
                     
-                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> rem = glE.patient.SqlQuery("Select * from Patient where t_doente=" + res.ElementAt(j).t_doente + " and doente=" + res.ElementAt(j).doente + ";");
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> rem = glE.patient.SqlQuery("Select * from Patient where t_doente=" + elem.t_doente + " and doente=" + elem.doente + ";");
                     MvcApplication1.patient remaining;
                     if (rem.Count() != 0)
                         remaining = rem.First();
