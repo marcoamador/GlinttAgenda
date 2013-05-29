@@ -257,8 +257,15 @@ namespace MvcApplication1.Models
                n = res2.Count();
            }
 
-           IEnumerable<g_cons_marc> res3 = res.Concat(res2).Distinct();
+           IEnumerable<g_cons_marc> res3;
 
+           if (res == null)
+               res3 = res2;
+           else if (res2 == null)
+               res3 = res;
+           else
+               res3 = res.Concat(res2).Distinct();
+            
            if (res3.Count() > 1)
            {
                return generateFeed(res3, res3.Count(), pageNum, itemNum, tokenaccess);

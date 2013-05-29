@@ -21,8 +21,12 @@ namespace MvcApplication1.Models
             {"birthdate-after",new List<string>(){"dt_nasc"}},
             {"gender",new List<string>(){"sexo"}},
             {"name",new List<string>(){"nome"}},
+            {"given", new List<string>() {"nome"}},
+            {"family", new List<string>() {"nome"}},
             {"identifier",new List<string>(){"n_bi", "n_contrib", "cartao_europeu_saude"}},
             {"language",null},
+            {"phonetic",null},
+            {"provider",null},
             {"telecom",new List<string>(){"telef1","telef2"}}
         };
 

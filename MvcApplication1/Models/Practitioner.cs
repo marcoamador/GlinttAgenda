@@ -9,19 +9,21 @@ namespace MvcApplication1.Models
 {
     public class Practitioner
     {
+        glinttEntities gE;
+        glinttLocalEntities glE;
+
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() 
         {
             {"_id", new List<string>() {"n_mecan"}}, 
             {"language", null},
             {"name", new List<string>() {"nome"}},
+            {"family", new List<string>() {"nome"}},
+            {"given", new List<string>() {"nome"}},
             {"organization", null},
             {"identifier", new List<string>(){"n_mecan"}},
             {"phonetic",null},
             {"telecom", new List<string>() {"telef", "email"}}
         };
-
-        glinttEntities gE;
-        glinttLocalEntities glE;
 
         public Practitioner()
         {
@@ -204,6 +206,7 @@ namespace MvcApplication1.Models
         public string search(HttpRequestBase pr)
         {
             int telecomIndex = 0;
+            int glinttkeys = 0;
             List<Object> l = new List<Object>();
             int i = 0;
 
@@ -226,7 +229,7 @@ namespace MvcApplication1.Models
             {
                 if (Practitioner.ParamToDic.ContainsKey(querykeys))
                 {
-
+                    glinttkeys++;
                     if (i != 0)
                     {
                         query1 += " and ";
@@ -264,11 +267,18 @@ namespace MvcApplication1.Models
             }
 
             query1 += ";";
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res = gE.g_pess_hosp_def.SqlQuery(query1, l.ToArray());
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res = null;
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res2 = null;
 
-            string query2 = "Select n_mecan from Practitioner where ";
-            List<object> l2 = new List<object>();
+            if (glinttkeys > 0)
+                res = gE.g_pess_hosp_def.SqlQuery(query1, l.ToArray());
+            else
+                res = null;
+
+            string query2 = "Select * from Practitioner where ";
             bool hitit = false;
+            List<object> l2 = new List<object>();
+
             foreach (string querykeys in pr.QueryString.Keys)
             {
                 if (querykeys == "gender")
@@ -276,6 +286,7 @@ namespace MvcApplication1.Models
                     if (hitit)
                         query2 += " or ";
                     query2 += "gender = ?";
+                    l2.Add(pr.QueryString["gender"]);
                     hitit = true;
                 }
                 else if (querykeys == "address")
@@ -283,14 +294,17 @@ namespace MvcApplication1.Models
                     if(hitit)
                         query2+= " or ";
                     query2 += "address = ?";
+                    l2.Add(pr.QueryString["address"]);
                     hitit = true;
                 }
 
             }
 
+            query2 += ";";
+
             if (hitit)
-            {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery(query2,l.ToArray());
+            {        
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery(query2,l2.ToArray());
                 int n  = secondResult.Count();
                 string query3 = "Select * from g_pess_hosp_def where n_mecan = ?";
                 List<object> l3 = new List<object>();
@@ -298,32 +312,38 @@ namespace MvcApplication1.Models
                 {
                     MvcApplication1.Practitioner p = secondResult.ElementAt(j);
                     if (j > 0)
-                        query3 += "or n_mecan = ?";
+                        query3 += " or n_mecan = ? ";
                     l3.Add(p.n_mecan);
                 }
-                System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res2 = gE.g_pess_hosp_def.SqlQuery(query3, l3.ToArray());
 
+                query3 += ";";
+                res2 = gE.g_pess_hosp_def.SqlQuery(query3, l3.ToArray());
                 n = res2.Count();
-                res = (System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def>)res.Concat(res2);
+                
             }
 
+            IEnumerable<g_pess_hosp_def> res3;
+            if (res == null)
+                res3 = res2;
+            else if (res2 == null)
+                res3 = res;
+            else
+                res3 = res.Concat(res2).Distinct();
 
-
-            
-            if (res.Count() > 1)
+            if (res3.Count() > 1)
             {
-                return generateFeed(res, res.Count(), pageNum, itemNum);
+                return generateFeed(res3, res3.Count(), pageNum, itemNum);
             }
-            else if (res.Count() == 1)
+            else if (res3.Count() == 1)
             {
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> thirdResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res3.First().n_mecan + ";");
                 MvcApplication1.Practitioner remaining;
-                if (secondResult.Count() != 0)
-                    remaining = secondResult.First();
+                if (thirdResult.Count() != 0)
+                    remaining = thirdResult.First();
                 else
                     remaining = null;
 
-                return practitionerParser(res.First(), remaining);
+                return practitionerParser(res3.First(), remaining);
             }
             else
             {
@@ -412,6 +432,91 @@ namespace MvcApplication1.Models
             feed.Append(@"</feed>");
             return feed.ToString();
         }
+
+        public string generateFeed(IEnumerable<g_pess_hosp_def> res, int count, int pageNum, int itemNum)
+        {
+            StringBuilder feed = new StringBuilder();
+            feed.AppendLine(@"<feed xmlns=""http://www.w3.org/2005/Atom"">");
+            feed.AppendLine(@"<title>g-patient feed</title>");
+            DateTime now = DateTime.Now;
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(now)).ToString());
+            Guid feedId;
+            feedId = Guid.NewGuid();
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
+            int next = 0, prev = 0, last = 0;
+
+            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+                next = pageNum;
+            else
+                next = pageNum + 1;
+
+            if (Math.Ceiling((decimal)count / itemNum) <= 1)
+                last = 1;
+            else
+                last = (int)Math.Ceiling((decimal)count / itemNum);
+
+            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
+                prev = pageNum;
+            else
+                prev = pageNum - 1;
+
+            String url = HttpContext.Current.Request.Url.AbsoluteUri;
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
+            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
+            if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + prev.ToString()));
+            if (!(url.Remove(url.Length - 1) + next.ToString()).Equals(url))
+                feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + next.ToString()));
+            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + last.ToString()));
+
+            feed.AppendLine(@"<author>");
+            feed.AppendLine(@"<name>g-patient</name>");
+            feed.AppendLine(@"</author>");
+
+            feed.AppendLine(@"<entry>");
+            feed.AppendLine(@"<title>Search Results</title>");
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
+            Guid entryId = Guid.NewGuid();
+            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
+            DateTime entryTime = DateTime.Now;
+            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
+            feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
+            feed.AppendLine(@"<author>");
+            feed.AppendLine(@"<name>g-patient</name>");
+            feed.AppendLine(@"</author>");
+            feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+            feed.AppendLine(@"<content type=""text/xml"">");
+            if (res.Count() > 0 && res.Count() > itemNum * (pageNum - 1))
+            {
+                int min = 0;
+                if (res.Count() > (itemNum * pageNum))
+                    min = (itemNum * pageNum);
+                else
+                    min = res.Count();
+                for (int j = (itemNum * (pageNum - 1)); j < min; j++)
+                {
+                    System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                    MvcApplication1.Practitioner remaining;
+                    if (secondResult.Count() != 0)
+                        remaining = secondResult.First();
+                    else
+                        remaining = null;
+
+                    feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + res.ElementAt(j).n_mecan));
+                    feed.Append(practitionerParser(res.ElementAt(j), remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                }
+            }
+            feed.AppendLine(@"</content>");
+            feed.AppendLine(@"</entry>");
+
+            feed.Append(@"</feed>");
+            return feed.ToString();
+        }
+
+
+
+
 
         public String update(HttpRequestBase p, String id)
         {
