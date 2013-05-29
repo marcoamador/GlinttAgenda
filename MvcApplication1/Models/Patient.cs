@@ -311,7 +311,13 @@ namespace MvcApplication1.Models
 
         public String byId(string id)
         {
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
+            String[] idSplit = id.Split('_');
+            if (idSplit.Length != 2)
+                return null;
+            if (idSplit.ElementAt(1).Equals(""))
+                return null;
+
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + idSplit.ElementAt(0) + " and doente= " + idSplit.ElementAt(1) + ";");
 
             if (sqlresult.Count() == 0)
             {
@@ -319,7 +325,7 @@ namespace MvcApplication1.Models
             }
             g_doente patient = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente="+ id.Split('_').ElementAt(0) + " and doente= " + id.Split('_').ElementAt(1) + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente=" + idSplit.ElementAt(0) + " and doente= " + idSplit.ElementAt(1) + ";");
             MvcApplication1.patient remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
@@ -352,7 +358,25 @@ namespace MvcApplication1.Models
             {
                 if (Patient.ParamToDic.ContainsKey(querykeys))
                 {
-                
+                    if (querykeys == "_id" || querykeys == "telecom")
+                    {
+                        String[] idSplit = p.QueryString[querykeys].Split('_');
+                        if (idSplit.Length != 2)
+                            return null;
+                        if (idSplit.ElementAt(0).Equals("") || idSplit.ElementAt(1).Equals(""))
+                            return null;
+                    }
+
+                    if (querykeys == "identifier")
+                    {
+                        String[] stringSplit = p.QueryString[querykeys].Split('_');
+                        if (stringSplit.Length != 3)
+                            return null;
+                        if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
+                            return null;
+                    }
+                    
+
                     if (i != 0)
                     {
                         query1 += " and ";
@@ -529,6 +553,12 @@ namespace MvcApplication1.Models
 
         public String update(HttpRequestBase p, String id)
         {
+            String[] idSplit = id.Split('_');
+            if (idSplit.Length != 2)
+                return null;
+            if (idSplit.ElementAt(1).Equals(""))
+                return null;
+            
             int idIndex = 0;
             int telecomIndex = 0;
             List<Object> l = new List<Object>();
@@ -544,6 +574,26 @@ namespace MvcApplication1.Models
                     {
                         if (!Patient.LocalDic.ContainsKey(querykeys))
                         {
+                            if (querykeys == "telecom")
+                            {
+                                String[] telecomSplit = p.QueryString[querykeys].Split('_');
+                                if (telecomSplit.Length != 2)
+                                    return null;
+                                if (telecomSplit.ElementAt(0).Equals("") || telecomSplit.ElementAt(1).Equals(""))
+                                    return null;
+                            }
+
+                            if (querykeys == "identifier")
+                            {
+                                String[] stringSplit = p.QueryString[querykeys].Split('_');
+                                if (stringSplit.Length != 3)
+                                    return null;
+                                if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
+                                    return null;
+                            }
+
+
+
                             int j = 0;
                             countKeysGlintt++;
                             foreach (string conver in Patient.ParamToDic[querykeys])
@@ -560,6 +610,8 @@ namespace MvcApplication1.Models
                                     
                                     if (querykeys.Equals("identifier"))
                                     {
+                                        if (!p.QueryString["identifier"].Contains('_'))
+                                            return null;
                                         l.Add(p.QueryString[querykeys].Split('_').ElementAt(idIndex));
                                         idIndex+=1;
                                     }

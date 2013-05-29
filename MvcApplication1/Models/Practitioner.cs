@@ -249,6 +249,8 @@ namespace MvcApplication1.Models
 
                             if (querykeys.Equals("telecom"))
                             {
+                                if (!pr.QueryString["telecom"].Contains('_'))
+                                    return null; 
                                 l.Add(pr.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
                                 telecomIndex += 1;
                             }
