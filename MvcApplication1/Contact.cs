@@ -22,5 +22,6 @@ namespace MvcApplication1
         public Nullable<bool> deceased { get; set; }
         public string address { get; set; }
         public string maritalStatus { get; set; }
+        public string relationship { get; set; }
     }
 }

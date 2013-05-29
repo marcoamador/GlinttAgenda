@@ -44,6 +44,7 @@
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
           <Property Name="maritalStatus" Type="varchar" MaxLength="255" />
+          <Property Name="relationship" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="contactpatient">
           <Key>
@@ -53,7 +54,6 @@
           <Property Name="doente" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="t_doente" Type="varchar" Nullable="false" MaxLength="5" />
           <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="relationship" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="country">
           <Key>
@@ -196,6 +196,7 @@
           <Property Name="deceased" Type="Boolean" />
           <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="maritalStatus" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Type="String" Name="relationship" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="contactpatient">
           <Key>
@@ -205,7 +206,6 @@
           <Property Name="doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="false" />
           <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="relationship" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="country">
           <Key>
@@ -327,6 +327,7 @@
           <EntitySetMapping Name="contact">
             <EntityTypeMapping TypeName="glinttlocalModel.contact">
               <MappingFragment StoreEntitySet="contact">
+                <ScalarProperty Name="relationship" ColumnName="relationship" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="telecom" ColumnName="telecom" />
@@ -345,7 +346,6 @@
                 <ScalarProperty Name="doente" ColumnName="doente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
                 <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="relationship" ColumnName="relationship" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
