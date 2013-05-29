@@ -14,18 +14,18 @@ namespace MvcApplication1.Models
 
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
             { "_id", new List<string>(){"n_cons"} }, 
-            { "contact", null }, 
-            { "fulfills", null },
-            { "identifier", new List<string>() {"n_cons"} },
-            { "indication", new List<string>() {"observ_cons"} },
-            { "length", new List<string>() {"n-mecan"} },
-            { "period", new List<string>() {"duracao_cons"} },
+            { "identifier", new List<string>(){"n_cons"} },
+            { "state", new List<string>() {"flag_estado"} },
+            { "subject", new List<string>() {"doente"} },
+            { "responsible", new List<string>() {"medico"} },
+            { "length", new List<string>() {"duracao_cons"} },
+            { "period", new List<string>() {"dt_cons"} },
             { "period-before", new List<string>() {"dt_cons"} },
             { "period-after", new List<string>() {"dt_cons"} },
-            { "responsible", new List<string>() {"medico"} },
-            { "setting", null },
-            { "state", new List<string>() {"flag_estado"} },
-            { "subject", new List<string>() {"doente"} }
+            { "indication", new List<string>() {"observ_cons"} },
+            { "location", new List<string>() {"cod_gab"} },
+            { "fulfills", null },
+            { "contact" , null }
         };
 
         public Visit()
@@ -97,9 +97,18 @@ namespace MvcApplication1.Models
                 duracao.Value = new Hl7.Fhir.Model.FhirDecimal(result.Hour*60 + result.Minute);
                 v.Length = duracao;
             }
+
+            //REVER - Não contempla remain.bed
+            v.Location = new List<Hl7.Fhir.Model.Visit.VisitLocationComponent>();
+            Hl7.Fhir.Model.Visit.VisitLocationComponent location = new Hl7.Fhir.Model.Visit.VisitLocationComponent();
+            location.Location = new Hl7.Fhir.Model.ResourceReference();
+            location.Location.Display = new Hl7.Fhir.Model.FhirString(c.cod_gab);
+            location.Period = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
+            v.Location.Add(location);
            
             if (remain != null)
             {
+                //Setting
                 v.Setting = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.Coding sett = new Hl7.Fhir.Model.Coding();
@@ -114,36 +123,30 @@ namespace MvcApplication1.Models
 
                 v.Setting = setting;
 
+                //period-end
                 if(remain.periodEnd != null)
                     periodo.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.periodEnd.ToString()));
 
+                //Admitter
                 v.Admission = new Hl7.Fhir.Model.Visit.VisitAdmissionComponent();
                 v.Admission.Admitter = new Hl7.Fhir.Model.ResourceReference();
                 v.Admission.Admitter.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.admitter)));
                 v.Admission.Admitter.Type = new Hl7.Fhir.Model.Code("Practitioner");
 
-                //REVER 
-                v.Location = new List<Hl7.Fhir.Model.Visit.VisitLocationComponent>();
-                Hl7.Fhir.Model.Visit.VisitLocationComponent location = new Hl7.Fhir.Model.Visit.VisitLocationComponent();
-                location.Location = new Hl7.Fhir.Model.ResourceReference();
-                location.Location.Display = new Hl7.Fhir.Model.FhirString(c.cod_gab + " " + remain.bed);
-                location.Period = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
-                
-                v.Location.Add(location);
-
+                //Discharger
                 v.Discharge = new Hl7.Fhir.Model.Visit.VisitDischargeComponent();
                 v.Discharge.Discharger = new Hl7.Fhir.Model.ResourceReference();
                 v.Discharge.Discharger.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.discharger)));
                 v.Discharge.Discharger.Type = new Hl7.Fhir.Model.Code("Practitioner");
-                
+
+                //Contact
+                String contactURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "contact";
+                v.Contact = new Hl7.Fhir.Model.ResourceReference();
+                v.Contact.Display = "Related Person";
+                v.Contact.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(contactURL + "/" + remain.id_contact)));
+
             }
-
             v.Period = periodo;
-
-            String contactURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "contact";
-            v.Contact = new Hl7.Fhir.Model.ResourceReference();
-            v.Contact.Display = "Related Person";
-            v.Contact.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(contactURL + "/" + remain.id_contact)));
 
 
             return Hl7.Fhir.Serializers.FhirSerializer.SerializeResourceAsXml(v);
@@ -157,7 +160,6 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
-
             return sqlresult.First();
         }
 
@@ -179,13 +181,13 @@ namespace MvcApplication1.Models
             else
                 itemNum = int.Parse(v.QueryString["_count"]);
 
-
+            int glinttkeys = 0;
             string query1 = "Select * from g_cons_marc where ";
             foreach (string querykeys in v.QueryString.Keys)
             {
                 if (Visit.ParamToDic.ContainsKey(querykeys))
                 {
-
+                    glinttkeys++;
                     if (i != 0)
                     {
                         query1 += " and ";
@@ -213,19 +215,70 @@ namespace MvcApplication1.Models
             }
 
             query1 += ";";
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
-            if (res.Count() > 1)
-            {
-                return generateFeed(res, res.Count(), pageNum, itemNum,tokenaccess);
-            }
-            else if (res.Count() == 1)
-            {
-                return visitParser(res.First(), localDataById(res.First().n_cons),tokenaccess);
-            }
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res;
+
+            if (glinttkeys > 0)
+                res = ge.g_cons_marc.SqlQuery(query1, l.ToArray());
             else
+                res = null;
+
+            String query2 = "Select * from Visit where ";
+            bool hitit = false;
+            List<object> l2 = new List<object>();
+
+            foreach (string querykeys in v.QueryString.Keys)
             {
-                return null;
-            }
+                if (querykeys == "setting")
+                {
+                    if (hitit)
+                        query2 += " or ";
+                    query2 += "setting = ?";
+                    l2.Add(v.QueryString["setting"]);
+                    hitit = true;
+                }
+           }
+            query2 += ";";
+
+           if (hitit){
+               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> secondResult = gle.Visit.SqlQuery(query2, l2.ToArray());
+               int n = secondResult.Count();
+               string query3 = "Select * from g_cons_marc where n_cons = ?";
+               List<object> l3 = new List<object>();
+               for(int j = 0; j< n ; ++j)
+               {
+                   MvcApplication1.Visit vis = secondResult.ElementAt(j);
+                   if (j > 0)
+                       query3 += "or n_cons = ?";
+                   l3.Add(vis.id);
+               }
+               query3 += ";";
+               System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res2 = ge.g_cons_marc.SqlQuery(query3, l3.ToArray());
+               n = res2.Count();
+
+               res = (System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc>) res.Concat(res2);
+           }
+
+           if (res.Count() > 1)
+           {
+               return generateFeed(res, res.Count(), pageNum, itemNum, tokenaccess);
+           }
+           else if (res.Count() == 1)
+           {
+               System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Visit> toParse = gle.Visit.SqlQuery("Select * from Visit where id=" + res.First().n_cons + ";");
+               MvcApplication1.Visit remaining;
+               if (toParse.Count() != 0)
+                   remaining = toParse.First();
+               else
+                   remaining = null;
+
+               return visitParser(res.First(), remaining, tokenaccess);
+           }
+           else
+           {
+               return null;
+           }
+
+
         }
 
         public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> res, int count, int pageNum, int itemNum, string access)

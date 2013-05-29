@@ -360,11 +360,13 @@ namespace MvcApplication1.Models
                             {
                                 query1 += " and ";
                             }
-                            
-                            if(querykeys == "birthdate-before")
+
+                            if (querykeys == "birthdate-before")
                                 query1 += conver + "<" + "?";
-                            else if(querykeys == "birthdate-after")
+                            else if (querykeys == "birthdate-after")
                                 query1 += conver + ">" + "?";
+                            else if (querykeys == "name")
+                                query1 += conver + " like " + "%?%";
                             else
                                 query1 += conver + "=" + "?";
 
