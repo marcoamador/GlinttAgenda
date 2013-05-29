@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Text;
+using System.Reflection;
 
 namespace MvcApplication1.Models
 {
@@ -11,11 +12,11 @@ namespace MvcApplication1.Models
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() 
         {
             {"_id", new List<string>() {"n_mecan"}}, 
-            {"address", new List<string>() {"morada"}}, 
-            {"gender", null},
             {"language", null},
             {"name", new List<string>() {"nome"}},
             {"organization", null},
+            {"identifier", new List<string>(){"n_mecan"}},
+            {"phonetic",null},
             {"telecom", new List<string>() {"telef", "email"}}
         };
 
@@ -202,6 +203,7 @@ namespace MvcApplication1.Models
 
         public string search(HttpRequestBase pr)
         {
+            int telecomIndex = 0;
             List<Object> l = new List<Object>();
             int i = 0;
 
@@ -240,9 +242,19 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
-                            query1 += conver + "=" + "?";
+                            if(conver != "nome")
+                                query1 += conver + "=" + "?";
+                            else
+                                query1 += conver + "like" + "%?%";
 
-                            l.Add(pr.QueryString[querykeys]);
+                            if (querykeys.Equals("telecom"))
+                            {
+                                l.Add(pr.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                telecomIndex += 1;
+                            }
+                            else
+                                l.Add(pr.QueryString[querykeys]);
+
                             j++;
                         }
                     }
@@ -253,6 +265,51 @@ namespace MvcApplication1.Models
 
             query1 += ";";
             System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res = gE.g_pess_hosp_def.SqlQuery(query1, l.ToArray());
+
+            string query2 = "Select n_mecan from Practitioner where ";
+            List<object> l2 = new List<object>();
+            bool hitit = false;
+            foreach (string querykeys in pr.QueryString.Keys)
+            {
+                if (querykeys == "gender")
+                {
+                    if (hitit)
+                        query2 += " or ";
+                    query2 += "gender = ?";
+                    hitit = true;
+                }
+                else if (querykeys == "address")
+                {
+                    if(hitit)
+                        query2+= " or ";
+                    query2 += "address = ?";
+                    hitit = true;
+                }
+
+            }
+
+            if (hitit)
+            {
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.Practitioner> secondResult = glE.Practitioner.SqlQuery(query2,l.ToArray());
+                int n  = secondResult.Count();
+                string query3 = "Select * from g_pess_hosp_def where n_mecan = ?";
+                List<object> l3 = new List<object>();
+                for(int j = 0; j< n ; ++j)
+                {
+                    MvcApplication1.Practitioner p = secondResult.ElementAt(j);
+                    if (j > 0)
+                        query3 += "or n_mecan = ?";
+                    l3.Add(p.n_mecan);
+                }
+                System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res2 = gE.g_pess_hosp_def.SqlQuery(query3, l3.ToArray());
+
+                n = res2.Count();
+                res = (System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def>)res.Concat(res2);
+            }
+
+
+
+            
             if (res.Count() > 1)
             {
                 return generateFeed(res, res.Count(), pageNum, itemNum);
@@ -272,6 +329,7 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
+             
         }
 
         public string generateFeed(System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> res, int count, int pageNum, int itemNum)
@@ -357,6 +415,7 @@ namespace MvcApplication1.Models
 
         public String update(HttpRequestBase p, String id)
         {
+
             Object[] key = { id };
             List<Object> l = new List<Object>();
             System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=?", key);
@@ -364,12 +423,13 @@ namespace MvcApplication1.Models
             {
 
                 String query1 = "update g_pess_hosp_def set ";
+                int j = 0;
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (Practitioner.ParamToDic.ContainsKey(querykeys) || !querykeys.Equals("_id"))
+                    if (Practitioner.ParamToDic.ContainsKey(querykeys))
                     {
 
-                        int j = 0;
+                        
 
                         foreach (string conver in Practitioner.ParamToDic[querykeys])
                         {
@@ -380,7 +440,7 @@ namespace MvcApplication1.Models
                                 {
                                     query1 += " , ";
                                 }
-                                query1 += conver + "=" + "?";
+                                query1 += conver + "= ?";
                                 l.Add(p.QueryString[querykeys]);
                                 j++;
                             }
@@ -388,11 +448,52 @@ namespace MvcApplication1.Models
                     }
 
                 }
+                if (j != 0)
+                {
+                    query1 += " where n_mecan = ?";
+                    l.Add(id);
+                    gE.Database.ExecuteSqlCommand(query1, l.ToArray());
+                    gE.SaveChanges();
+                }
 
-                query1 += " where n_mecan = '" + id  + "' ;";
-                gE.Database.ExecuteSqlCommand(query1, l.ToArray());
-                gE.SaveChanges();
-                return query1;
+
+                //"Select * from Practitioner where n_mecan=" + res.First().n_mecan + ";");
+                
+                MvcApplication1.Practitioner prac = new MvcApplication1.Practitioner();
+                PropertyInfo[] proptinfo = prac.GetType().GetProperties(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance);
+                List<string> collumns = new List<string>();
+                foreach (PropertyInfo pi in proptinfo)
+                {
+                    collumns.Add(pi.Name);
+                }
+
+                string query2 = "update Practitioner set ";
+                List<object> l2 = new List<object>();
+                bool bbb = false;
+                foreach (string querykeys in p.QueryString.Keys)
+                {
+                    if (collumns.Contains(querykeys))
+                    {
+                        if (bbb)
+                            query2 += ",";
+                        query2 += querykeys + " = ? ";
+                        l2.Add(p.QueryString[querykeys]);
+                        bbb = true;
+                    }
+                    
+                }
+                if (bbb)
+                {
+                    query2 += " where n_mecan = ?";
+                    l2.Add(id);
+                    glE.Database.ExecuteSqlCommand(query2, l2.ToArray());
+                    glE.SaveChanges();
+                }
+
+
+
+
+                return "ok";
 
             }
 

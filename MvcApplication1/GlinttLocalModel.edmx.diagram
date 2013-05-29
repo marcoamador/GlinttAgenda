@@ -17,6 +17,7 @@
         <EntityTypeShape EntityType="glinttLocalModel.Patient" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttLocalModel.Practitioner" Width="1.5" PointX="4.75" PointY="7.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttLocalModel.Visit" Width="1.5" PointX="6.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="glinttLocalModel.Country" Width="1.5" PointX="2.75" PointY="10.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

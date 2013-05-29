@@ -37,5 +37,6 @@ namespace MvcApplication1
         public DbSet<Patient> Patient { get; set; }
         public DbSet<Practitioner> Practitioner { get; set; }
         public DbSet<Visit> Visit { get; set; }
+        public DbSet<Country> Country { get; set; }
     }
 }
