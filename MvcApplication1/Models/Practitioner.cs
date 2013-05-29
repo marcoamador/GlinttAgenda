@@ -139,13 +139,13 @@ namespace MvcApplication1.Models
                     Hl7.Fhir.Model.Coding pMarStatus = new Hl7.Fhir.Model.Coding();
                     pMarStatus.Code = remain.maritalStatus;
 
-                    if (remain.maritalStatus == "ca")
+                    if (remain.maritalStatus == "cas")
                         pMarStatus.Display = "Casado";
-                    else if (remain.maritalStatus == "so")
+                    else if (remain.maritalStatus == "sol")
                         pMarStatus.Display = "Solteiro";
                     else if (remain.maritalStatus == "div")
                         pMarStatus.Display = "Divorciado";
-                    else if (remain.maritalStatus == "vi")
+                    else if (remain.maritalStatus == "viu")
                         pMarStatus.Display = "Viúvo";
                     else if (remain.maritalStatus == "oth")
                         pMarStatus.Display = "Outro";
@@ -226,6 +226,16 @@ namespace MvcApplication1.Models
             {
                 if (Practitioner.ParamToDic.ContainsKey(querykeys))
                 {
+                    if (querykeys == "telecom")
+                    {
+                        String[] idSplit = pr.QueryString[querykeys].Split('_');
+                        if (idSplit.Length != 2)
+                            return null;
+                        if (idSplit.ElementAt(0).Equals("") || idSplit.ElementAt(1).Equals(""))
+                            return null;
+                    }
+                    
+                    
                     glinttkeys++;
                     if (i != 0)
                     {
@@ -536,7 +546,16 @@ namespace MvcApplication1.Models
                 foreach (string querykeys in p.QueryString.Keys)
                 {
                     if (Practitioner.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("identifier")))
-                    {                      
+                    {
+                        if (querykeys == "telecom")
+                        {
+                            String[] idSplit = p.QueryString[querykeys].Split('_');
+                            if (idSplit.Length != 2)
+                                return null;
+                            if (idSplit.ElementAt(0).Equals("") || idSplit.ElementAt(1).Equals(""))
+                                return null;
+                        }
+
 
                         foreach (string conver in Practitioner.ParamToDic[querykeys])
                         {

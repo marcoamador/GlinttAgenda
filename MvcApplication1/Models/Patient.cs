@@ -27,7 +27,7 @@ namespace MvcApplication1.Models
             {"language",null},
             {"phonetic",null},
             {"provider",null},
-            {"telecom",new List<string>(){"telef1","telef2"}}
+            {"telecom",new List<string>(){"telef1","telef2","e_mail"}}
         };
 
         private static Dictionary<string, List<string>> LocalDic = new Dictionary<string, List<string>>() {
@@ -167,13 +167,13 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Coding marCoding = new Hl7.Fhir.Model.Coding();
             marCoding.Code = patient.estado_civil;
 
-            if (patient.estado_civil == "ca")
+            if (patient.estado_civil == "cas")
                 marCoding.Display = "Casado";
-            else if (patient.estado_civil == "so")
+            else if (patient.estado_civil == "sol")
                 marCoding.Display = "Solteiro";
             else if (patient.estado_civil == "div")
                 marCoding.Display = "Divorciado";
-            else if (patient.estado_civil == "vi")
+            else if (patient.estado_civil == "viu")
                 marCoding.Display = "Viúvo";
             else if (patient.estado_civil == "oth")
                 marCoding.Display = "Outro";
@@ -273,13 +273,13 @@ namespace MvcApplication1.Models
                 Hl7.Fhir.Model.Coding marStatus = new Hl7.Fhir.Model.Coding();
                 marStatus.Code = element.maritalStatus;
 
-                if (element.maritalStatus == "ca")
+                if (element.maritalStatus == "cas")
                     marStatus.Display = "Casado";
-                else if (element.maritalStatus == "so")
+                else if (element.maritalStatus == "sol")
                     marStatus.Display = "Solteiro";
                 else if (element.maritalStatus == "div")
                     marStatus.Display = "Divorciado";
-                else if (element.maritalStatus == "vi")
+                else if (element.maritalStatus == "viu")
                     marStatus.Display = "Viúvo";
                 else if (element.maritalStatus == "oth")
                     marStatus.Display = "Outro";
@@ -294,13 +294,13 @@ namespace MvcApplication1.Models
                 contact.Details.Telecom.Add(telecom);
 
                 //Relationship
-                /*contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>();
+                contact.Relationship = new List<Hl7.Fhir.Model.CodeableConcept>();
                 Hl7.Fhir.Model.CodeableConcept relationship = new Hl7.Fhir.Model.CodeableConcept();
                 relationship.Coding = new List<Hl7.Fhir.Model.Coding>();
                 Hl7.Fhir.Model.Coding relText = new Hl7.Fhir.Model.Coding();
-                relText.Code = sqlresult.ElementAt(i).relationship;
+                relText.Code = element.relationship;
                 relationship.Coding.Add(relText);
-                contact.Relationship.Add(relationship);*/
+                contact.Relationship.Add(relationship);
 
                 list.Add(contact);
                    
@@ -358,7 +358,7 @@ namespace MvcApplication1.Models
             {
                 if (Patient.ParamToDic.ContainsKey(querykeys))
                 {
-                    if (querykeys == "_id" || querykeys == "telecom")
+                    if (querykeys == "_id")
                     {
                         String[] idSplit = p.QueryString[querykeys].Split('_');
                         if (idSplit.Length != 2)
@@ -367,7 +367,7 @@ namespace MvcApplication1.Models
                             return null;
                     }
 
-                    if (querykeys == "identifier")
+                    if (querykeys == "identifier" || querykeys == "telecom")
                     {
                         String[] stringSplit = p.QueryString[querykeys].Split('_');
                         if (stringSplit.Length != 3)
@@ -407,19 +407,19 @@ namespace MvcApplication1.Models
                                 query1 += conver + "=" + "?";
 
 
-                            if (j == 0 && (querykeys == "_id" || querykeys == "telecom"))
+                            if (j == 0 && (querykeys == "_id" || querykeys == "telecom" || querykeys == "identifier"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(0));
                             }
-                            else if (j != 0 && ( querykeys == "_id" || querykeys == "telecom"))
+                            else if (j != 0 && querykeys == "_id")
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
                             }
-                            else if (j == 1 && querykeys == "identifier")
+                            else if (j == 1 && (querykeys == "identifier" || querykeys == "telecom"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
                             }
-                            else if (j == 2 && querykeys == "identifier")
+                            else if (j == 2 && (querykeys == "identifier" || querykeys == "telecom"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(2));
                             }
@@ -574,16 +574,8 @@ namespace MvcApplication1.Models
                     {
                         if (!Patient.LocalDic.ContainsKey(querykeys))
                         {
-                            if (querykeys == "telecom")
-                            {
-                                String[] telecomSplit = p.QueryString[querykeys].Split('_');
-                                if (telecomSplit.Length != 2)
-                                    return null;
-                                if (telecomSplit.ElementAt(0).Equals("") || telecomSplit.ElementAt(1).Equals(""))
-                                    return null;
-                            }
 
-                            if (querykeys == "identifier")
+                            if (querykeys == "identifier" || querykeys == "telecom")
                             {
                                 String[] stringSplit = p.QueryString[querykeys].Split('_');
                                 if (stringSplit.Length != 3)
@@ -591,8 +583,6 @@ namespace MvcApplication1.Models
                                 if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
                                     return null;
                             }
-
-
 
                             int j = 0;
                             countKeysGlintt++;
@@ -610,8 +600,6 @@ namespace MvcApplication1.Models
                                     
                                     if (querykeys.Equals("identifier"))
                                     {
-                                        if (!p.QueryString["identifier"].Contains('_'))
-                                            return null;
                                         l.Add(p.QueryString[querykeys].Split('_').ElementAt(idIndex));
                                         idIndex+=1;
                                     }

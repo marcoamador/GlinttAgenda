@@ -18,6 +18,5 @@ namespace MvcApplication1
         public string doente { get; set; }
         public string t_doente { get; set; }
         public int id { get; set; }
-        public string relationship { get; set; }
     }
 }
