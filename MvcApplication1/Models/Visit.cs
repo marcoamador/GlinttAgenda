@@ -81,7 +81,7 @@ namespace MvcApplication1.Models
             String responsibleURL = appURL;
             if (!responsibleURL.ElementAt(responsibleURL.Length - 1).Equals('/'))
                 responsibleURL += "/";
-            responsibleURL += "contact";
+            responsibleURL += "practitioner";
             v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + c.medico)));
             v.Responsible.Type = new Hl7.Fhir.Model.Code("Practitioner");
 
