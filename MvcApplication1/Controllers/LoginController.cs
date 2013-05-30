@@ -33,7 +33,7 @@ namespace MvcApplication1.Controllers
             //create respective clientID and ClientSecret
             //save responseUri
 
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            //Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
             glinttEntities e = new glinttEntities();
 
@@ -65,7 +65,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult AuthorizeLogin()
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            //Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
             string clientid = Request.QueryString["clientid"];
             string clientsecret = Request.QueryString["clientsecret"];
@@ -197,7 +197,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult isTokenValid()
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
+            //Response.AppendHeader("Access-Control-Allow-Origin", "*");
             if (Common.getPrivileges(Request.QueryString["accesstoken"]) != "-1")
                 return Content("1");
             return Content("0");

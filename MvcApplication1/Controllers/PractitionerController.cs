@@ -23,10 +23,8 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index(String id)
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
-
+            
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-
             if (id == null || id.Equals("") || access == "-1")
             {
                 Response.StatusCode = 404;
@@ -107,16 +105,13 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Search()
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
-
-            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "-1")
             {
                 Response.StatusCode = 404;
                 return null;
             }
-
             MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
             String s = pr.search(Request);
             if (s == null)
@@ -136,8 +131,7 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Update(String id)
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
-
+            
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
