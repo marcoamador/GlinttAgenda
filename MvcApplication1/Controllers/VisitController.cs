@@ -16,8 +16,6 @@ namespace MvcApplication1.Controllers
 		glinttEntities gE;  
 		glinttlocalEntities glE;
 
-		
-
 		protected override void Initialize(RequestContext rc)
 		{
 			base.Initialize(rc);
@@ -27,8 +25,7 @@ namespace MvcApplication1.Controllers
 
 		public ActionResult Index(String id)
 		{
-			Response.AppendHeader("Access-Control-Allow-Origin", "*");
-
+			
 			if (Request.HttpMethod.Equals("GET"))
 			{
 				if (id == null || id.Equals(""))
@@ -78,8 +75,7 @@ namespace MvcApplication1.Controllers
 
 		public ActionResult Search()
 		{
-			Response.AppendHeader("Access-Control-Allow-Origin", "*");
-
+			
 			string access = Common.getPrivileges(Request.QueryString["accessToken"]);
 			MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 
@@ -87,18 +83,15 @@ namespace MvcApplication1.Controllers
 
 			if (s == null)
 			{
-				Response.StatusCode = 403;
+				Response.StatusCode = 404;
 				return null;
 			}
 			return Content(s);
-
-
 		}
 
 		public ActionResult Update(String id)
 		{
-			Response.AppendHeader("Access-Control-Allow-Origin", "*");
-
+			
 			MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 
 			string access = Common.getPrivileges(Request.QueryString["accessToken"]);

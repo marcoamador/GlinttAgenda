@@ -317,7 +317,10 @@ namespace MvcApplication1.Models
             if (idSplit.ElementAt(1).Equals(""))
                 return null;
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + idSplit.ElementAt(0) + " and doente= " + idSplit.ElementAt(1) + ";");
+            List<object> l = new List<object>();
+            l.Add(idSplit.ElementAt(0));
+            l.Add(idSplit.ElementAt(1));
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente= ? and doente= ? ;", l.ToArray());
 
             if (sqlresult.Count() == 0)
             {
@@ -325,7 +328,7 @@ namespace MvcApplication1.Models
             }
             g_doente patient = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente=" + idSplit.ElementAt(0) + " and doente= " + idSplit.ElementAt(1) + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente=? and doente=? ;", l.ToArray());
             MvcApplication1.patient remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
@@ -448,7 +451,7 @@ namespace MvcApplication1.Models
 
                 g_doente elem = res.First();
                 
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> rem = glE.patient.SqlQuery("Select * from Patient where t_doente=" + res.First().t_doente + " and doente=" + res.First().doente + ";");
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> rem = glE.patient.SqlQuery("Select * from Patient where t_doente=" + elem.t_doente + " and doente=" + elem.doente + ";");
                 MvcApplication1.patient remaining;
                 if (rem.Count() != 0)
                     remaining = rem.First();
@@ -566,11 +569,15 @@ namespace MvcApplication1.Models
             int idIndex = 0;
             int telecomIndex = 0;
             List<Object> l = new List<Object>();
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
+            List<Object> firstList = new List<Object>();
+            firstList.Add(id.Split('_').ElementAt(0));
+            firstList.Add(id.Split('_').ElementAt(1));
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> sqlresult = gE.g_doente.SqlQuery("Select * from g_doente where t_doente=? and doente=? ;", firstList.ToArray());
             if (sqlresult.Count() != 0)
             {
                 int countKeysGlintt = 0;
                 int countKeysLocal = 0;
+                int z = 0;
                 String query1 = "update g_doente set ";
                 foreach (string querykeys in p.QueryString.Keys)
                 {
@@ -588,14 +595,14 @@ namespace MvcApplication1.Models
                                     return null;
                             }
 
-                            int j = 0;
+                            
                             countKeysGlintt++;
                             foreach (string conver in Patient.ParamToDic[querykeys])
                             {
 
                                 if (conver != null)
                                 {
-                                    if (j != 0)
+                                    if (z != 0)
                                     {
                                         query1 += " , ";
                                     }
@@ -614,7 +621,7 @@ namespace MvcApplication1.Models
                                     }else
                                         l.Add(p.QueryString[querykeys]);
               
-                                    j++;
+                                    z++;
 
                                     
 
@@ -626,16 +633,17 @@ namespace MvcApplication1.Models
 
                 }
 
-                query1 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
+                query1 += " where t_doente = ? and doente= ? ;";
                 if (countKeysGlintt > 0)
                 {
-                    
+                    l.Add(id.Split('_').ElementAt(0));
+                    l.Add(id.Split('_').ElementAt(1));
                     gE.Database.ExecuteSqlCommand(query1, l.ToArray());
                     gE.SaveChanges();
                 }
                 
                 List<Object> newList = new List<Object>();
-                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente=" + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";");
+                System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.patient> secondResult = glE.patient.SqlQuery("Select * from Patient where t_doente= ? and doente= ? ;", firstList.ToArray());
                 if (secondResult.Count() != 0)
                 {
                     String query2 = "update Patient set ";
@@ -663,10 +671,12 @@ namespace MvcApplication1.Models
                         }
 
                     }
-                    query2 += " where t_doente = " + id.Split('_').ElementAt(0) + " and doente=" + id.Split('_').ElementAt(1) + ";";
+                    query2 += " where t_doente = ? and doente= ? ;";
                     if (countKeysLocal > 0)
                     {
-                        
+                        newList.Add(id.Split('_').ElementAt(0));
+                        newList.Add(id.Split('_').ElementAt(1));
+
                         glE.Database.ExecuteSqlCommand(query2, newList.ToArray());
                         glE.SaveChanges();
                     }

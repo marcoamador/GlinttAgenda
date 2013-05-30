@@ -182,15 +182,15 @@ namespace MvcApplication1.Models
 
         public String byId(string id)
         {
- 
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan='" + id + "';");
+            List<Object> l = new List<Object>() { id };
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=? ;", l.ToArray());
             if (sqlresult.Count() == 0)
             {
                 return null;
             }
             g_pess_hosp_def practitioner = sqlresult.First();
 
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan=" + id + ";");
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.practitioner> secondResult = glE.practitioner.SqlQuery("Select * from Practitioner where n_mecan= ? ;", l.ToArray());
             MvcApplication1.practitioner remaining;
             if (secondResult.Count() != 0)
                 remaining = secondResult.First();
