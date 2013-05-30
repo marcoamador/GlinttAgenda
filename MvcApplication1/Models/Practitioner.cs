@@ -612,7 +612,7 @@ namespace MvcApplication1.Models
                 bool bbb = false;
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (collumns.Contains(querykeys))
+                    if (collumns.Contains(querykeys) && querykeys != "n_mecan")
                     {
                         if (bbb)
                             query2 += ",";

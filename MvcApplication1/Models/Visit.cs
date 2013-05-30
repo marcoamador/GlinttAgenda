@@ -523,9 +523,6 @@ namespace MvcApplication1.Models
         }
 
 
-
-
-
         public String update(HttpRequestBase p, String id,string access)
         {
             Object[] key = { id };
@@ -581,7 +578,7 @@ namespace MvcApplication1.Models
 
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (collumns.Contains(querykeys))
+                    if (collumns.Contains(querykeys) && querykeys != "id")
                     {
                         if (bbb)
                             query2 += ",";
@@ -606,36 +603,6 @@ namespace MvcApplication1.Models
 
             return null;
         }
-
-
-
-
-        /*
-     public List<VisitModel> byPatient (string id) 
-     {
-
-         List<VisitModel> result = new List<VisitModel>();
-         Object[] key = { id };
-         System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where doente=?", key);
-         if (sqlresult.Count() == 0)
-         {
-             return null;
-         }
-    
-         for(int i=0; sqlresult.Count()<i; i++)
-         {
-             g_cons_marc temp = sqlresult.ElementAt(i);
-
-
-             VisitModel final = visitParser(temp);
-             result.Add(temp);
-         }
-         return ;
-  
-
-    }
-        
- */
 
         public MvcApplication1.visit localDataById(String id)
         {
