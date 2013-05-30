@@ -39,7 +39,7 @@ namespace MvcApplication1.Models
 
         public string visitParser(g_cons_marc c, MvcApplication1.visit remain, string access)
         {
-
+            String appURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
             if (access != "0")
             {
                 string [] s = access.Split('_');
@@ -69,14 +69,19 @@ namespace MvcApplication1.Models
             
             //Subject
             v.Subject = new Hl7.Fhir.Model.ResourceReference();
-            String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
-            v.Subject.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(basicURL + "/" + c.t_doente + "_" + c.doente)));
+            String patientURL = appURL;
+            if (!patientURL.ElementAt(patientURL.Length - 1).Equals('/'))
+                patientURL += "/";
+            patientURL += "patient";
+            v.Subject.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(patientURL + "/" + c.t_doente + "_" + c.doente)));
             v.Subject.Type = new Hl7.Fhir.Model.Code("Patient");
 
             //Responsible
             v.Responsible = new Hl7.Fhir.Model.ResourceReference();
-            String responsibleURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
+            String responsibleURL = appURL;
+            if (!responsibleURL.ElementAt(responsibleURL.Length - 1).Equals('/'))
+                responsibleURL += "/";
+            responsibleURL += "contact";
             v.Responsible.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + c.medico)));
             v.Responsible.Type = new Hl7.Fhir.Model.Code("Practitioner");
 
@@ -141,7 +146,11 @@ namespace MvcApplication1.Models
                 v.Discharge.Discharger.Type = new Hl7.Fhir.Model.Code("Practitioner");
 
                 //Contact
-                String contactURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "contact";
+                String contactURL = appURL;
+                if (!contactURL.ElementAt(contactURL.Length - 1).Equals('/'))
+                    contactURL += "/";
+                contactURL += "contact";
+                    
                 v.Contact = new Hl7.Fhir.Model.ResourceReference();
                 v.Contact.Display = "Related Person";
                 v.Contact.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(contactURL + "/" + remain.id_contact)));
