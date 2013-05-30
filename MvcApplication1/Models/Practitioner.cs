@@ -391,14 +391,18 @@ namespace MvcApplication1.Models
                 prev = pageNum - 1;
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
-            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
-            if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
-                feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + prev.ToString()));
-            if (!(url.Remove(url.Length - 1) + next.ToString()).Equals(url))
-                feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + next.ToString()));
-            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + last.ToString()));
+            String toAppend = "";
+            if (!url.Contains("&page="))
+                toAppend = "&page=x";
+
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
+            feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + "1"));
+            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))
+                feed.AppendFormat(@"<link rel=""previous"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()));
+            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()).Equals((url + toAppend)))
+                feed.AppendFormat(@"<link rel=""next"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()));
+            feed.AppendFormat(@"<link rel=""last"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + last.ToString()));
 
             feed.AppendLine(@"<author>");
             feed.AppendLine(@"<name>g-patient</name>");
@@ -473,15 +477,18 @@ namespace MvcApplication1.Models
                 prev = pageNum - 1;
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "practitioner";
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
-            feed.AppendFormat(@"<link rel=""first"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + "1"));
-            if (!(url.Remove(url.Length - 1) + prev.ToString()).Equals(url))
-                feed.AppendFormat(@"<link rel=""previous"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + prev.ToString()));
-            if (!(url.Remove(url.Length - 1) + next.ToString()).Equals(url))
-                feed.AppendFormat(@"<link rel=""next"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + next.ToString()));
-            feed.AppendFormat(@"<link rel=""last"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url.Remove(url.Length - 1) + last.ToString()));
+            String toAppend = "";
+            if (!url.Contains("&page="))
+                toAppend = "&page=x";
 
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
+            feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + "1"));
+            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))
+                feed.AppendFormat(@"<link rel=""previous"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()));
+            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()).Equals((url + toAppend)))
+                feed.AppendFormat(@"<link rel=""next"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()));
+            feed.AppendFormat(@"<link rel=""last"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + last.ToString()));
             feed.AppendLine(@"<author>");
             feed.AppendLine(@"<name>g-patient</name>");
             feed.AppendLine(@"</author>");
