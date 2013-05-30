@@ -13,7 +13,6 @@ namespace MvcApplication1.Controllers
     {
         public ActionResult byUserId(string id)
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (id == access || access == "0")
@@ -45,7 +44,6 @@ namespace MvcApplication1.Controllers
 
         public ActionResult add()
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
@@ -67,7 +65,6 @@ namespace MvcApplication1.Controllers
 
         public ActionResult markRead()
         {
-            Response.AppendHeader("Access-Control-Allow-Origin", "*");
 
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             glinttlocalEntities gle = new glinttlocalEntities();

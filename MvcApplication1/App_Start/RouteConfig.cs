@@ -39,6 +39,12 @@ namespace MvcApplication1
             );
 
             routes.MapRoute(
+                name: "Visit_Create",
+                url: "Visit/Create",
+                defaults: new { controller = "Visit", action = "Create" }
+            );
+
+            routes.MapRoute(
                 name: "Visit",
                 url: "Visit/{id}",
                 defaults: new { controller = "Visit", action = "Index", id = "" }

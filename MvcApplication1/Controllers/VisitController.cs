@@ -111,5 +111,27 @@ namespace MvcApplication1.Controllers
 				return null;
 			}
 		}
+
+        public ActionResult Create()
+        {
+            MvcApplication1.Models.Visit v = new Visit();
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0")
+            {
+                String s = v.create(Request);
+                if (s == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                return Content(s);
+            }
+            else
+            {
+                Response.StatusCode = 403;
+                return null;
+            }
+        }
+
 	}
 }

@@ -18,7 +18,7 @@ namespace MvcApplication1.Models
             { "identifier", new List<string>(){"n_cons"} },
             { "service", new List<string>(){"cod_serv"} },
             { "state", new List<string>() {"flag_estado"} },
-            { "subject", new List<string>() {"doente"} },
+            { "subject", new List<string>() {"t_doente","doente"} },
             { "responsible", new List<string>() {"medico"} },
             { "length", new List<string>() {"duracao_cons"} },
             { "period", new List<string>() {"dt_cons"} },
@@ -237,8 +237,13 @@ namespace MvcApplication1.Models
                                 query1 += conver + ">" + "?";
                             else
                                 query1 += conver + "=" + "?";
-
-                            l.Add(v.QueryString[querykeys]);
+                            if (conver == "t_doente")
+                                l.Add(v.QueryString[querykeys].Split('_')[0]);
+                            else
+                                if (conver == "doente")
+                                    l.Add(v.QueryString[querykeys].Split('_')[1]);
+                                else
+                                    l.Add(v.QueryString[querykeys]);
                             j++;
                         }
                     }
@@ -625,6 +630,72 @@ namespace MvcApplication1.Models
             }
 
             return sqlresult.First();
+        }
+
+
+
+        public string create(HttpRequestBase Request)
+        {
+            visit v = new visit();
+            g_cons_marc g = new g_cons_marc();
+
+            string idquery = "SELECT MAX(CONVERT(n_cons, SIGNED INTEGER)) FROM g_cons_marc";
+            int vaux = ge.Database.SqlQuery<int>(idquery, new List<object>() { }.ToArray()).FirstOrDefault();
+
+            v.id = vaux + 1;
+            g.n_cons = v.id.ToString();
+
+            if(Request.Params["service"] != null)
+                g.cod_serv = Request.Params["service"];
+
+            if(Request.Params["state"] != null)
+                g.flag_estado = Request.Params["state"];
+
+            if(Request.Params["subject"] != null)
+            {
+                string[] s = Request.Params["subject"].Split('_');
+                g.t_doente = s[0];
+                g.doente = s[1];
+            }
+
+            if (Request.Params["responsible"] != null)
+                g.medico = Request.Params["responsible"];
+
+            if (Request.Params["length"] != null)
+                g.duracao_cons = DateTime.Parse(Request.Params["length"]);
+
+            if (Request.Params["period"] != null)
+                g.dt_cons = DateTime.Parse( Request.Params["period"]);
+
+            if (Request.Params["indication"] != null)
+                g.observ_cons = Request.Params["indication"];
+
+            if (Request.Params["location"] != null)
+                g.cod_gab = Request.Params["location"];
+
+
+
+            if(Request.Params["admitter"] != null)
+                v.admitter = Convert.ToInt32( Request.Params["admitter"] );
+
+            if (Request.Params["bed"] != null)
+                v.bed = Request.Params["bed"];
+            
+            if(Request.Params["discharger"] != null)
+                v.discharger = Convert.ToInt32( Request.Params["discharger"] );
+
+            if(Request.Params["setting"] != null)
+                v.setting = Request.Params["setting"];
+
+            if(Request.Params["periodend"] != null)
+                v.periodEnd = DateTime.Parse(Request.Params["periodend"]);
+
+
+            ge.g_cons_marc.Add(g);
+            ge.SaveChanges();
+            gle.visit.Add(v);
+            gle.SaveChanges();
+            return "ok";
         }
     }
 
