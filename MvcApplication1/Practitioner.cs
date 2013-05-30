@@ -16,7 +16,7 @@ namespace MvcApplication1
     {
         public int n_mecan { get; set; }
         public string gender { get; set; }
-        public string birthDate { get; set; }
+        public Nullable<System.DateTime> birthDate { get; set; }
         public Nullable<bool> deceased { get; set; }
         public string address { get; set; }
         public string maritalStatus { get; set; }

@@ -16,8 +16,8 @@
         <EntityTypeShape EntityType="glinttlocalModel.notifications" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.oauthclients" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.patient" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="glinttlocalModel.practitioner" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.visit" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="glinttlocalModel.practitioner" Width="1.5" PointX="8.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

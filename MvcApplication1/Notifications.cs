@@ -21,5 +21,6 @@ namespace MvcApplication1
         public string text { get; set; }
         public sbyte seen { get; set; }
         public Nullable<System.DateTime> seentimestamp { get; set; }
+        public string idVisit { get; set; }
     }
 }
