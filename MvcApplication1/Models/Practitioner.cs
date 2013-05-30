@@ -183,7 +183,7 @@ namespace MvcApplication1.Models
         public String byId(string id)
         {
  
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan='" + id + "';");
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_pess_hosp_def> sqlresult = gE.g_pess_hosp_def.SqlQuery("Select * from g_pess_hosp_def where n_mecan=" + id + ";");
             if (sqlresult.Count() == 0)
             {
                 return null;
