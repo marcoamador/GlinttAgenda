@@ -16,6 +16,7 @@ namespace MvcApplication1.Models
         private static Dictionary<string, List<string>> ParamToDic = new Dictionary<string, List<string>>() {
             { "_id", new List<string>(){"n_cons"} }, 
             { "identifier", new List<string>(){"n_cons"} },
+            { "service", new List<string>(){"cod_serv"} },
             { "state", new List<string>() {"flag_estado"} },
             { "subject", new List<string>() {"doente"} },
             { "responsible", new List<string>() {"medico"} },
@@ -57,7 +58,23 @@ namespace MvcApplication1.Models
             //Id
             Hl7.Fhir.Model.Identifier idt = new Hl7.Fhir.Model.Identifier();
             idt.Id = c.n_cons;
-            v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+            idt.Label = "id";
+            
+
+            //tipo de consulta
+            Hl7.Fhir.Model.Identifier idt2 = null;
+            g_serv asd = ge.Database.SqlQuery<g_serv>("Select * from g_serv where cod_serv = ?",new List<object>(){c.cod_serv}.ToArray()).FirstOrDefault();
+            if(asd != null)
+            {
+                idt2 = new Hl7.Fhir.Model.Identifier();
+                idt2.Id = asd.descr_serv;
+                idt2.InternalId = asd.cod_serv;
+                idt2.Label = "service";
+            }
+            if(idt2 == null)
+                v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt };
+            else
+                v.Identifier = new List<Hl7.Fhir.Model.Identifier>() { idt, idt2 };
             
             //State
             Hl7.Fhir.Model.CodeableConcept state = new Hl7.Fhir.Model.CodeableConcept();
@@ -506,9 +523,6 @@ namespace MvcApplication1.Models
         }
 
 
-
-
-
         public String update(HttpRequestBase p, String id,string access)
         {
             Object[] key = { id };
@@ -564,7 +578,7 @@ namespace MvcApplication1.Models
 
                 foreach (string querykeys in p.QueryString.Keys)
                 {
-                    if (collumns.Contains(querykeys))
+                    if (collumns.Contains(querykeys) && querykeys != "id")
                     {
                         if (bbb)
                             query2 += ",";
@@ -583,42 +597,24 @@ namespace MvcApplication1.Models
                     gle.SaveChanges();
                 }
 
+                g_cons_marc cons = ge.g_cons_marc.Find(id);
+                g_serv srv = ge.g_serv.Find(cons.cod_serv);
+                string t = "Surgiram alterações na sua consulta de " + srv.descr_serv + " : ";
+                notifications n = new notifications();
+                n.text = t;
+                n.idVisit = cons.n_cons;
+                n.idDoente = cons.doente;
+                n.t_doente = cons.t_doente;
+                n.timestamp = DateTime.Now;
+
+                gle.notifications.Add(n);
+
                 return "ok";
 
             }
 
             return null;
         }
-
-
-
-
-        /*
-     public List<VisitModel> byPatient (string id) 
-     {
-
-         List<VisitModel> result = new List<VisitModel>();
-         Object[] key = { id };
-         System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where doente=?", key);
-         if (sqlresult.Count() == 0)
-         {
-             return null;
-         }
-    
-         for(int i=0; sqlresult.Count()<i; i++)
-         {
-             g_cons_marc temp = sqlresult.ElementAt(i);
-
-
-             VisitModel final = visitParser(temp);
-             result.Add(temp);
-         }
-         return ;
-  
-
-    }
-        
- */
 
         public MvcApplication1.visit localDataById(String id)
         {

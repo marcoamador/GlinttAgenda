@@ -40,7 +40,7 @@ namespace MvcApplication1.Controllers
             glinttlocalEntities gle = new glinttlocalEntities();
             oauthclients oc = new oauthclients();
             oc.clientID = (gle.oauthclients.Count() + 1);
-            oc.clientSecret = generateRandomSequence(16);
+            oc.clientSecret = Guid.NewGuid().ToString(); //generateRandomSequence(16);
             oc.responseUri = response_uri;
             gle.oauthclients.Add(oc);
             gle.SaveChanges();
@@ -51,16 +51,13 @@ namespace MvcApplication1.Controllers
                 oc.clientSecret,
             };
 
-
+            /*
             Response.Headers["clientid"] = oc.clientID.ToString();
             Response.Headers["clientsecret"] = oc.clientSecret;
-
-            
-
             Response.Redirect(response_uri);
             Response.End();
-
-            return Content("");
+            */
+            return Content(new Dictionary<string, string>() { {"clientid", oc.clientID.ToString()}, {"clientsecret",oc.clientSecret} }.ToJSON());
         }
 
         public ActionResult AuthorizeLogin()
@@ -96,7 +93,7 @@ namespace MvcApplication1.Controllers
                             {
                                 //authentication successful
                                 //TODO tokens must expire
-                                string tokenstring = generateRandomSequence(32);
+                                string tokenstring = Guid.NewGuid().ToString(); //generateRandomSequence(32);
 
                                 List<object> lt = new List<object>(){patientquery.doente,patientquery.t_doente, c.clientID};
                                 accesstokens t = gle.accesstokens.SqlQuery("select * from Accesstokens where userid = ? and t_doente = ? and clientid = ?", lt.ToArray()).FirstOrDefault();
@@ -150,7 +147,7 @@ namespace MvcApplication1.Controllers
 
                             if (practitionerquery1.password == password) //admin login
                             {
-                                string tokenstring = generateRandomSequence(32);
+                                string tokenstring = Guid.NewGuid().ToString();// generateRandomSequence(32);
 
                                 List<object> lt = new List<object>() { practitionerquery.n_mecan, 1, c.clientID };
                                 accesstokens t = gle.accesstokens.SqlQuery("select * from Accesstokens where userid = ? and isAdmin = ? and clientid = ? ", lt.ToArray()).FirstOrDefault();
@@ -192,7 +189,8 @@ namespace MvcApplication1.Controllers
                 Response.Redirect(c.responseUri + "?username=" + email + "&password=" + password + "&error=1");
                 return Content("");
             }
-            return Content("");
+            Response.StatusCode = 403;
+            return null;
         }
 
         public ActionResult isTokenValid()
