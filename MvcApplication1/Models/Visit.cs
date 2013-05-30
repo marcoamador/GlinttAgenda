@@ -597,6 +597,18 @@ namespace MvcApplication1.Models
                     gle.SaveChanges();
                 }
 
+                g_cons_marc cons = ge.g_cons_marc.Find(id);
+                g_serv srv = ge.g_serv.Find(cons.cod_serv);
+                string t = "Surgiram alterações na sua consulta de " + srv.descr_serv + " : ";
+                notifications n = new notifications();
+                n.text = t;
+                n.idVisit = cons.n_cons;
+                n.idDoente = cons.doente;
+                n.t_doente = cons.t_doente;
+                n.timestamp = DateTime.Now;
+
+                gle.notifications.Add(n);
+
                 return "ok";
 
             }

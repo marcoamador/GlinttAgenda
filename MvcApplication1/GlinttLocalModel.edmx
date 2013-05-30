@@ -106,6 +106,7 @@
           <Property Name="text" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="seen" Type="tinyint" Nullable="false" />
           <Property Name="seentimestamp" Type="datetime" />
+          <Property Name="idVisit" Type="varchar" Nullable="false" MaxLength="45" />
         </EntityType>
         <EntityType Name="oauthclients">
           <Key>
@@ -258,6 +259,7 @@
           <Property Name="text" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="seen" Type="SByte" Nullable="false" />
           <Property Name="seentimestamp" Type="DateTime" />
+          <Property Type="String" Name="idVisit" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="oauthclients">
           <Key>
@@ -397,6 +399,7 @@
           <EntitySetMapping Name="notifications">
             <EntityTypeMapping TypeName="glinttlocalModel.notifications">
               <MappingFragment StoreEntitySet="notifications">
+                <ScalarProperty Name="idVisit" ColumnName="idVisit" />
                 <ScalarProperty Name="idNotifications" ColumnName="idNotifications" />
                 <ScalarProperty Name="idDoente" ColumnName="idDoente" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
