@@ -111,7 +111,7 @@ namespace MvcApplication1.Models
                 p.Details.Gender = gender;
 
                 //Practitioner BirthDate
-                Hl7.Fhir.Model.FhirDateTime birthdate = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.birthDate));
+                Hl7.Fhir.Model.FhirDateTime birthdate = new Hl7.Fhir.Model.FhirDateTime(remain.birthDate.Value);
                 p.Details.BirthDate = birthdate;
 
                 //Practitioner Deceased

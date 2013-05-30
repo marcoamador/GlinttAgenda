@@ -133,7 +133,7 @@
           </Key>
           <Property Name="n_mecan" Type="int" Nullable="false" />
           <Property Name="gender" Type="char" MaxLength="1" />
-          <Property Name="birthDate" Type="varchar" MaxLength="255" />
+          <Property Name="birthDate" Type="date" />
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
           <Property Name="maritalStatus" Type="varchar" MaxLength="10" />
@@ -170,8 +170,8 @@
           <EntitySet Name="notifications" EntityType="glinttlocalModel.notifications" />
           <EntitySet Name="oauthclients" EntityType="glinttlocalModel.oauthclients" />
           <EntitySet Name="patient" EntityType="glinttlocalModel.patient" />
-          <EntitySet Name="practitioner" EntityType="glinttlocalModel.practitioner" />
           <EntitySet Name="visit" EntityType="glinttlocalModel.visit" />
+          <EntitySet Name="practitioner" EntityType="glinttlocalModel.practitioner" />
         </EntityContainer>
         <EntityType Name="accesstokens">
           <Key>
@@ -280,21 +280,6 @@
           <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
           <Property Name="deceasedDate" Type="DateTime" />
         </EntityType>
-        <EntityType Name="practitioner">
-          <Key>
-            <PropertyRef Name="n_mecan" />
-          </Key>
-          <Property Name="n_mecan" Type="Int32" Nullable="false" />
-          <Property Name="gender" Type="String" MaxLength="1" Unicode="false" FixedLength="false" />
-          <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="deceased" Type="Boolean" />
-          <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="maritalStatus" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
-          <Property Name="periodStart" Type="DateTime" />
-          <Property Name="password" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="specialty" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
-          <Property Name="periodEnd" Type="DateTime" />
-        </EntityType>
         <EntityType Name="visit">
           <Key>
             <PropertyRef Name="id" />
@@ -306,6 +291,21 @@
           <Property Name="admitter" Type="Int32" />
           <Property Name="bed" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="discharger" Type="Int32" />
+        </EntityType>
+        <EntityType Name="practitioner">
+          <Key>
+            <PropertyRef Name="n_mecan" />
+          </Key>
+          <Property Type="Int32" Name="n_mecan" Nullable="false" />
+          <Property Type="String" Name="gender" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="birthDate" />
+          <Property Type="Boolean" Name="deceased" />
+          <Property Type="String" Name="address" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="maritalStatus" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="periodStart" />
+          <Property Type="String" Name="password" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="specialty" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="periodEnd" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -430,22 +430,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="practitioner">
-            <EntityTypeMapping TypeName="glinttlocalModel.practitioner">
-              <MappingFragment StoreEntitySet="practitioner">
-                <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
-                <ScalarProperty Name="deceased" ColumnName="deceased" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
-                <ScalarProperty Name="periodStart" ColumnName="periodStart" />
-                <ScalarProperty Name="password" ColumnName="password" />
-                <ScalarProperty Name="specialty" ColumnName="specialty" />
-                <ScalarProperty Name="periodEnd" ColumnName="periodEnd" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="visit">
             <EntityTypeMapping TypeName="glinttlocalModel.visit">
               <MappingFragment StoreEntitySet="visit">
@@ -456,6 +440,22 @@
                 <ScalarProperty Name="admitter" ColumnName="admitter" />
                 <ScalarProperty Name="bed" ColumnName="bed" />
                 <ScalarProperty Name="discharger" ColumnName="discharger" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="practitioner">
+            <EntityTypeMapping TypeName="glinttlocalModel.practitioner">
+              <MappingFragment StoreEntitySet="practitioner">
+                <ScalarProperty Name="periodEnd" ColumnName="periodEnd" />
+                <ScalarProperty Name="specialty" ColumnName="specialty" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="periodStart" ColumnName="periodStart" />
+                <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="deceased" ColumnName="deceased" />
+                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

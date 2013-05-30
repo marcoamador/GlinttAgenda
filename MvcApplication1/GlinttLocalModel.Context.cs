@@ -36,7 +36,7 @@ namespace MvcApplication1
         public DbSet<notifications> notifications { get; set; }
         public DbSet<oauthclients> oauthclients { get; set; }
         public DbSet<patient> patient { get; set; }
-        public DbSet<practitioner> practitioner { get; set; }
         public DbSet<visit> visit { get; set; }
+        public DbSet<practitioner> practitioner { get; set; }
     }
 }
