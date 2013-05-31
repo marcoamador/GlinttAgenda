@@ -231,6 +231,9 @@ namespace MvcApplication1.Models
                                 query1 += " or ";
                             }
 
+                            if(conver == "t_doente")
+                                query1 += " ( ";
+
                             if (querykeys == "period-before")
                                 query1 += conver + "<" + "?";
                             else if (querykeys == "period-after")
@@ -238,10 +241,14 @@ namespace MvcApplication1.Models
                             else
                                 query1 += conver + "=" + "?";
                             if (conver == "t_doente")
+                            {
                                 l.Add(v.QueryString[querykeys].Split('_')[0]);
+                            }
                             else
-                                if (conver == "doente")
+                                if (conver == "doente"){
                                     l.Add(v.QueryString[querykeys].Split('_')[1]);
+                                    query1 += " ) ";
+                                }   
                                 else
                                     l.Add(v.QueryString[querykeys]);
                             j++;
@@ -269,7 +276,7 @@ namespace MvcApplication1.Models
                 if (querykeys == "setting")
                 {
                     if (hitit)
-                        query2 += " or ";
+                        query2 += " and ";
                     query2 += "setting = ?";
                     l2.Add(v.QueryString["setting"]);
                     hitit = true;

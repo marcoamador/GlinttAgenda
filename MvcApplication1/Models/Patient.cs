@@ -391,6 +391,10 @@ namespace MvcApplication1.Models
                         
                         if (conver != null)
                         {
+                            if (Patient.ParamToDic[querykeys].Count > 1 && j==0)
+                                query1 += "(";
+                            
+                            
                             if (j != 0 && querykeys != "_id")
                             {
                                 query1 += " or ";
@@ -404,11 +408,14 @@ namespace MvcApplication1.Models
                                 query1 += conver + "<" + "?";
                             else if (querykeys == "birthdate-after")
                                 query1 += conver + ">" + "?";
-                            else if (querykeys == "name")
-                                query1 += conver + " like " + "%?%";
+                            else if (querykeys == "name" || querykeys == "given" || querykeys == "family" || querykeys == "address"){
+                                query1 += conver + " like " + "?";
+                                l.Add("%" + p.QueryString[querykeys] + "%");
+                            }                                
                             else
                                 query1 += conver + "=" + "?";
 
+                            
 
                             if (j == 0 && (querykeys == "_id" || querykeys == "telecom" || querykeys == "identifier"))
                             {
@@ -417,6 +424,7 @@ namespace MvcApplication1.Models
                             else if (j != 0 && querykeys == "_id")
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
+                                query1 += " )";
                             }
                             else if (j == 1 && (querykeys == "identifier" || querykeys == "telecom"))
                             {
@@ -425,6 +433,7 @@ namespace MvcApplication1.Models
                             else if (j == 2 && (querykeys == "identifier" || querykeys == "telecom"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(2));
+                                query1 += " )";
                             }
                             else
                                 l.Add(p.QueryString[querykeys]);
@@ -438,7 +447,6 @@ namespace MvcApplication1.Models
             }
 
             query1 += ";";
-            
             System.Data.Entity.Infrastructure.DbSqlQuery<g_doente> res = gE.g_doente.SqlQuery(query1, l.ToArray());
             int n = res.Count();
 

@@ -245,25 +245,33 @@ namespace MvcApplication1.Models
 
                         if (conver != null)
                         {
+                            if (Practitioner.ParamToDic[querykeys].Count > 1 && j == 0)
+                                query1 += "(";
+                            
                             if (j != 0)
                             {
                                 query1 += " or ";
                             }
 
-                            if(conver != "nome")
-                                query1 += conver + "=" + "?";
-                            else
-                                query1 += conver + "like" + "%?%";
-
                             if (querykeys.Equals("telecom"))
                             {
-                                if (!pr.QueryString["telecom"].Contains('_'))
-                                    return null; 
+                                query1 += conver + " = " + "?";
                                 l.Add(pr.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                if (telecomIndex == 1)
+                                    query1 += " )";
                                 telecomIndex += 1;
                             }
+                            else if (querykeys == "name" || querykeys == "given" || querykeys == "family")
+                            {
+                                query1 += conver + " like " + "?";
+                                l.Add("%" + pr.QueryString[querykeys] + "%");
+                            }
                             else
+                            {
+                                query1 += conver + "=" + "?";
                                 l.Add(pr.QueryString[querykeys]);
+                            }
+                                
 
                             j++;
                         }
@@ -291,7 +299,7 @@ namespace MvcApplication1.Models
                 if (querykeys == "gender")
                 {
                     if (hitit)
-                        query2 += " or ";
+                        query2 += " and ";
                     query2 += "gender = ?";
                     l2.Add(pr.QueryString["gender"]);
                     hitit = true;
@@ -299,7 +307,7 @@ namespace MvcApplication1.Models
                 else if (querykeys == "address")
                 {
                     if(hitit)
-                        query2+= " or ";
+                        query2+= " and ";
                     query2 += "address = ?";
                     l2.Add(pr.QueryString["address"]);
                     hitit = true;
