@@ -387,8 +387,8 @@ namespace MvcApplication1.Models
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
             String toAppend = "";
-            if (!url.Contains("&page="))
-                toAppend = "&page=x";
+            if (!url.Contains("&_page="))
+                toAppend = "&_page=x";
 
             String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
             if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
@@ -492,8 +492,8 @@ namespace MvcApplication1.Models
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
             String toAppend = "";
-            if (!url.Contains("&page="))
-                toAppend = "&page=x";
+            if (!url.Contains("&_page="))
+                toAppend = "&_page=x";
 
             String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
             if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
