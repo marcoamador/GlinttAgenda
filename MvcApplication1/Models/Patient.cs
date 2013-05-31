@@ -167,16 +167,14 @@ namespace MvcApplication1.Models
             Hl7.Fhir.Model.Coding marCoding = new Hl7.Fhir.Model.Coding();
             marCoding.Code = patient.estado_civil;
 
-            if (patient.estado_civil == "cas")
+            if (patient.estado_civil == "C")
                 marCoding.Display = "Casado";
-            else if (patient.estado_civil == "sol")
+            else if (patient.estado_civil == "S")
                 marCoding.Display = "Solteiro";
-            else if (patient.estado_civil == "div")
+            else if (patient.estado_civil == "D")
                 marCoding.Display = "Divorciado";
-            else if (patient.estado_civil == "viu")
+            else if (patient.estado_civil == "V")
                 marCoding.Display = "Viúvo";
-            else if (patient.estado_civil == "oth")
-                marCoding.Display = "Outro";
 
             dem.MaritalStatus.Coding.Add(marCoding);
 
@@ -244,10 +242,13 @@ namespace MvcApplication1.Models
                 contact.Details.Address = new List<Hl7.Fhir.Model.Address>();
                 Hl7.Fhir.Model.Address addr = new Hl7.Fhir.Model.Address();
                 addr.Line = new List<Hl7.Fhir.Model.FhirString>() { element.address };
-                    
-                //BirthDate
-                DateTime cBirth = DateTime.Parse(element.birthDate);
-                contact.Details.BirthDate = new Hl7.Fhir.Model.FhirDateTime(cBirth);
+
+                if (element.birthDate != null)
+                {
+                    //BirthDate
+                    DateTime cBirth = element.birthDate.Value;
+                    contact.Details.BirthDate = new Hl7.Fhir.Model.FhirDateTime(cBirth);
+                }
                     
                 //Deceased
                 contact.Details.Deceased = new Hl7.Fhir.Model.FhirBoolean(element.deceased.Value);
@@ -273,16 +274,15 @@ namespace MvcApplication1.Models
                 Hl7.Fhir.Model.Coding marStatus = new Hl7.Fhir.Model.Coding();
                 marStatus.Code = element.maritalStatus;
 
-                if (element.maritalStatus == "cas")
+                if (element.maritalStatus == "C")
                     marStatus.Display = "Casado";
-                else if (element.maritalStatus == "sol")
+                else if (element.maritalStatus == "S")
                     marStatus.Display = "Solteiro";
-                else if (element.maritalStatus == "div")
+                else if (element.maritalStatus == "D")
                     marStatus.Display = "Divorciado";
-                else if (element.maritalStatus == "viu")
+                else if (element.maritalStatus == "V")
                     marStatus.Display = "Viúvo";
-                else if (element.maritalStatus == "oth")
-                    marStatus.Display = "Outro";
+                
 
                 contact.Details.MaritalStatus.Coding.Add(marStatus);
 
@@ -495,7 +495,10 @@ namespace MvcApplication1.Models
             if (!url.Contains("&page="))
                 toAppend = "&page=x";
 
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
+                basicURL += "/";
+            basicURL += "patient";
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url+toAppend).Length-1) + pageNum));
             feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url+toAppend).Remove((url+toAppend).Length - 1) + "1"));
             if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))

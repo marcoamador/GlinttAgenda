@@ -383,7 +383,10 @@ namespace MvcApplication1.Models
             if (!url.Contains("&page="))
                 toAppend = "&page=x";
 
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
+                basicURL += "/";
+            basicURL += "visit";
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
             feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + "1"));
             if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))
@@ -483,7 +486,10 @@ namespace MvcApplication1.Models
             if (!url.Contains("&page="))
                 toAppend = "&page=x";
 
-            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath + "patient";
+            String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
+                basicURL += "/";
+            basicURL += "visit";
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
             feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + "1"));
             if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))
