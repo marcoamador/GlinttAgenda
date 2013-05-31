@@ -207,10 +207,10 @@ namespace MvcApplication1.Models
 
             int pageNum, itemNum;
 
-            if (String.IsNullOrEmpty(pr.QueryString["page"]))
+            if (String.IsNullOrEmpty(pr.QueryString["_page"]))
                 pageNum = 1;
             else
-                pageNum = int.Parse(pr.QueryString["page"]);
+                pageNum = int.Parse(pr.QueryString["_page"]);
 
 
             if (String.IsNullOrEmpty(pr.QueryString["_count"]))
@@ -418,7 +418,7 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"<name>g-patient</name>");
             feed.AppendLine(@"</author>");
 
-            feed.AppendLine(@"<entry>");
+           
             feed.AppendLine(@"<title>Search Results</title>");
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
             Guid entryId = Guid.NewGuid();
@@ -426,11 +426,7 @@ namespace MvcApplication1.Models
             DateTime entryTime = DateTime.Now;
             feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
             feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
-            feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
-            feed.AppendLine(@"<content type=""text/xml"">");
+            
             if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
@@ -447,13 +443,19 @@ namespace MvcApplication1.Models
                         remaining = secondResult.First();
                     else
                         remaining = null;
-
+                    feed.AppendLine(@"<entry>");
+                    feed.AppendLine(@"<author>");
+                    feed.AppendLine(@"<name>g-patient</name>");
+                    feed.AppendLine(@"</author>");
+                    feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+                    feed.AppendLine(@"<content type=""text/xml"">");
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_mecan));
                     feed.Append(practitionerParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendLine(@"</content>");
+                    feed.AppendLine(@"</entry>");
                 }
             }
-            feed.AppendLine(@"</content>");
-            feed.AppendLine(@"</entry>");
+            
 
             feed.Append(@"</feed>");
             return feed.ToString();
@@ -506,7 +508,7 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"<name>g-patient</name>");
             feed.AppendLine(@"</author>");
 
-            feed.AppendLine(@"<entry>");
+            
             feed.AppendLine(@"<title>Search Results</title>");
             feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
             Guid entryId = Guid.NewGuid();
@@ -514,11 +516,7 @@ namespace MvcApplication1.Models
             DateTime entryTime = DateTime.Now;
             feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
             feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
-            feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
-            feed.AppendLine(@"<content type=""text/xml"">");
+            
             if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
@@ -535,13 +533,18 @@ namespace MvcApplication1.Models
                         remaining = secondResult.First();
                     else
                         remaining = null;
-
+                    feed.AppendLine(@"<entry>");
+                    feed.AppendLine(@"<author>");
+                    feed.AppendLine(@"<name>g-patient</name>");
+                    feed.AppendLine(@"</author>");
+                    feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+                    feed.AppendLine(@"<content type=""text/xml"">");
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_mecan));
                     feed.Append(practitionerParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendLine(@"</content>");
+                    feed.AppendLine(@"</entry>");
                 }
             }
-            feed.AppendLine(@"</content>");
-            feed.AppendLine(@"</entry>");
 
             feed.Append(@"</feed>");
             return feed.ToString();

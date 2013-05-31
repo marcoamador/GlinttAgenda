@@ -345,10 +345,10 @@ namespace MvcApplication1.Models
             int i = 0;
             int pageNum, itemNum;
 
-            if (String.IsNullOrEmpty(p.QueryString["page"]))
+            if (String.IsNullOrEmpty(p.QueryString["_page"]))
                 pageNum = 1;
             else
-                pageNum = int.Parse(p.QueryString["page"]);
+                pageNum = int.Parse(p.QueryString["_page"]);
 
 
             if (String.IsNullOrEmpty(p.QueryString["_count"]))
@@ -523,7 +523,7 @@ namespace MvcApplication1.Models
             feed.AppendLine(@"<name>g-patient</name>");
             feed.AppendLine(@"</author>");
 
-            feed.AppendLine(@"<entry>");
+            
             feed.AppendLine(@"<title>Search Results</title>");
             Guid entryId = Guid.NewGuid();
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", HttpUtility.HtmlEncode(entryId.ToString()));
@@ -533,11 +533,7 @@ namespace MvcApplication1.Models
             DateTime entryTime = DateTime.Now;
             feed.AppendFormat(@"<updated>{0}</updated>", HttpUtility.HtmlEncode((Common.GetDate(entryTime)).ToString()));
             feed.AppendFormat(@"<published>{0}</published>", HttpUtility.HtmlEncode((Common.GetDate(entryTime)).ToString()));
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
-            feed.AppendLine(@"<category term=""Patient"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
-            feed.AppendLine(@"<content type=""text/xml"">");
+            
 
 
             if (count > 0 && count > itemNum * (pageNum - 1))
@@ -557,13 +553,19 @@ namespace MvcApplication1.Models
                         remaining = rem.First();
                     else
                         remaining = null;
-
+                    feed.AppendLine(@"<entry>");
+                    feed.AppendLine(@"<author>");
+                    feed.AppendLine(@"<name>g-patient</name>");
+                    feed.AppendLine(@"</author>");
+                    feed.AppendLine(@"<category term=""Patient"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+                    feed.AppendLine(@"<content type=""text/xml"">");
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.t_doente));
                     feed.Append(patientParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendLine(@"</content>");
+                    feed.AppendLine(@"</entry>");
                 }
             }
-            feed.AppendLine(@"</content>");
-            feed.AppendLine(@"</entry>");
+            
 
             feed.Append(@"</feed>");
             return feed.ToString();
