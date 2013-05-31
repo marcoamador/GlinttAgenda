@@ -133,5 +133,23 @@ namespace MvcApplication1.Controllers
             }
         }
 
+        public ActionResult getServices()
+        {
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_serv> g = gE.g_serv.SqlQuery("Select * from g_serv", new List<object>() { });
+            int n = g.Count();
+            if (n != 0)
+            {
+                Dictionary<string, string> d = new Dictionary<string, string>();
+                for (int i = 0; i < n; i++)
+                {
+                    g_serv srv = g.ElementAt(i);
+                    d.Add(srv.cod_serv, srv.descr_serv);
+                }
+                return Content(d.ToJSON());
+            }
+
+            return null;
+        }
+
 	}
 }
