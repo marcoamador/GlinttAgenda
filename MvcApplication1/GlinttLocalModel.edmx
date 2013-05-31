@@ -40,7 +40,7 @@
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="telecom" Type="int" Nullable="false" />
           <Property Name="gender" Type="varchar" MaxLength="255" />
-          <Property Name="birthDate" Type="varchar" MaxLength="255" />
+          <Property Name="birthDate" Type="date" />
           <Property Name="deceased" Type="bool" />
           <Property Name="address" Type="varchar" MaxLength="255" />
           <Property Name="maritalStatus" Type="varchar" MaxLength="255" />
@@ -160,7 +160,6 @@
       <Schema Namespace="glinttlocalModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="glinttlocalEntities" p1:LazyLoadingEnabled="true">
           <EntitySet Name="accesstokens" EntityType="glinttlocalModel.accesstokens" />
-          <EntitySet Name="contact" EntityType="glinttlocalModel.contact" />
           <EntitySet Name="contactpatient" EntityType="glinttlocalModel.contactpatient" />
           <EntitySet Name="country" EntityType="glinttlocalModel.country" />
           <EntitySet Name="language" EntityType="glinttlocalModel.language" />
@@ -172,6 +171,7 @@
           <EntitySet Name="patient" EntityType="glinttlocalModel.patient" />
           <EntitySet Name="visit" EntityType="glinttlocalModel.visit" />
           <EntitySet Name="practitioner" EntityType="glinttlocalModel.practitioner" />
+          <EntitySet Name="contact" EntityType="glinttlocalModel.contact" />
         </EntityContainer>
         <EntityType Name="accesstokens">
           <Key>
@@ -184,20 +184,6 @@
           <Property Name="isAdmin" Type="SByte" Nullable="false" />
           <Property Name="userid" Type="String" Nullable="false" MaxLength="45" Unicode="false" FixedLength="false" />
           <Property Name="t_doente" Type="String" MaxLength="45" Unicode="false" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="contact">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="name" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="telecom" Type="Int32" Nullable="false" />
-          <Property Name="gender" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="birthDate" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="deceased" Type="Boolean" />
-          <Property Name="address" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Name="maritalStatus" Type="String" MaxLength="255" Unicode="false" FixedLength="false" />
-          <Property Type="String" Name="relationship" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="contactpatient">
           <Key>
@@ -307,6 +293,20 @@
           <Property Type="String" Name="specialty" MaxLength="45" FixedLength="false" Unicode="false" />
           <Property Type="DateTime" Name="periodEnd" />
         </EntityType>
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="telecom" Nullable="false" />
+          <Property Type="String" Name="gender" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="birthDate" />
+          <Property Type="Boolean" Name="deceased" />
+          <Property Type="String" Name="address" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="maritalStatus" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="relationship" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -323,21 +323,6 @@
                 <ScalarProperty Name="isAdmin" ColumnName="isAdmin" />
                 <ScalarProperty Name="userid" ColumnName="userid" />
                 <ScalarProperty Name="t_doente" ColumnName="t_doente" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="contact">
-            <EntityTypeMapping TypeName="glinttlocalModel.contact">
-              <MappingFragment StoreEntitySet="contact">
-                <ScalarProperty Name="relationship" ColumnName="relationship" />
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="telecom" ColumnName="telecom" />
-                <ScalarProperty Name="gender" ColumnName="gender" />
-                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
-                <ScalarProperty Name="deceased" ColumnName="deceased" />
-                <ScalarProperty Name="address" ColumnName="address" />
-                <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -456,6 +441,21 @@
                 <ScalarProperty Name="birthDate" ColumnName="birthDate" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="n_mecan" ColumnName="n_mecan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="contact">
+            <EntityTypeMapping TypeName="glinttlocalModel.contact">
+              <MappingFragment StoreEntitySet="contact">
+                <ScalarProperty Name="relationship" ColumnName="relationship" />
+                <ScalarProperty Name="maritalStatus" ColumnName="maritalStatus" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="deceased" ColumnName="deceased" />
+                <ScalarProperty Name="birthDate" ColumnName="birthDate" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="telecom" ColumnName="telecom" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

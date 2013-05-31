@@ -139,16 +139,14 @@ namespace MvcApplication1.Models
                     Hl7.Fhir.Model.Coding pMarStatus = new Hl7.Fhir.Model.Coding();
                     pMarStatus.Code = remain.maritalStatus;
 
-                    if (remain.maritalStatus == "cas")
+                    if (remain.maritalStatus == "C")
                         pMarStatus.Display = "Casado";
-                    else if (remain.maritalStatus == "sol")
+                    else if (remain.maritalStatus == "S")
                         pMarStatus.Display = "Solteiro";
-                    else if (remain.maritalStatus == "div")
+                    else if (remain.maritalStatus == "D")
                         pMarStatus.Display = "Divorciado";
-                    else if (remain.maritalStatus == "viu")
+                    else if (remain.maritalStatus == "V")
                         pMarStatus.Display = "Viúvo";
-                    else if (remain.maritalStatus == "oth")
-                        pMarStatus.Display = "Outro";
 
                     p.Details.MaritalStatus.Coding.Add(pMarStatus);
                 }
