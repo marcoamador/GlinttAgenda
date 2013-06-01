@@ -217,7 +217,7 @@ namespace MvcApplication1.Models
             {
                 return null;
             }
-            return sqlresult.First().ToString();
+            return sqlresult.First().pais.ToString();
         }
 
         public List<Hl7.Fhir.Model.Patient.ContactComponent> getContacts(string doente, string t_doente)

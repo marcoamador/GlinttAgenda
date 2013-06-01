@@ -122,11 +122,12 @@ namespace MvcApplication1.Controllers
                                     ac.isAdmin = 0;
 
                                     gle.accesstokens.Add(ac);
+                                    gle.SaveChanges();
                                 }
                                 
                                 
 
-                                gle.SaveChanges();
+                                
 
                                 Response.Redirect(c.responseUri + "?accessToken=" + tokenstring + "&userid=" + patientquery.t_doente + "_" + patientquery.doente + "&usertype=1");
                                 Response.End();
@@ -143,7 +144,7 @@ namespace MvcApplication1.Controllers
                         if (practitionerquery != null)
                         {
                             List<Object> l3 = new List<object>() { practitionerquery.n_mecan };
-                            practitioner practitionerquery1 = gle.practitioner.SqlQuery("select * from Practitioner where if = ?").FirstOrDefault();
+                            practitioner practitionerquery1 = gle.practitioner.SqlQuery("select * from Practitioner where n_mecan = ?",l3.ToArray()).FirstOrDefault();
 
                             if (practitionerquery1.password == password) //admin login
                             {
@@ -173,13 +174,15 @@ namespace MvcApplication1.Controllers
                                     ac.Token = tokenstring;
                                     ac.Timestamp = DateTime.Now;
                                     ac.isAdmin = 1;
+                                    ac.t_doente = "0";
+                                    ac.userid = practitionerquery1.n_mecan.ToString();
                                     ac.clientid = Convert.ToInt32(practitionerquery.n_mecan);
                                     gle.accesstokens.Add(ac);
-
+                                    gle.SaveChanges();
                                 }
-                                gle.SaveChanges();
+                                
 
-                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "?userid=" + practitionerquery.n_mecan +"&usertype=0");
+                                Response.Redirect(c.responseUri+"?accessToken="+tokenstring + "&userid=" + practitionerquery.n_mecan +"&usertype=0");
                                 Response.End();
                                 return Content("");
                             }
@@ -199,6 +202,12 @@ namespace MvcApplication1.Controllers
             if (Common.getPrivileges(Request.QueryString["accesstoken"]) != "-1")
                 return Content("1");
             return Content("0");
+        }
+
+        public ActionResult passwordForgotten()
+        {
+
+            return null;
         }
     }
 }
