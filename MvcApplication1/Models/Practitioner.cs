@@ -207,10 +207,10 @@ namespace MvcApplication1.Models
 
             int pageNum, itemNum;
 
-            if (String.IsNullOrEmpty(pr.QueryString["page"]))
+            if (String.IsNullOrEmpty(pr.QueryString["_page"]))
                 pageNum = 1;
             else
-                pageNum = int.Parse(pr.QueryString["page"]);
+                pageNum = int.Parse(pr.QueryString["_page"]);
 
 
             if (String.IsNullOrEmpty(pr.QueryString["_count"]))
@@ -245,25 +245,33 @@ namespace MvcApplication1.Models
 
                         if (conver != null)
                         {
+                            if (Practitioner.ParamToDic[querykeys].Count > 1 && j == 0)
+                                query1 += "(";
+                            
                             if (j != 0)
                             {
                                 query1 += " or ";
                             }
 
-                            if(conver != "nome")
-                                query1 += conver + "=" + "?";
-                            else
-                                query1 += conver + "like" + "%?%";
-
                             if (querykeys.Equals("telecom"))
                             {
-                                if (!pr.QueryString["telecom"].Contains('_'))
-                                    return null; 
+                                query1 += conver + " = " + "?";
                                 l.Add(pr.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                if (telecomIndex == 1)
+                                    query1 += " )";
                                 telecomIndex += 1;
                             }
+                            else if (querykeys == "name" || querykeys == "given" || querykeys == "family")
+                            {
+                                query1 += conver + " like " + "?";
+                                l.Add("%" + pr.QueryString[querykeys] + "%");
+                            }
                             else
+                            {
+                                query1 += conver + "=" + "?";
                                 l.Add(pr.QueryString[querykeys]);
+                            }
+                                
 
                             j++;
                         }
@@ -291,7 +299,7 @@ namespace MvcApplication1.Models
                 if (querykeys == "gender")
                 {
                     if (hitit)
-                        query2 += " or ";
+                        query2 += " and ";
                     query2 += "gender = ?";
                     l2.Add(pr.QueryString["gender"]);
                     hitit = true;
@@ -299,7 +307,7 @@ namespace MvcApplication1.Models
                 else if (querykeys == "address")
                 {
                     if(hitit)
-                        query2+= " or ";
+                        query2+= " and ";
                     query2 += "address = ?";
                     l2.Add(pr.QueryString["address"]);
                     hitit = true;
@@ -390,39 +398,27 @@ namespace MvcApplication1.Models
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
             String toAppend = "";
-            if (!url.Contains("&page="))
-                toAppend = "&page=x";
+            if (!url.Contains("&_page="))
+                toAppend = "&_page=x";
 
             String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
             if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
                 basicURL += "/";
             basicURL += "practitioner";
 
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
-            feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + "1"));
-            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))
-                feed.AppendFormat(@"<link rel=""previous"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()));
-            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()).Equals((url + toAppend)))
-                feed.AppendFormat(@"<link rel=""next"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()));
+            string self = (url + toAppend).Remove((url + toAppend).Length - 1) + pageNum;
+            string first = (url + toAppend).Remove((url + toAppend).Length - 1) + "1";
+            string nextS = (url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString();
+            string previous = (url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString();
+
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(self));
+            feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode(first));
+            if (!previous.Equals(self))
+                feed.AppendFormat(@"<link rel=""previous"" href=""{0}"" />", HttpUtility.HtmlEncode(previous));
+            if (!nextS.Equals(self))
+                feed.AppendFormat(@"<link rel=""next"" href=""{0}"" />", HttpUtility.HtmlEncode(nextS));
             feed.AppendFormat(@"<link rel=""last"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + last.ToString()));
 
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
-
-            feed.AppendLine(@"<entry>");
-            feed.AppendLine(@"<title>Search Results</title>");
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
-            Guid entryId = Guid.NewGuid();
-            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
-            DateTime entryTime = DateTime.Now;
-            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
-            feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
-            feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
-            feed.AppendLine(@"<content type=""text/xml"">");
             if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
@@ -439,13 +435,26 @@ namespace MvcApplication1.Models
                         remaining = secondResult.First();
                     else
                         remaining = null;
-
+                    feed.AppendLine(@"<entry>");
+                    Guid entryId = Guid.NewGuid();
+                    feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
+                    DateTime entryTime = DateTime.Now;
+                    feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
+                    feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
+                    feed.AppendLine(@"<title>Search Results</title>");
+                    feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
+                    feed.AppendLine(@"<author>");
+                    feed.AppendLine(@"<name>g-patient</name>");
+                    feed.AppendLine(@"</author>");
+                    feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+                    feed.AppendLine(@"<content type=""text/xml"">");
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_mecan));
                     feed.Append(practitionerParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendLine(@"</content>");
+                    feed.AppendLine(@"</entry>");
                 }
             }
-            feed.AppendLine(@"</content>");
-            feed.AppendLine(@"</entry>");
+            
 
             feed.Append(@"</feed>");
             return feed.ToString();
@@ -480,37 +489,27 @@ namespace MvcApplication1.Models
 
             String url = HttpContext.Current.Request.Url.AbsoluteUri;
             String toAppend = "";
-            if (!url.Contains("&page="))
-                toAppend = "&page=x";
+            if (!url.Contains("&_page="))
+                toAppend = "&_page=x";
 
             String basicURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
             if (!basicURL.ElementAt(basicURL.Length - 1).Equals('/'))
                 basicURL += "/";
             basicURL += "practitioner";
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
-            feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + "1"));
-            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()).Equals((url + toAppend)))
-                feed.AppendFormat(@"<link rel=""previous"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString()));
-            if (!((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()).Equals((url + toAppend)))
-                feed.AppendFormat(@"<link rel=""next"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString()));
-            feed.AppendFormat(@"<link rel=""last"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + last.ToString()));
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
 
-            feed.AppendLine(@"<entry>");
-            feed.AppendLine(@"<title>Search Results</title>");
-            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(url));
-            Guid entryId = Guid.NewGuid();
-            feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
-            DateTime entryTime = DateTime.Now;
-            feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
-            feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
-            feed.AppendLine(@"<author>");
-            feed.AppendLine(@"<name>g-patient</name>");
-            feed.AppendLine(@"</author>");
-            feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
-            feed.AppendLine(@"<content type=""text/xml"">");
+            string self = (url + toAppend).Remove((url + toAppend).Length - 1) + pageNum;
+            string first = (url + toAppend).Remove((url + toAppend).Length - 1) + "1";
+            string nextS = (url + toAppend).Remove((url + toAppend).Length - 1) + next.ToString();
+            string previous = (url + toAppend).Remove((url + toAppend).Length - 1) + prev.ToString();
+
+            feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode(self));
+            feed.AppendFormat(@"<link rel=""first"" href=""{0}"" />", HttpUtility.HtmlEncode(first));
+            if (!previous.Equals(self))
+                feed.AppendFormat(@"<link rel=""previous"" href=""{0}"" />", HttpUtility.HtmlEncode(previous));
+            if (!nextS.Equals(self))
+                feed.AppendFormat(@"<link rel=""next"" href=""{0}"" />", HttpUtility.HtmlEncode(nextS));
+            feed.AppendFormat(@"<link rel=""last"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + last.ToString()));          
+            
             if (count > 0 && count > itemNum * (pageNum - 1))
             {
                 int min = 0;
@@ -527,13 +526,25 @@ namespace MvcApplication1.Models
                         remaining = secondResult.First();
                     else
                         remaining = null;
-
+                    feed.AppendLine(@"<entry>");
+                    feed.AppendLine(@"<title>Search Results</title>");
+                    feed.AppendFormat(@"<link rel=""self"" type=""application/atom+xml"" href=""{0}"" />", HttpUtility.HtmlEncode((url + toAppend).Remove((url + toAppend).Length - 1) + pageNum));
+                    Guid entryId = Guid.NewGuid();
+                    feed.AppendFormat(@"<id>urn:uuid:{0}</id>", entryId.ToString());
+                    DateTime entryTime = DateTime.Now;
+                    feed.AppendFormat(@"<updated>{0}</updated>", (Common.GetDate(entryTime)).ToString());
+                    feed.AppendFormat(@"<published>{0}</published>", (Common.GetDate(entryTime)).ToString());
+                   feed.AppendLine(@"<author>");
+                    feed.AppendLine(@"<name>g-patient</name>");
+                    feed.AppendLine(@"</author>");
+                    feed.AppendLine(@"<category term=""Practitioner"" scheme=""http://hl7.org/fhir/sid/fhir/resource-types""/>");
+                    feed.AppendLine(@"<content type=""text/xml"">");
                     feed.AppendFormat(@"<link href=""{0}"" />", HttpUtility.HtmlEncode(basicURL + "/" + elem.n_mecan));
                     feed.Append(practitionerParser(elem, remaining).Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", ""));
+                    feed.AppendLine(@"</content>");
+                    feed.AppendLine(@"</entry>");
                 }
             }
-            feed.AppendLine(@"</content>");
-            feed.AppendLine(@"</entry>");
 
             feed.Append(@"</feed>");
             return feed.ToString();
