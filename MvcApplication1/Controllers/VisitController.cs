@@ -151,5 +151,11 @@ namespace MvcApplication1.Controllers
             return null;
         }
 
+        public ActionResult getSettings()
+        {
+            MvcApplication1.Models.Visit v = new Visit();
+            return Content(v.getSettings().ToJSON());
+        }
+
 	}
 }
