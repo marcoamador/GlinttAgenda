@@ -150,7 +150,8 @@ namespace MvcApplication1.Models
                 Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
                 Hl7.Fhir.Model.Coding sett = new Hl7.Fhir.Model.Coding();
                 sett.Code = remain.setting;
-                sett.Display = settingsDic[remain.setting];
+                if(settingsDic.Keys.Contains(remain.setting))
+                    sett.Display = settingsDic[remain.setting];
                     /*
                 if (remain.setting == "amb")
                     sett.Display = "Ambulatório";
