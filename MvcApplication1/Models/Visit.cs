@@ -53,6 +53,8 @@ namespace MvcApplication1.Models
         public string visitParser(g_cons_marc c, MvcApplication1.visit remain, string access)
         {
             String appURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + HttpContext.Current.Request.ApplicationPath;
+            if (access == "-1")
+                return null;
             if (access != "0")
             {
                 string [] s = access.Split('_');
@@ -741,5 +743,6 @@ namespace MvcApplication1.Models
             return "ok";
         }
     }
+
 
 }

@@ -4,8 +4,9 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="23cf32997a9e4a58b2114a15fffdfeeb" Name="Diagram1">
+      <Diagram DiagramId="940c8db04eda49cb8d18ecac38e60686" Name="Diagram1">
         <EntityTypeShape EntityType="glinttlocalModel.accesstokens" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="glinttlocalModel.contact" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.contactpatient" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.country" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.language" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
@@ -15,9 +16,8 @@
         <EntityTypeShape EntityType="glinttlocalModel.notifications" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.oauthclients" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.patient" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="glinttlocalModel.practitioner" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="glinttlocalModel.visit" Width="1.5" PointX="8.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="glinttlocalModel.practitioner" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="glinttlocalModel.contact" Width="1.5" PointX="2.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

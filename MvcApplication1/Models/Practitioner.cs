@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Text;
 using System.Reflection;
+using System.Web.Mail;
+using System.Net.Mail;
 
 namespace MvcApplication1.Models
 {
@@ -651,6 +653,48 @@ namespace MvcApplication1.Models
             }
 
             return null;
+        }
+
+
+        public bool setPassword(string id, string oldp, string newp)
+        {
+            practitioner p = glE.practitioner.SqlQuery("select * from practitioner where n_mecan = ? ", new List<Object>() { id }.ToArray()).FirstOrDefault();
+            if (p != null)
+            {
+                if (p.password == oldp)
+                {
+                    p.password = newp;
+                    glE.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool removePassword(string id, string pw)
+        {
+            practitioner p = glE.practitioner.SqlQuery("select * from practitioner where n_mecan = ?", new List<Object>() { id }.ToArray()).FirstOrDefault();
+            if (p != null && p.password == pw)
+            {
+                p.password = null;
+                glE.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public void resetPassword(string id, string email)
+        {
+            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage("noreply@glinttagenda.fe.up.pt", email);
+            SmtpClient client = new SmtpClient();
+            client.Port = 25;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Host = "stmp.google.com";
+            mail.Subject = "Recuperação de password";
+            mail.Body = "nova password:";
+            client.Send(mail);
+
         }
 
     }

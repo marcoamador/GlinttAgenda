@@ -702,5 +702,37 @@ namespace MvcApplication1.Models
             return null;
         }
 
+
+        public bool setPassword(string id, string oldp, string newp)
+        {
+            List<Object> l = new List<Object>() { };
+            l.Add(id.Split('_').ElementAt(0));
+            l.Add(id.Split('_').ElementAt(1));
+
+            patient p = glE.patient.SqlQuery("select * from patient where doente = ? and t_doente = ?", l.ToArray()).FirstOrDefault();
+            
+            if (p != null)
+            {
+                if (p.password == oldp)
+                {
+                    p.password = newp;
+                    glE.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool removePassword(string id, string pw)
+        {
+            patient p = glE.patient.SqlQuery("select * from patient where doente = ? and t_doente = ?", new List<Object>() { id.Split('_').ElementAt(0), id.Split('_').ElementAt(1) }.ToArray()).FirstOrDefault();
+            if (p != null && p.password == pw)
+            {
+                p.password = null;
+                glE.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

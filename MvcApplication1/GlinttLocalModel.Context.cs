@@ -26,6 +26,7 @@ namespace MvcApplication1
         }
     
         public DbSet<accesstokens> accesstokens { get; set; }
+        public DbSet<contact> contact { get; set; }
         public DbSet<contactpatient> contactpatient { get; set; }
         public DbSet<country> country { get; set; }
         public DbSet<language> language { get; set; }
@@ -35,8 +36,7 @@ namespace MvcApplication1
         public DbSet<notifications> notifications { get; set; }
         public DbSet<oauthclients> oauthclients { get; set; }
         public DbSet<patient> patient { get; set; }
-        public DbSet<visit> visit { get; set; }
         public DbSet<practitioner> practitioner { get; set; }
-        public DbSet<contact> contact { get; set; }
+        public DbSet<visit> visit { get; set; }
     }
 }

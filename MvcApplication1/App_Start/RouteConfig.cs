@@ -27,6 +27,18 @@ namespace MvcApplication1
             );
 
             routes.MapRoute(
+                name: "Patient_removePassword",
+                url: "Patient/removePassword/{id}",
+                defaults: new { controller = "Patient", action = "removePassword", id = "" }
+            );
+
+            routes.MapRoute(
+                name: "Patient_setPassword",
+                url: "Patient/setPassword/{id}",
+                defaults: new { controller = "Patient", action = "setPassword", id = "" }
+            );
+
+            routes.MapRoute(
                 name: "Patient",
                 url: "Patient/{id}",
                 defaults: new { controller = "Patient", action = "Index", id = "" }
@@ -43,8 +55,6 @@ namespace MvcApplication1
                 url: "Visit/Create",
                 defaults: new { controller = "Visit", action = "Create" }
             );
-
-            
             
             routes.MapRoute(
                 name: "Visit_getSettings",
@@ -87,7 +97,18 @@ namespace MvcApplication1
                 url: "Practitioner/Update/{id}",
                 defaults: new { controller = "Practitioner", action = "Update", id = "" }
             );
+            
+            routes.MapRoute(
+                name: "Practitioner_setPassword",
+                url: "Practitioner/setPassword/{id}",
+                defaults: new { controller = "Practitioner", action = "setPassword", id = "" }
+            );
 
+            routes.MapRoute(
+                name: "Practitioner_removePassword",
+                url: "Practitioner/removePassword/{id}",
+                defaults: new { controller = "Practitioner", action = "removePassword", id = "" }
+            );
 
             routes.MapRoute(
                name: "Register_LoginClient",

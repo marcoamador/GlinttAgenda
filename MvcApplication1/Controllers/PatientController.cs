@@ -114,5 +114,45 @@ namespace MvcApplication1.Controllers
                 return null;
             }
         }
+
+
+        public ActionResult setPassword(String id)
+        {
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0" || access == id)
+            {
+                MvcApplication1.Models.Patient p = new Patient();
+                if(p.setPassword(id,Request.QueryString["oldpassword"],Request.QueryString["newpassword"]))
+                {
+                    return Content("ok");
+                }
+                return Content("wrong password");
+            }
+            else
+            {
+                Response.StatusCode = 403;
+                return null;
+            }
+        }
+
+        public ActionResult removePassword(String id)
+        {
+            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+            if (access == "0" || access == id)
+            {
+                MvcApplication1.Models.Patient p = new Patient();
+                if (p.removePassword(id,Request.QueryString["password"]))
+                {
+                    return Content("ok");
+                }
+                return Content("wrong password");
+            }
+            else
+            {
+                Response.StatusCode = 403;
+                return null;
+            }
+        }
+
     }
 }
