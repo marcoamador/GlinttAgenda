@@ -21,7 +21,7 @@ namespace MvcApplication1.Models
             { "subject", new List<string>() {"t_doente","doente"} },
             { "responsible", new List<string>() {"medico"} },
             { "length", new List<string>() {"duracao_cons"} },
-            { "period", new List<string>() {"dt_cons"} },
+            { "periodStart", new List<string>() {"dt_cons"} },
             { "period-before", new List<string>() {"dt_cons"} },
             { "period-after", new List<string>() {"dt_cons"} },
             { "indication", new List<string>() {"observ_cons"} },
@@ -581,10 +581,10 @@ namespace MvcApplication1.Models
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where n_cons=?", key);
             if (sqlresult.Count() != 0)
             {
-
+                
                 String query1 = "update g_cons_marc set ";
                 int j = 0;
-                foreach (string querykeys in p.QueryString.Keys)
+                foreach (string querykeys in p.Form.Keys)
                 {
                     if (Visit.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("identifier") && !querykeys.Equals("period-before") && !querykeys.Equals("period-after")))
                     {                    
@@ -599,7 +599,7 @@ namespace MvcApplication1.Models
                                     query1 += " , ";
                                 }
                                 query1 += conver + "=" + "?";
-                                l.Add(p.QueryString[querykeys]);
+                                l.Add(p.Form[querykeys]);
                                 j++;
                             }
                         }
@@ -627,14 +627,14 @@ namespace MvcApplication1.Models
                 List<object> l2 = new List<object>();
                 bool bbb = false;
 
-                foreach (string querykeys in p.QueryString.Keys)
+                foreach (string querykeys in p.Form.Keys)
                 {
                     if (collumns.Contains(querykeys) && querykeys != "id")
                     {
                         if (bbb)
                             query2 += ",";
                         query2 += querykeys + " = ? ";
-                        l2.Add(p.QueryString[querykeys]);
+                        l2.Add(p.Form[querykeys]);
                         bbb = true;
                     }
 

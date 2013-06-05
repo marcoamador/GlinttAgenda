@@ -22,39 +22,66 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index(String id)
         {
-            
-            if (id == null || id.Equals(""))
+            if (Request.HttpMethod.Equals("GET"))
             {
-                Response.StatusCode = 404;
-                return null;
-            }
-            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-            if (access == "0" || access == id)
-            {
-                MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
-                String result = p.byId(id);
-                if (result == null)
+                if (id == null || id.Equals(""))
                 {
                     Response.StatusCode = 404;
                     return null;
                 }
-
-                try
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0" || access == id)
                 {
-                    Common.validateXML(result, "~/Content/xsd/patient.xsd");
-                }
-                catch (Common.InvalidXmlException ie)
-                {
+                    MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
+                    String result = p.byId(id);
+                    if (result == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
 
-                    return Content(Common.addtoxml(result, ie.error));
+                    try
+                    {
+                        Common.validateXML(result, "~/Content/xsd/patient.xsd");
+                    }
+                    catch (Common.InvalidXmlException ie)
+                    {
+
+                        return Content(Common.addtoxml(result, ie.error));
+                    }
+                    return Content(result);
                 }
-                return Content(result);
+                else
+                {
+                    Response.StatusCode = 403;
+                    return null;
+                }
+            }
+            else if (Request.HttpMethod.Equals("PUT"))
+            {
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0" || access == id)
+                {
+                    MvcApplication1.Models.Patient p = new MvcApplication1.Models.Patient();
+                    String s = p.update(Request, id);
+                    if (s == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
+                    return Content(s);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
+                    return null;
+                }
             }
             else
             {
                 Response.StatusCode = 403;
                 return null;
-            }
+            } 
 
         }
 

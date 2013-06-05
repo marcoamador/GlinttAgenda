@@ -17,6 +17,10 @@ namespace MvcApplication1.Models
             {"deceased",new List<string>() {"flag_falec"}},
             {"address",new List<string>() {"morada"}},
             {"birthdate",new List<string>() {"dt_nasc"}},
+            {"zipcode", new List<string>() {"cod_postal"}},
+            {"city", new List<string>() {"localidade"}},
+            {"country", new List<string>() {"pais"}},
+            {"maritalStatus", new List<string>() {"estado_civil"}},
             {"birthdate-before",new List<string>(){"dt_nasc"}},
             {"birthdate-after",new List<string>(){"dt_nasc"}},
             {"gender",new List<string>(){"sexo"}},
@@ -410,7 +414,6 @@ namespace MvcApplication1.Models
                                 query1 += conver + ">" + "?";
                             else if (querykeys == "name" || querykeys == "given" || querykeys == "family" || querykeys == "address"){
                                 query1 += conver + " like " + "?";
-                                l.Add("%" + p.QueryString[querykeys] + "%");
                             }                                
                             else
                                 query1 += conver + "=" + "?";
@@ -435,6 +438,8 @@ namespace MvcApplication1.Models
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(2));
                                 query1 += " )";
                             }
+                            else if(querykeys == "name" || querykeys == "given" || querykeys == "family" || querykeys == "address")
+                                l.Add("%" + p.QueryString[querykeys].ToLowerInvariant() + "%");
                             else
                                 l.Add(p.QueryString[querykeys]);
 
@@ -592,7 +597,7 @@ namespace MvcApplication1.Models
                 int countKeysLocal = 0;
                 int z = 0;
                 String query1 = "update g_doente set ";
-                foreach (string querykeys in p.QueryString.Keys)
+                foreach (string querykeys in p.Form.Keys)
                 {
                     if (Patient.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("birthdate-before") && !querykeys.Equals("birthdate-after")))
                     {
@@ -624,15 +629,20 @@ namespace MvcApplication1.Models
                                     
                                     if (querykeys.Equals("identifier"))
                                     {
-                                        l.Add(p.QueryString[querykeys].Split('_').ElementAt(idIndex));
+                                        l.Add(p.Form[querykeys].Split('_').ElementAt(idIndex));
                                         idIndex+=1;
                                     }
                                     else if (querykeys.Equals("telecom"))
                                     {
-                                        l.Add(p.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                        l.Add(p.Form[querykeys].Split('_').ElementAt(telecomIndex));
                                         telecomIndex+=1;
-                                    }else
-                                        l.Add(p.QueryString[querykeys]);
+                                    }
+                                    else if (querykeys.Equals("maritalStatus"))
+                                    {
+                                        l.Add(p.Form[querykeys].ElementAt(0).ToString());
+                                    }
+                                    else
+                                        l.Add(p.Form[querykeys]);
               
                                     z++;
 
@@ -660,7 +670,7 @@ namespace MvcApplication1.Models
                 if (secondResult.Count() != 0)
                 {
                     String query2 = "update Patient set ";
-                    foreach (string querykeys in p.QueryString.Keys)
+                    foreach (string querykeys in p.Form.Keys)
                     {
                         if (Patient.LocalDic.ContainsKey(querykeys))
                         {
@@ -677,7 +687,7 @@ namespace MvcApplication1.Models
                                         query2 += " , ";
                                     }
                                     query2 += conver + "=" + "?";
-                                    newList.Add(p.QueryString[querykeys]);
+                                    newList.Add(p.Form[querykeys]);
                                     j++;
                                 }
                             }

@@ -64,7 +64,28 @@ namespace MvcApplication1.Controllers
 
 				return Content(result);
 			}
-			else
+            else if (Request.HttpMethod.Equals("PUT"))
+            {
+                MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
+
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0")
+                {
+                    String s = v.update(Request, id, access);
+                    if (s == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
+                    return Content(s);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
+                    return null;
+                }
+            }
+            else
 			{
 				Response.StatusCode = 404;
 				return null;

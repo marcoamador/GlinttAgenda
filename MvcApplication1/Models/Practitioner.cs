@@ -266,7 +266,7 @@ namespace MvcApplication1.Models
                             else if (querykeys == "name" || querykeys == "given" || querykeys == "family")
                             {
                                 query1 += conver + " like " + "?";
-                                l.Add("%" + pr.QueryString[querykeys] + "%");
+                                l.Add("%" + pr.QueryString[querykeys].ToLowerInvariant() + "%");
                             }
                             else
                             {
@@ -310,8 +310,8 @@ namespace MvcApplication1.Models
                 {
                     if(hitit)
                         query2+= " and ";
-                    query2 += "address = ?";
-                    l2.Add(pr.QueryString["address"]);
+                    query2 += "address like ?";
+                    l2.Add("%" + pr.QueryString["address"].ToLowerInvariant() + "%");
                     hitit = true;
                 }
 
@@ -568,13 +568,13 @@ namespace MvcApplication1.Models
 
                 String query1 = "update g_pess_hosp_def set ";
                 int j = 0;
-                foreach (string querykeys in p.QueryString.Keys)
+                foreach (string querykeys in p.Form.Keys)
                 {
                     if (Practitioner.ParamToDic.ContainsKey(querykeys) && (!querykeys.Equals("_id") && !querykeys.Equals("identifier")))
                     {
                         if (querykeys == "telecom")
                         {
-                            String[] idSplit = p.QueryString[querykeys].Split('_');
+                            String[] idSplit = p.Form[querykeys].Split('_');
                             if (idSplit.Length != 2)
                                 return null;
                             if (idSplit.ElementAt(0).Equals("") || idSplit.ElementAt(1).Equals(""))
@@ -595,11 +595,11 @@ namespace MvcApplication1.Models
 
                                 if (querykeys.Equals("telecom"))
                                 {
-                                    l.Add(p.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                    l.Add(p.Form[querykeys].Split('_').ElementAt(telecomIndex));
                                     telecomIndex += 1;
                                 }
                                 else
-                                    l.Add(p.QueryString[querykeys]);
+                                    l.Add(p.Form[querykeys]);
                                 j++;
                             }
                         }
@@ -628,14 +628,14 @@ namespace MvcApplication1.Models
                 string query2 = "update Practitioner set ";
                 List<object> l2 = new List<object>();
                 bool bbb = false;
-                foreach (string querykeys in p.QueryString.Keys)
+                foreach (string querykeys in p.Form.Keys)
                 {
                     if (collumns.Contains(querykeys) && querykeys != "n_mecan")
                     {
                         if (bbb)
                             query2 += ",";
                         query2 += querykeys + " = ? ";
-                        l2.Add(p.QueryString[querykeys]);
+                        l2.Add(p.Form[querykeys]);
                         bbb = true;
                     }
                     

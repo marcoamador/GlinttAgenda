@@ -23,36 +23,64 @@ namespace MvcApplication1.Controllers
 
         public ActionResult Index(String id)
         {
-            
-            string access = Common.getPrivileges(Request.QueryString["accessToken"]);
-            if (id == null || id.Equals("") || access == "-1")
+
+            if (Request.HttpMethod.Equals("GET"))
             {
-                Response.StatusCode = 404;
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (id == null || id.Equals("") || access == "-1")
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+
+                MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
+                String result = p.byId(id);
+                if (result == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+
+                if (access != "0")
+                {
+                    result = trimPractitionerResource(result);
+                }
+
+                try
+                {
+                    Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
+                }
+                catch (Common.InvalidXmlException ie)
+                {
+                    return Content(Common.addtoxml(result, ie.error));
+                }
+                return Content(result);
+            }
+            else if (Request.HttpMethod.Equals("PUT"))
+            {
+                string access = Common.getPrivileges(Request.QueryString["accessToken"]);
+                if (access == "0")
+                {
+                    MvcApplication1.Models.Practitioner pr = new MvcApplication1.Models.Practitioner();
+                    String s = pr.update(Request, id);
+                    if (s == null)
+                    {
+                        Response.StatusCode = 404;
+                        return null;
+                    }
+                    return Content(s);
+                }
+                else
+                {
+                    Response.StatusCode = 403;
+                    return null;
+                }
+            }
+            else
+            {
+                Response.StatusCode = 403;
                 return null;
             }
-
-            MvcApplication1.Models.Practitioner p = new MvcApplication1.Models.Practitioner();
-            String result = p.byId(id);
-            if (result == null)
-            {
-                Response.StatusCode = 404;
-                return null;
-            }
-
-            if (access != "0")
-            {
-                result = trimPractitionerResource(result);
-            }
-
-            try
-            {
-                Common.validateXML(result, "~/Content/xsd/practitioner.xsd");
-            }
-            catch (Common.InvalidXmlException ie)
-            {
-                return Content(Common.addtoxml(result, ie.error));
-            }
-            return Content(result);
         }
 
 
