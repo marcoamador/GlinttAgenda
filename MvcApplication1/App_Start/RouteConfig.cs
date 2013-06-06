@@ -52,7 +52,7 @@ namespace MvcApplication1
 
             routes.MapRoute(
                 name: "Visit_Create",
-                url: "Visit/Create",
+                url: "Visit",
                 defaults: new { controller = "Visit", action = "Create" }
             );
             

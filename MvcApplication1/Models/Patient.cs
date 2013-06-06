@@ -374,9 +374,17 @@ namespace MvcApplication1.Models
                             return null;
                     }
 
-                    if (querykeys == "identifier" || querykeys == "telecom")
+                    if (querykeys == "identifier")
                     {
                         String[] stringSplit = p.QueryString[querykeys].Split('_');
+                        if (stringSplit.Length != 3)
+                            return null;
+                        if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
+                            return null;
+                    }
+                    if (querykeys == "telecom")
+                    {
+                        String[] stringSplit = p.QueryString[querykeys].Split('#');
                         if (stringSplit.Length != 3)
                             return null;
                         if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
@@ -420,25 +428,38 @@ namespace MvcApplication1.Models
 
                             
 
-                            if (j == 0 && (querykeys == "_id" || querykeys == "telecom" || querykeys == "identifier"))
+                            if (j == 0 && (querykeys == "_id" || querykeys == "identifier"))
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(0));
+                            }
+                            else if (j == 0 && querykeys == "telecom")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('#').ElementAt(0));
                             }
                             else if (j != 0 && querykeys == "_id")
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
                                 query1 += " )";
                             }
-                            else if (j == 1 && (querykeys == "identifier" || querykeys == "telecom"))
+                            else if (j == 1 && querykeys == "identifier")
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(1));
                             }
-                            else if (j == 2 && (querykeys == "identifier" || querykeys == "telecom"))
+                            else if (j == 1 && querykeys == "telecom")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('#').ElementAt(1));
+                            }
+                            else if (j == 2 && querykeys == "identifier")
                             {
                                 l.Add(p.QueryString[querykeys].Split('_').ElementAt(2));
                                 query1 += " )";
                             }
-                            else if(querykeys == "name" || querykeys == "given" || querykeys == "family" || querykeys == "address")
+                            else if (j == 2 && querykeys == "telecom")
+                            {
+                                l.Add(p.QueryString[querykeys].Split('#').ElementAt(2));
+                                query1 += " )";
+                            }
+                            else if (querykeys == "name" || querykeys == "given" || querykeys == "family" || querykeys == "address")
                                 l.Add("%" + p.QueryString[querykeys].ToLowerInvariant() + "%");
                             else
                                 l.Add(p.QueryString[querykeys]);
@@ -604,9 +625,17 @@ namespace MvcApplication1.Models
                         if (!Patient.LocalDic.ContainsKey(querykeys))
                         {
 
-                            if (querykeys == "identifier" || querykeys == "telecom")
+                            if (querykeys == "identifier")
                             {
-                                String[] stringSplit = p.QueryString[querykeys].Split('_');
+                                String[] stringSplit = p.Form[querykeys].Split('_');
+                                if (stringSplit.Length != 3)
+                                    return null;
+                                if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
+                                    return null;
+                            }
+                            if (querykeys == "telecom")
+                            {
+                                String[] stringSplit = p.Form[querykeys].Split('#');
                                 if (stringSplit.Length != 3)
                                     return null;
                                 if (stringSplit.ElementAt(0).Equals("") || stringSplit.ElementAt(1).Equals("") || stringSplit.ElementAt(2).Equals(""))
@@ -634,7 +663,7 @@ namespace MvcApplication1.Models
                                     }
                                     else if (querykeys.Equals("telecom"))
                                     {
-                                        l.Add(p.Form[querykeys].Split('_').ElementAt(telecomIndex));
+                                        l.Add(p.Form[querykeys].Split('#').ElementAt(telecomIndex));
                                         telecomIndex+=1;
                                     }
                                     else if (querykeys.Equals("maritalStatus"))
