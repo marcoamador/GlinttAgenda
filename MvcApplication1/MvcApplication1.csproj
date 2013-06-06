@@ -217,6 +217,7 @@
     <Compile Include="languagepractitioner.cs">
       <DependentUpon>glinttLocalModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Practitioner.cs" />
     <Compile Include="Models\Visit.cs" />

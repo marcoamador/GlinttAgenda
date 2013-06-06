@@ -135,23 +135,35 @@ namespace MvcApplication1.Models
                 v.Length = duracao;
             }
 
-            //REVER - Não contempla remain.bed
             v.Location = new List<Hl7.Fhir.Model.Visit.VisitLocationComponent>();
             Hl7.Fhir.Model.Visit.VisitLocationComponent location = new Hl7.Fhir.Model.Visit.VisitLocationComponent();
             location.Location = new Hl7.Fhir.Model.ResourceReference();
-            location.Location.Display = new Hl7.Fhir.Model.FhirString(c.cod_gab);
             location.Period = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(c.dt_cons.ToString()));
-            v.Location.Add(location);
+
+            //REVER - Não contempla remain.bed
+            if (c.cod_gab != null)
+            {
+                location.Location.Display = new Hl7.Fhir.Model.FhirString(c.cod_gab);
+                v.Location.Add(location);
+            }
+            else
+            {
+                location.Location.Display = new Hl7.Fhir.Model.FhirString("A Definir");
+                v.Location.Add(location);
+            }
+            
            
             if (remain != null)
             {
                 //Setting
-                v.Setting = new Hl7.Fhir.Model.CodeableConcept();
-                Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
-                Hl7.Fhir.Model.Coding sett = new Hl7.Fhir.Model.Coding();
-                sett.Code = remain.setting;
-                if(settingsDic.Keys.Contains(remain.setting))
-                    sett.Display = settingsDic[remain.setting];
+                if (remain.setting != null)
+                {
+                    v.Setting = new Hl7.Fhir.Model.CodeableConcept();
+                    Hl7.Fhir.Model.CodeableConcept setting = new Hl7.Fhir.Model.CodeableConcept();
+                    Hl7.Fhir.Model.Coding sett = new Hl7.Fhir.Model.Coding();
+                    sett.Code = remain.setting;
+                    if (settingsDic.Keys.Contains(remain.setting))
+                        sett.Display = settingsDic[remain.setting];
                     /*
                 if (remain.setting == "amb")
                     sett.Display = "Ambulatório";
@@ -160,25 +172,34 @@ namespace MvcApplication1.Models
                 else if (remain.setting == "home")
                     sett.Display = "Ao Domicílio";
                      * */
-                setting.Coding = new List<Hl7.Fhir.Model.Coding>(){sett};
+                    setting.Coding = new List<Hl7.Fhir.Model.Coding>() { sett };
 
-                v.Setting = setting;
+                    v.Setting = setting;
+                }
+                
 
                 //period-end
                 if(remain.periodEnd != null)
                     periodo.End = new Hl7.Fhir.Model.FhirDateTime(DateTime.Parse(remain.periodEnd.ToString()));
 
-                //Admitter
-                v.Admission = new Hl7.Fhir.Model.Visit.VisitAdmissionComponent();
-                v.Admission.Admitter = new Hl7.Fhir.Model.ResourceReference();
-                v.Admission.Admitter.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.admitter)));
-                v.Admission.Admitter.Type = new Hl7.Fhir.Model.Code("Practitioner");
+                if (remain.admitter != null)
+                {
+                    //Admitter
+                    v.Admission = new Hl7.Fhir.Model.Visit.VisitAdmissionComponent();
+                    v.Admission.Admitter = new Hl7.Fhir.Model.ResourceReference();
+                    v.Admission.Admitter.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.admitter)));
+                    v.Admission.Admitter.Type = new Hl7.Fhir.Model.Code("Practitioner");
+                }
 
-                //Discharger
-                v.Discharge = new Hl7.Fhir.Model.Visit.VisitDischargeComponent();
-                v.Discharge.Discharger = new Hl7.Fhir.Model.ResourceReference();
-                v.Discharge.Discharger.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.discharger)));
-                v.Discharge.Discharger.Type = new Hl7.Fhir.Model.Code("Practitioner");
+                if (remain.discharger != null)
+                {
+                    //Discharger
+                    v.Discharge = new Hl7.Fhir.Model.Visit.VisitDischargeComponent();
+                    v.Discharge.Discharger = new Hl7.Fhir.Model.ResourceReference();
+                    v.Discharge.Discharger.Url = new Hl7.Fhir.Model.FhirUri(new Uri(HttpUtility.HtmlEncode(responsibleURL + "/" + remain.discharger)));
+                    v.Discharge.Discharger.Type = new Hl7.Fhir.Model.Code("Practitioner");
+                }
+                
 
                 //Contact
                 String contactURL = appURL;
@@ -199,12 +220,13 @@ namespace MvcApplication1.Models
         public g_cons_marc byId(string id)
         {
             Object[] key = { id };
-            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where n_cons=?", key);
+            System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where n_cons= ? ", key);
             if (sqlresult.Count() == 0)
             {
                 return null;
             }
-            return sqlresult.First();
+            else
+              return sqlresult.First();
         }
 
         public string search(HttpRequestBase v, string tokenaccess)
@@ -388,17 +410,16 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)(newCount - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(newCount - ((pageNum - 1) * itemNum)) / itemNum) < pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
-
             if (Math.Ceiling((decimal)newCount / itemNum) <= 1)
                 last = 1;
             else
                 last = (int)Math.Ceiling((decimal)newCount / itemNum);
 
-            if (Math.Ceiling((decimal)newCount - (pageNum * itemNum) / itemNum) >= pageNum)
+            if (pageNum - 1 < 1)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
@@ -498,7 +519,7 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)(newCount - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(newCount - ((pageNum - 1) * itemNum)) / itemNum) < pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
@@ -508,7 +529,7 @@ namespace MvcApplication1.Models
             else
                 last = (int)Math.Ceiling((decimal)newCount / itemNum);
 
-            if (Math.Ceiling((decimal)newCount - (pageNum * itemNum) / itemNum) >= pageNum)
+            if (pageNum - 1 < 1)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
@@ -581,7 +602,7 @@ namespace MvcApplication1.Models
             System.Data.Entity.Infrastructure.DbSqlQuery<g_cons_marc> sqlresult = ge.g_cons_marc.SqlQuery("Select * from g_cons_marc where n_cons=?", key);
             if (sqlresult.Count() != 0)
             {
-                
+                g_cons_marc elem = sqlresult.First();
                 String query1 = "update g_cons_marc set ";
                 int j = 0;
                 foreach (string querykeys in p.Form.Keys)
@@ -650,7 +671,8 @@ namespace MvcApplication1.Models
 
                 g_cons_marc cons = ge.g_cons_marc.Find(id);
                 g_serv srv = ge.g_serv.Find(cons.cod_serv);
-                string t = "Surgiram alterações na sua consulta de " + srv.descr_serv + " : ";
+                string t = "Alterações na sua consulta de " + srv.descr_serv + " - " + elem.dt_cons.Value.ToString();
+                t = t.Substring(0, t.Length - 3) + ". Por favor aceda aos detalhes da mesma.";
                 notifications n = new notifications();
                 n.text = t;
                 n.idVisit = cons.n_cons;
@@ -659,6 +681,7 @@ namespace MvcApplication1.Models
                 n.timestamp = DateTime.Now;
 
                 gle.notifications.Add(n);
+                gle.SaveChanges();
 
                 return "ok";
 
@@ -669,7 +692,8 @@ namespace MvcApplication1.Models
 
         public MvcApplication1.visit localDataById(String id)
         {
-            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> sqlresult = gle.visit.SqlQuery("Select * from Visit where id=" + id + ";");
+            Object[] key = { id };
+            System.Data.Entity.Infrastructure.DbSqlQuery<MvcApplication1.visit> sqlresult = gle.visit.SqlQuery("Select * from Visit where id=?", key);
             if (sqlresult.Count() == 0)
             {
                 return null;
@@ -694,8 +718,10 @@ namespace MvcApplication1.Models
             if(Request.Params["service"] != null)
                 g.cod_serv = Request.Params["service"];
 
-            if(Request.Params["state"] != null)
+            if (Request.Params["state"] != null)
                 g.flag_estado = Request.Params["state"];
+            else
+                g.flag_estado = "N";
 
             if(Request.Params["subject"] != null)
             {
@@ -710,8 +736,8 @@ namespace MvcApplication1.Models
             if (Request.Params["length"] != null)
                 g.duracao_cons = DateTime.Parse(Request.Params["length"]);
 
-            if (Request.Params["period"] != null)
-                g.dt_cons = DateTime.Parse( Request.Params["period"]);
+            if (Request.Params["periodStart"] != null)
+                g.dt_cons = DateTime.Parse( Request.Params["periodStart"]);
 
             if (Request.Params["indication"] != null)
                 g.observ_cons = Request.Params["indication"];

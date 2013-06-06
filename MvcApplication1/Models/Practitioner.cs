@@ -228,7 +228,7 @@ namespace MvcApplication1.Models
                 {
                     if (querykeys == "telecom")
                     {
-                        String[] idSplit = pr.QueryString[querykeys].Split('_');
+                        String[] idSplit = pr.QueryString[querykeys].Split('#');
                         if (idSplit.Length != 2)
                             return null;
                         if (idSplit.ElementAt(0).Equals("") || idSplit.ElementAt(1).Equals(""))
@@ -258,7 +258,7 @@ namespace MvcApplication1.Models
                             if (querykeys.Equals("telecom"))
                             {
                                 query1 += conver + " = " + "?";
-                                l.Add(pr.QueryString[querykeys].Split('_').ElementAt(telecomIndex));
+                                l.Add(pr.QueryString[querykeys].Split('#').ElementAt(telecomIndex));
                                 if (telecomIndex == 1)
                                     query1 += " )";
                                 telecomIndex += 1;
@@ -383,7 +383,7 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) < pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
@@ -393,7 +393,7 @@ namespace MvcApplication1.Models
             else
                 last = (int)Math.Ceiling((decimal)count / itemNum);
 
-            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
+            if (pageNum - 1 < 1)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
@@ -474,7 +474,7 @@ namespace MvcApplication1.Models
             feed.AppendFormat(@"<id>urn:uuid:{0}</id>", feedId.ToString());
             int next = 0, prev = 0, last = 0;
 
-            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) <= pageNum)
+            if (Math.Ceiling((decimal)(count - ((pageNum - 1) * itemNum)) / itemNum) < pageNum)
                 next = pageNum;
             else
                 next = pageNum + 1;
@@ -484,7 +484,7 @@ namespace MvcApplication1.Models
             else
                 last = (int)Math.Ceiling((decimal)count / itemNum);
 
-            if (Math.Ceiling((decimal)count - (pageNum * itemNum) / itemNum) >= pageNum)
+            if (pageNum - 1 < 1)
                 prev = pageNum;
             else
                 prev = pageNum - 1;
@@ -574,7 +574,7 @@ namespace MvcApplication1.Models
                     {
                         if (querykeys == "telecom")
                         {
-                            String[] idSplit = p.Form[querykeys].Split('_');
+                            String[] idSplit = p.Form[querykeys].Split('#');
                             if (idSplit.Length != 2)
                                 return null;
                             if (idSplit.ElementAt(0).Equals("") || idSplit.ElementAt(1).Equals(""))
@@ -595,7 +595,7 @@ namespace MvcApplication1.Models
 
                                 if (querykeys.Equals("telecom"))
                                 {
-                                    l.Add(p.Form[querykeys].Split('_').ElementAt(telecomIndex));
+                                    l.Add(p.Form[querykeys].Split('#').ElementAt(telecomIndex));
                                     telecomIndex += 1;
                                 }
                                 else

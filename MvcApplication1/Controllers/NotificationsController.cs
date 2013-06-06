@@ -48,19 +48,24 @@ namespace MvcApplication1.Controllers
             string access = Common.getPrivileges(Request.QueryString["accessToken"]);
             if (access == "0")
             {
-                notifications n = new notifications();
-                string[] s = Request.QueryString["userid"].Split('_');
-                n.t_doente = s[0];
-                n.idDoente = s[1];
-                n.seen = 0;
-                n.timestamp = DateTime.Now;
-                n.text = Request.QueryString["text"];
-                glinttlocalEntities gle = new glinttlocalEntities();
-                gle.notifications.Add(n);
-                gle.SaveChanges();
+                Notifications n = new Notifications();
+                String s = n.add(Request);
+                if (s != null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
+                else
+                {
+                    Response.StatusCode = 200;
+                    return Content("ok");
+                }
             }
-            Response.StatusCode = 403;
-            return Content("");
+            else
+            {
+                Response.StatusCode = 403;
+                return Content("");
+            }
         }
 
         public ActionResult markRead()
@@ -78,6 +83,11 @@ namespace MvcApplication1.Controllers
                     gle.SaveChanges();
 
                     return Content("ok");
+                }
+                else
+                {
+                    Response.StatusCode = 403;
+                    return null;
                 }
             }
             Response.StatusCode = 403;

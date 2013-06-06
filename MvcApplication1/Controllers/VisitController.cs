@@ -41,10 +41,14 @@ namespace MvcApplication1.Controllers
 
 				if (access == "-1")
 				{
-					Response.StatusCode = 404;
+					Response.StatusCode = 403;
 					return null;
 				}
-
+                if (r == null)
+                {
+                    Response.StatusCode = 404;
+                    return null;
+                }
 				string result = v.visitParser(r, rV, access);
 				if (result == null)
 				{
@@ -87,7 +91,7 @@ namespace MvcApplication1.Controllers
             }
             else
 			{
-				Response.StatusCode = 404;
+				Response.StatusCode = 403;
 				return null;
 			}
 
@@ -101,7 +105,6 @@ namespace MvcApplication1.Controllers
 			MvcApplication1.Models.Visit v = new MvcApplication1.Models.Visit();
 
 			string s = v.search(Request,access);
-
 			if (s == null)
 			{
 				Response.StatusCode = 404;
@@ -121,7 +124,7 @@ namespace MvcApplication1.Controllers
 				String s = v.update(Request, id,access);
 				if (s == null)
 				{
-					Response.StatusCode = 404;
+					Response.StatusCode = 403;
 					return null;
 				}
 				return Content(s);

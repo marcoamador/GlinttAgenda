@@ -29,7 +29,7 @@ namespace MvcApplication1.Controllers
                 string access = Common.getPrivileges(Request.QueryString["accessToken"]);
                 if (id == null || id.Equals("") || access == "-1")
                 {
-                    Response.StatusCode = 404;
+                    Response.StatusCode = 403;
                     return null;
                 }
 
